@@ -4,14 +4,14 @@
 
 ## Project Components & Artifacts
 
-* [ER: Requirements Specification](components/er)
-    * [A1: Project Presentation](artifacts/a1)
-    * [A2: Actors and User Stories](artifacts/a2)
-    * [A3: Information Architecture](artifacts/a3)
-* [EBD: Database Specification]()
+* [ER: Requirements Specification](components/er.md)
+    * [A1: Project Presentation](artifacts/a1.md)
+    * [A2: Actors and User Stories](artifacts/a2.md)
+    * [A3: Information Architecture](artifacts/a3.md)
+* [EBD: Database Specification](components/ebd.md)
     * ...
-* [EAP: Architecture Specification and Prototype]()
-* [PA: Product and Presentation]()
+* [EAP: Architecture Specification and Prototype](components/eap.md)
+* [PA: Product and Presentation](components/pa.md)
 
 ## Artefacts Checklist
 
