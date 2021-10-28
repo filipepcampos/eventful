@@ -2,12 +2,16 @@
 
 > Project vision.
 
-## Project Components
+## Project Components & Artifacts
 
-* [ER: Requirements Specification](er)
-* [EBD: Database Specification](ebd)
-* [EAP: Architecture Specification and Prototype](eap)
-* [PA: Product and Presentation](pa)
+* [ER: Requirements Specification](components/er)
+    * [A1: Project Presentation](artifacts/a1)
+    * [A2: Actors and User Stories](artifacts/a2)
+    * [A3: Information Architecture](artifacts/a3)
+* [EBD: Database Specification]()
+    * ...
+* [EAP: Architecture Specification and Prototype]()
+* [PA: Product and Presentation]()
 
 ## Artefacts Checklist
 
