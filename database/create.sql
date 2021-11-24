@@ -14,9 +14,6 @@ DROP TABLE IF EXISTS event_report;
 DROP TABLE IF EXISTS comment_report;
 DROP TABLE IF EXISTS user_report;
 DROP TABLE IF EXISTS report;
-DROP TABLE IF EXISTS invite;
-DROP TABLE IF EXISTS request;
-DROP TABLE IF EXISTS inquiry;
 DROP TABLE IF EXISTS file;
 DROP TABLE IF EXISTS rating;
 DROP TABLE IF EXISTS comment;
@@ -24,6 +21,8 @@ DROP TABLE IF EXISTS option;
 DROP TABLE IF EXISTS poll;
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS invite;
+DROP TABLE IF EXISTS request;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS unblock_appeal;
 DROP TABLE IF EXISTS users;
@@ -127,20 +126,19 @@ CREATE TABLE file (
     path TEXT NOT NULL CONSTRAINT file_path_uk UNIQUE
 );
 
-CREATE TABLE inquiry (
+CREATE TABLE request (
     id SERIAL PRIMARY KEY,
     id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE,
-    date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT inquiry_date_check CHECK (date <= NOW()),
-    accepted BOOLEAN NOT NULL DEFAULT false
-);
-
-CREATE TABLE request (
-    id_inquiry INTEGER PRIMARY KEY REFERENCES inquiry,
+    date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT request_date_check CHECK (date <= NOW()),
+    accepted BOOLEAN NOT NULL DEFAULT false,
     id_requester INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE
 );
 
 CREATE TABLE invite (
-    id_inquiry INTEGER PRIMARY KEY REFERENCES inquiry,
+    id SERIAL PRIMARY KEY,
+    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE,
+    date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT invite_date_check CHECK (date <= NOW()),
+    accepted BOOLEAN NOT NULL DEFAULT false,
     id_inviter INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
     id_invitee INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
     CONSTRAINT invite_invitter_invitee_id_check CHECK (id_inviter <> id_invitee)
