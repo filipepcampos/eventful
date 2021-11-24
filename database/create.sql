@@ -179,7 +179,8 @@ CREATE TABLE transaction (
 
 CREATE TABLE event_cancelled_notification (
     id_user INTEGER PRIMARY KEY REFERENCES users,
-    title TEXT NOT NULL
+    title TEXT NOT NULL,
+    notificationDate TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT event_cancelled_notification_check CHECK (notificationDate <= NOW())
 );
 
 CREATE TABLE attendee (
