@@ -1,0 +1,7 @@
+BEGIN TRANSACTION;
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+INSERT INTO attendee (id_user, id_event)
+    VALUES ($id_user, $id_event)
+
+END TRANSACTION;
