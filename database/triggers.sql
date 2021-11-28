@@ -66,7 +66,6 @@ CREATE TRIGGER user_report_trigger
     EXECUTE PROCEDURE user_report();
 
 -- ===== TRIGGER04 =====
-
 DROP TRIGGER IF EXISTS comment_report_trigger ON comment_report;
 DROP FUNCTION IF EXISTS comment_report;
 CREATE FUNCTION comment_report() RETURNS TRIGGER AS
@@ -90,7 +89,6 @@ CREATE TRIGGER comment_report_trigger
     EXECUTE PROCEDURE comment_report();
 
 -- -- ===== TRIGGER05 =====
-
 DROP TRIGGER IF EXISTS event_report_trigger ON event_report;
 DROP FUNCTION IF EXISTS event_report;
 CREATE FUNCTION event_report() RETURNS TRIGGER AS
@@ -112,3 +110,22 @@ CREATE TRIGGER event_report_trigger
     BEFORE INSERT OR UPDATE ON event_report
     FOR EACH ROW
     EXECUTE PROCEDURE event_report();
+
+-- ===== TRIGGER06 =====
+DROP TRIGGER IF EXISTS host_invite ON invite;
+DROP FUNCTION IF EXISTS host_invite;
+CREATE FUNCTION host_invite() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF EXISTS (SELECT * FROM event WHERE (NEW.id_event = id AND NEW.id_invitee = id_host))
+        RAISE EXCEPTION "Host cannot be invited to his own event.";
+    END IF;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER host_invite
+    BEFORE INSERT OR UPDATE ON invite
+    FOR EACH ROW
+    EXECUTE PROCEDURE host_invite();
