@@ -70,6 +70,7 @@ CREATE TABLE unblock_appeal (
 CREATE TABLE event (
    id SERIAL PRIMARY KEY,
    id_host INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
+   title TEXT NOT NULL,
    event_image TEXT NOT NULL,
    description TEXT NOT NULL,
    location TEXT NOT NULL,
