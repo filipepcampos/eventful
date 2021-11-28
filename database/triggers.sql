@@ -118,7 +118,8 @@ CREATE FUNCTION host_invite() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF EXISTS (SELECT * FROM event WHERE (NEW.id_event = id AND NEW.id_invitee = id_host))
-        RAISE EXCEPTION "Host cannot be invited to his own event.";
+        THEN
+            RAISE EXCEPTION 'Host cannot be invited to his own event.';
     END IF;
     RETURN NEW;
 END
