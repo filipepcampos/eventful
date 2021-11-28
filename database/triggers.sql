@@ -1,3 +1,6 @@
+-- ===== TRIGGER01 =====
+DROP TRIGGER IF EXISTS event_attendee_dif_host ON attendee;
+DROP FUNCTION IF EXISTS event_attendee_dif_host;
 CREATE FUNCTION event_attendee_dif_host() RETURNS TRIGGER AS $$
 BEGIN
     IF EXISTS (SELECT * FROM event WHERE NEW.id_event = event.id AND NEW.id_user = event.id_host) THEN
@@ -13,7 +16,9 @@ CREATE TRIGGER event_attendee_dif_host
     FOR EACH ROW
     EXECUTE PROCEDURE event_attendee_dif_host();
 
-
+-- ===== TRIGGER02 =====
+DROP TRIGGER IF EXISTS event_request ON request;
+DROP FUNCTION IF EXISTS event_attendee_dif_host;
 CREATE FUNCTION event_request() RETURNS TRIGGER AS $$
 BEGIN
         IF EXISTS (SELECT * FROM (OLD LEFT JOIN event ON (id_event = id)) WHERE is_visible AND NOT is_acessible) THEN
@@ -29,9 +34,9 @@ CREATE TRIGGER event_request
         FOR EACH ROW
         EXECUTE PROCEDURE event_request();
 
-
-
-
+-- ===== TRIGGER03 =====
+DROP TRIGGER IF EXISTS user_report_trigger ON user_report;
+DROP FUNCTION IF EXISTS user_report;
 CREATE FUNCTION user_report() RETURNS TRIGGER AS
 BEGIN
     IF EXISTS (SELECT * FROM (OLD LEFT JOIN report ON (user_report = id)) WHERE id_author = target) THEN
