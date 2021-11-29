@@ -77,9 +77,10 @@ CREATE TABLE event (
    creation_date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT event_creation_date_check CHECK (creation_date <= NOW()),
    realization_date TIMESTAMP NOT NULL,
    is_visible BOOLEAN NOT NULL,
-   is_acessible BOOLEAN NOT NULL,
+   is_accessible BOOLEAN NOT NULL,
    capacity INT NOT NULL CHECK (capacity > 0),
    price DECIMAL(2) NOT NULL CHECK (price >= 0),
+   number_attendees INT NOT NULL DEFAULT 0 CONSTRAINT event_number_attendees CHECK (number_attendees >= 0 AND number_attendees <= capacity),
    CONSTRAINT check_realization_date CHECK (creation_date < realization_date)
 );
 
@@ -104,7 +105,7 @@ CREATE TABLE option (
     id SERIAL PRIMARY KEY,
     id_poll INTEGER NOT NULL REFERENCES poll ON UPDATE CASCADE,
     description TEXT NOT NULL,
-    votes INTEGER NOT NULL CONSTRAINT option_votes_check CHECK (votes >= 0)
+    votes INTEGER NOT NULL DEFAULT 0 CONSTRAINT option_votes_check CHECK (votes >= 0)
 );
 
 CREATE TABLE comment (
@@ -112,6 +113,8 @@ CREATE TABLE comment (
     id_author INTEGER REFERENCES users ON UPDATE CASCADE,
     id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE,
     content TEXT NOT NULL,
+    number_upvotes INTEGER NOT NULL DEFAULT 0 CONSTRAINT comment_number_upvotes CHECK (number_upvotes >= 0),
+    number_downvotes INTEGER NOT NULL DEFAULT 0 CONSTRAINT comment_number_downvotes CHECK (number_downvotes >= 0),
     creation_date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT comment_creation_date_check CHECK (creation_date <= NOW())
 );
 
