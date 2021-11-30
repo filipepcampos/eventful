@@ -1,21 +1,17 @@
-# CheckedIn
+# Eventful
 
-> Project vision.
+Eventful is a website that allows users to organize and participate in events, gathering all information needed in one single space.
 
 ## Project Components & Artifacts
 
-* [ER: Requirements Specification](components/er.md)
-    * [A1: Project Presentation](artifacts/a1.md)
-    * [A2: Actors and User Stories](artifacts/a2.md)
-    * [A3: Information Architecture](artifacts/a3.md)
-* [EBD: Database Specification](components/ebd.md)
-    * ...
-* [EAP: Architecture Specification and Prototype](components/eap.md)
-* [PA: Product and Presentation](components/pa.md)
+* [ER: Requirements Specification](https://git.fe.up.pt/lbaw/lbaw2122/lbaw2122/-/wikis/er)
+* [EBD: Database Specification](https://git.fe.up.pt/lbaw/lbaw2122/lbaw2122/-/wikis/ebd)
+* [EAP: Architecture Specification and Prototype](https://git.fe.up.pt/lbaw/lbaw2122/lbaw2122/-/wikis/eap)
+* [PA: Product and Presentation](https://git.fe.up.pt/lbaw/lbaw2122/lbaw2122/-/wikis/pa)
 
 ## Artefacts Checklist
 
-* The artefacts checklist is available at: <https://docs.google.com/spreadsheets/d/17fUajNOO16hj5zFbtIyRWcwKu0kIl2VdCbS4QU1Rim4/edit#gid=537406521>
+* The artefacts checklist is available [**here**](https://docs.google.com/spreadsheets/d/17fUajNOO16hj5zFbtIyRWcwKu0kIl2VdCbS4QU1Rim4/edit#gid=537406521)
 
 ## Team
 
@@ -25,4 +21,4 @@
 * Vasco Alves, up201808031@fe.up.pt
 
 ***
-GROUP2122, DD/10/2021
+GROUP2122, 30/11/2021
