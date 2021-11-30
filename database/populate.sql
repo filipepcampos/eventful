@@ -794,31 +794,31 @@ INSERT INTO file(id_comment,path) VALUES
 
 -- ========================= report =========================
 
-INSERT INTO report(id,id_author,report_date,motive,dismissal_date) VALUES
-  (0,70,'2021-09-18 23:22:49','quam dignissim pharetra. Nam ac nulla. In tincidunt','2021-10-28 16:19:00'),
-  (1,23,'2020-03-31 17:19:59','blandit congue. In scelerisque scelerisque','2021-10-26 12:45:16'),
-  (2,19,'2020-03-01 21:48:49','Nunc commodo auctor velit. Aliquam nisl. Nulla eu',NULL),
-  (3,20,'2021-09-13 18:47:10','Donec consectetuer mauris id sapien. Cras dolor dolor, tempus non,','2021-10-30 03:45:15'),
-  (4,55,'2020-11-22 14:38:54','eu nibh vulputate mauris sagittis placerat. Cras dictum ultricies','2021-10-21 08:35:15'),
-  (5,126,'2020-07-15 21:31:10','et, commodo at, libero. Morbi accumsan laoreet ipsum.',NULL);
+INSERT INTO report(id_author,report_date,motive,dismissal_date) VALUES
+  (70,'2021-09-18 23:22:49','quam dignissim pharetra. Nam ac nulla. In tincidunt','2021-10-28 16:19:00'),
+  (23,'2020-03-31 17:19:59','blandit congue. In scelerisque scelerisque','2021-10-26 12:45:16'),
+  (19,'2020-03-01 21:48:49','Nunc commodo auctor velit. Aliquam nisl. Nulla eu',NULL),
+  (20,'2021-09-13 18:47:10','Donec consectetuer mauris id sapien. Cras dolor dolor, tempus non,','2021-10-30 03:45:15'),
+  (55,'2020-11-22 14:38:54','eu nibh vulputate mauris sagittis placerat. Cras dictum ultricies','2021-10-21 08:35:15'),
+  (126,'2020-07-15 21:31:10','et, commodo at, libero. Morbi accumsan laoreet ipsum.',NULL);
 
 -- ========================= user_report =========================
 
 INSERT INTO user_report(id_report,target) VALUES
-  (0,120),
-  (1,144);
+  (1,120),
+  (2,144);
 
 -- ========================= comment_report =========================
 
 INSERT INTO comment_report(id_report,target) VALUES
-  (2,7),
-  (3,14);
+  (3,7),
+  (4,14);
 
 -- ========================= event_report =========================
 
 INSERT INTO event_report(id_report,target) VALUES
-  (4,86),
-  (5,76);
+  (5,86),
+  (6,76);
 
 -- ========================= transaction =========================
 
@@ -904,62 +904,7 @@ INSERT INTO event_cancelled_notification_user(id_notification,id_user) VALUES
   (2, 146), 
   (2, 27), 
   (3, 50);
-
-
-
-/*
--- ========================= event_cancelled_notification_user =========================
-
-INSERT INTO event_cancelled_notification_user(id_notification,id_user) VALUES
-  (4, 116), 
-  (1, 74), 
-  (2, 94), 
-  (1, 37), 
-  (1, 100), 
-  (3, 147), 
-  (2, 66), 
-  (2, 5), 
-  (2, 133), 
-  (1, 23), 
-  (4, 106), 
-  (2, 145), 
-  (4, 48), 
-  (2, 29), 
-  (2, 20), 
-  (1, 91), 
-  (2, 90), 
-  (4, 8), 
-  (2, 47), 
-  (0, 53), 
-  (1, 48),
-  (2, 120),
-  (3, 68),
-  (3, 71),
-  (1, 11),
-  (1, 8),
-  (3, 39),
-  (4, 111),
-  (1, 87),
-  (4, 126),
-  (3, 124),
-  (4, 71),
-  (4, 10),
-  (1, 102),
-  (2, 49),
-  (3, 72),
-  (4, 77),
-  (1, 56),
-  (4, 28),
-  (4, 147),
-  (1, 146), 
-  (3, 35), 
-  (2, 12), 
-  (3, 24), 
-  (2, 134), 
-  (2, 146), 
-  (2, 27), 
-  (3, 50);
-*/
+  
 -- ========================= vote =========================
 
 INSERT INTO vote(id_user,id_option) VALUES

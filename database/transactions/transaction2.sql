@@ -1,10 +1,10 @@
 BEGIN TRANSACTION;
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 
-INSERT INTO report (id, id_author, motive)
-    VALUES ($id, $id_author, $motive);
+INSERT INTO report (id_author, motive)
+    VALUES ($id_author, $motive);
 
 INSERT INTO user_report (id_report, target)
-    VALUES ($id, $target);
+    VALUES (currval('report_id_seq'), $target);
 
 END TRANSACTION;

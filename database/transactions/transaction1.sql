@@ -1,5 +1,5 @@
 BEGIN TRANSACTION;
-SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+SET TRANSACTION ISOLATION LEVEL SERIAlIZABLE;
 
 -- Remove unblock_appeals
 DELETE FROM unblock_appeal WHERE id_user=$id;
@@ -35,8 +35,22 @@ DELETE FROM event_report WHERE id_report IN (SELECT id FROM report WHERE id_auth
 DELETE FROM report WHERE id_author=$id;
 DELETE FROM report WHERE id NOT IN (SELECT id_report FROM user_report UNION SELECT id_report FROM comment_report UNION SELECT id_report FROM event_report);
 
--- Removing the events hosted by the user, comments, ratings, posts, polls, options and votes will be removed as well (ON DELETE CASCADE)
-DELETE FROM event WHERE id_host=$id;
+-- Removing the events hosted by the user, comments, ratings, posts, polls, options and votes will be removed as well (ON DELETE CASCADE) and notifying attendees
+DO $$   
+DECLARE tableId INTEGER;
+DECLARE T RECORD;
+BEGIN
+    FOR T IN (SELECT id, title FROM event WHERE id_host=$id) LOOP
+        INSERT INTO event_cancelled_notification(title) VALUES (T.title) RETURNING id INTO tableId;
+
+        INSERT INTO event_cancelled_notification_user(id_notification, id_user)
+            SELECT tableId, id_user FROM attendee WHERE id_event=T.id;
+
+        DELETE FROM attendee WHERE id_event=T.id;
+
+        DELETE FROM event WHERE id=T.id;
+    END LOOP;
+END $$;
 
 -- Removing all the attendee status of the user
 DELETE FROM attendee WHERE id_user=$id;
