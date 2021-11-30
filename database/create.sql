@@ -94,16 +94,16 @@ CREATE TABLE post (
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     creation_date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT post_creation_date_check CHECK (creation_date <= NOW()),
-    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE
+    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE poll (
-    id_post INTEGER PRIMARY KEY REFERENCES post
+    id_post INTEGER PRIMARY KEY REFERENCES post ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE option (
     id SERIAL PRIMARY KEY,
-    id_poll INTEGER NOT NULL REFERENCES poll ON UPDATE CASCADE,
+    id_poll INTEGER NOT NULL REFERENCES poll ON UPDATE CASCADE ON DELETE CASCADE,
     description TEXT NOT NULL,
     votes INTEGER NOT NULL DEFAULT 0 CONSTRAINT option_votes_check CHECK (votes >= 0)
 );
@@ -111,7 +111,7 @@ CREATE TABLE option (
 CREATE TABLE comment (
     id SERIAL PRIMARY KEY,
     id_author INTEGER REFERENCES users ON UPDATE CASCADE,
-    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE,
+    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
     content TEXT NOT NULL,
     number_upvotes INTEGER NOT NULL DEFAULT 0 CONSTRAINT comment_number_upvotes CHECK (number_upvotes >= 0),
     number_downvotes INTEGER NOT NULL DEFAULT 0 CONSTRAINT comment_number_downvotes CHECK (number_downvotes >= 0),
@@ -119,20 +119,20 @@ CREATE TABLE comment (
 );
 
 CREATE TABLE rating (
-    id_comment INTEGER REFERENCES comment,
-    id_reader INTEGER REFERENCES users,
+    id_comment INTEGER REFERENCES comment ON UPDATE CASCADE,
+    id_reader INTEGER REFERENCES users ON UPDATE CASCADE,
     vote comment_rating NOT NULL,
     PRIMARY KEY (id_comment, id_reader)
 );
 
 CREATE TABLE file (
-    id_comment INTEGER PRIMARY KEY REFERENCES comment,
+    id_comment INTEGER PRIMARY KEY REFERENCES comment ON UPDATE CASCADE ON DELETE CASCADE,
     path TEXT NOT NULL CONSTRAINT file_path_uk UNIQUE
 );
 
 CREATE TABLE request (
     id SERIAL PRIMARY KEY,
-    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE,
+    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
     date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT request_date_check CHECK (date <= NOW()),
     accepted BOOLEAN NOT NULL DEFAULT false,
     id_requester INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE
@@ -140,7 +140,7 @@ CREATE TABLE request (
 
 CREATE TABLE invite (
     id SERIAL PRIMARY KEY,
-    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE,
+    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
     date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT invite_date_check CHECK (date <= NOW()),
     accepted BOOLEAN NOT NULL DEFAULT false,
     id_inviter INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
@@ -158,52 +158,53 @@ CREATE TABLE report (
 );
 
 CREATE TABLE user_report (
-    id_report INTEGER PRIMARY KEY REFERENCES report,
-    target INTEGER REFERENCES users NOT NULL
+    id_report INTEGER PRIMARY KEY REFERENCES report ON UPDATE CASCADE,
+    target INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE
 );
 
 CREATE TABLE comment_report (
     id_report INTEGER PRIMARY KEY REFERENCES report,
-    target INTEGER REFERENCES comment NOT NULL
+    target INTEGER NOT NULL REFERENCES comment ON UPDATE CASCADE
 );
 
 CREATE TABLE event_report (
-    id_report INTEGER PRIMARY KEY REFERENCES report,
-    target INTEGER REFERENCES event NOT NULL
+    id_report INTEGER PRIMARY KEY REFERENCES report ON UPDATE CASCADE,
+    target INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE
 );
 
 CREATE TABLE transaction (
     id SERIAL PRIMARY KEY,
-    id_user INTEGER REFERENCES users,
+    id_user INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
     amount DECIMAL(2) NOT NULL CONSTRAINT transaction_amount_check CHECK(amount > 0),
     date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT transaction_date_check CHECK (date <= NOW())
 );
 
 CREATE TABLE event_cancelled_notification (
-    id_user INTEGER PRIMARY KEY REFERENCES users,
+    id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
-    notificationDate TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT event_cancelled_notification_check CHECK (notificationDate <= NOW())
+    notification_date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT event_cancelled_notification_check CHECK (notification_date <= NOW())
 );
 
 CREATE TABLE attendee (
-    id_user INTEGER REFERENCES users,
-    id_event INTEGER REFERENCES event,
+    id_user INTEGER REFERENCES users ON UPDATE CASCADE,
+    id_event INTEGER REFERENCES event ON UPDATE CASCADE,
     PRIMARY KEY (id_user, id_event)
 );
 
 CREATE TABLE vote (
     id_user INTEGER REFERENCES users,
-    id_option INTEGER REFERENCES option,
+    id_option INTEGER REFERENCES option ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (id_user, id_option)
 );
 
 CREATE TABLE event_cancelled_notification_user (
-    id_notification INTEGER PRIMARY KEY REFERENCES event_cancelled_notification,
-    id_user INTEGER REFERENCES users
+    id_notification INTEGER REFERENCES event_cancelled_notification ON UPDATE CASCADE ON DELETE CASCADE,
+    id_user INTEGER REFERENCES users ON UPDATE CASCADE,
+    PRIMARY KEY (id_notification, id_user)
 );
 
 CREATE TABLE tag_event (
-    id_tag INTEGER REFERENCES tag,
-    id_event INTEGER REFERENCES event,
+    id_tag INTEGER REFERENCES tag ON UPDATE CASCADE,
+    id_event INTEGER REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (id_tag, id_event)
 );

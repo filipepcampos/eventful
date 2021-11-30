@@ -8,14 +8,15 @@ DROP TRIGGER IF EXISTS event_search_update ON event;
 DROP FUNCTION IF EXISTS event_search_update;
 ALTER TABLE event DROP COLUMN IF EXISTS tsvectors;
 
+-- ========================== Performance Indexes ===========================
 
-CREATE INDEX user_event_attendee ON attendee USING btree (id_user, id_event);
+CREATE INDEX user_attendee ON attendee USING hash (id_user);
 CREATE INDEX event_comment ON comment USING hash (id_event);
 CREATE INDEX comment_rating ON rating USING hash (id_comment);
 
+-- ======================== Full-text Search Indexes ========================
 
 ALTER TABLE event ADD COLUMN tsvectors TSVECTOR;
-
 
 CREATE FUNCTION event_search_update() RETURNS TRIGGER AS $$
 BEGIN
@@ -36,7 +37,6 @@ BEGIN
   RETURN NEW;
 END $$
 LANGUAGE plpgsql;
-
 
 CREATE TRIGGER event_search_update
   BEFORE INSERT OR UPDATE ON event

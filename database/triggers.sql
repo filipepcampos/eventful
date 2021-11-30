@@ -1,6 +1,7 @@
 SET search_path TO lbaw2122;
 
--- ===== TRIGGER01 =====
+-- =========================================== TRIGGER01 ===========================================
+
 DROP TRIGGER IF EXISTS event_attendee_dif_host ON attendee;
 DROP FUNCTION IF EXISTS event_attendee_dif_host;
 CREATE FUNCTION event_attendee_dif_host() RETURNS TRIGGER AS 
@@ -19,7 +20,8 @@ CREATE TRIGGER event_attendee_dif_host
     FOR EACH ROW
     EXECUTE PROCEDURE event_attendee_dif_host();
 
--- ===== TRIGGER02 =====
+-- =========================================== TRIGGER02 ===========================================
+
 DROP TRIGGER IF EXISTS event_request ON request;
 DROP FUNCTION IF EXISTS event_request;
 CREATE FUNCTION event_request() RETURNS TRIGGER AS
@@ -38,7 +40,8 @@ CREATE TRIGGER event_request
     FOR EACH ROW
     EXECUTE PROCEDURE event_request();
 
--- ===== TRIGGER03 =====
+-- =========================================== TRIGGER03 ===========================================
+
 DROP TRIGGER IF EXISTS user_report_trigger ON user_report;
 DROP FUNCTION IF EXISTS user_report;
 CREATE FUNCTION user_report() RETURNS TRIGGER AS
@@ -57,7 +60,8 @@ CREATE TRIGGER user_report_trigger
     FOR EACH ROW
     EXECUTE PROCEDURE user_report();
 
--- ===== TRIGGER04 =====
+-- =========================================== TRIGGER04 ===========================================
+
 DROP TRIGGER IF EXISTS comment_report_trigger ON comment_report;
 DROP FUNCTION IF EXISTS comment_report;
 CREATE FUNCTION comment_report() RETURNS TRIGGER AS
@@ -80,7 +84,8 @@ CREATE TRIGGER comment_report_trigger
     FOR EACH ROW
     EXECUTE PROCEDURE comment_report();
 
--- -- ===== TRIGGER05 =====
+-- =========================================== TRIGGER05 ===========================================
+
 DROP TRIGGER IF EXISTS event_report_trigger ON event_report;
 DROP FUNCTION IF EXISTS event_report;
 CREATE FUNCTION event_report() RETURNS TRIGGER AS
@@ -103,7 +108,8 @@ CREATE TRIGGER event_report_trigger
     FOR EACH ROW
     EXECUTE PROCEDURE event_report();
 
--- ===== TRIGGER06 =====
+-- =========================================== TRIGGER06 ===========================================
+
 DROP TRIGGER IF EXISTS host_invite ON invite;
 DROP FUNCTION IF EXISTS host_invite;
 CREATE FUNCTION host_invite() RETURNS TRIGGER AS
@@ -123,7 +129,8 @@ CREATE TRIGGER host_invite
     FOR EACH ROW
     EXECUTE PROCEDURE host_invite();
 
--- ===== TRIGGER07 =====
+-- =========================================== TRIGGER07 ===========================================
+
 DROP TRIGGER IF EXISTS vote_increase ON vote;
 DROP FUNCTION IF EXISTS vote_increase;
 CREATE FUNCTION vote_increase() RETURNS TRIGGER AS
@@ -140,7 +147,8 @@ CREATE TRIGGER vote_increase
     FOR EACH ROW
     EXECUTE PROCEDURE vote_increase();
 
--- ===== TRIGGER 08 =====
+-- =========================================== TRIGGER08 ===========================================
+
 DROP TRIGGER IF EXISTS user_report_disjoint ON user_report;
 DROP FUNCTION IF EXISTS user_report_disjoint;
 CREATE FUNCTION user_report_disjoint() RETURNS TRIGGER AS
@@ -163,7 +171,8 @@ CREATE TRIGGER user_report_disjoint
     FOR EACH ROW
     EXECUTE PROCEDURE user_report_disjoint();
     
--- ===== TRIGGER09 =====
+-- =========================================== TRIGGER09 ===========================================
+
 DROP TRIGGER IF EXISTS comment_report_disjoint ON comment_report;
 DROP FUNCTION IF EXISTS comment_report_disjoint;
 CREATE FUNCTION comment_report_disjoint() RETURNS TRIGGER AS
@@ -184,9 +193,10 @@ LANGUAGE plpgsql;
 CREATE TRIGGER comment_report_disjoint
     BEFORE INSERT OR UPDATE ON comment_report
     FOR EACH ROW
-    EXECUTE PROCEDURE comment_report_disjoint();    
+    EXECUTE PROCEDURE comment_report_disjoint();
 
--- ===== TRIGGER10 =====
+-- =========================================== TRIGGER10 ===========================================
+
 DROP TRIGGER IF EXISTS event_report_disjoint ON event_report;
 DROP FUNCTION IF EXISTS event_report_disjoint;
 CREATE FUNCTION event_report_disjoint() RETURNS TRIGGER AS
@@ -209,13 +219,18 @@ CREATE TRIGGER event_report_disjoint
     FOR EACH ROW
     EXECUTE PROCEDURE event_report_disjoint();
 
--- ===== TRIGGER11 =====
+-- =========================================== TRIGGER11 ===========================================
+
 DROP TRIGGER IF EXISTS comment_author_belongs_to_event ON comment;
 DROP FUNCTION IF EXISTS comment_author_belongs_to_event;
 CREATE FUNCTION comment_author_belongs_to_event() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF 
+    IF NEW.id_author = 0 -- Anonymous user
+    THEN
+        RETURN NEW;
+    END IF;
+    IF
         EXISTS (SELECT * FROM event WHERE id_host=NEW.id_author AND id=NEW.id_event) 
         OR 
         EXISTS (SELECT * FROM attendee WHERE id_user=NEW.id_author AND id_event=NEW.id_event)
@@ -232,16 +247,21 @@ CREATE TRIGGER comment_author_belongs_to_event
     FOR EACH ROW
     EXECUTE PROCEDURE comment_author_belongs_to_event();
 
--- ===== TRIGGER12 =====
+-- =========================================== TRIGGER12 ===========================================
+
 DROP TRIGGER IF EXISTS comment_reader_belongs_to_event ON rating;
 DROP FUNCTION IF EXISTS comment_reader_belongs_to_event;
 CREATE FUNCTION comment_reader_belongs_to_event() RETURNS TRIGGER AS
 $BODY$
 BEGIN
+    IF NEW.id_reader = 0 -- Anonymous user
+    THEN
+        RETURN NEW;
+    END IF;
     IF 
         EXISTS (SELECT * FROM ((SELECT id_event FROM comment WHERE id = NEW.id_comment) AS event_comment JOIN event ON (id_event=event.id)) WHERE id_host=NEW.id_reader)
         OR
-        EXISTS (SELECT * FROM ((SELECT id_event FROM comment WHERE id = NEW.id_comment) AS event_comment JOIN attendee ON (id_event=attendee.id_event)) WHERE id_user=NEW.id_reader)
+        EXISTS (SELECT * FROM ((SELECT id_event FROM comment WHERE id = NEW.id_comment) AS event_comment JOIN attendee ON (event_comment.id_event=attendee.id_event)) WHERE id_user=NEW.id_reader)
         THEN
             RETURN NEW;
     END IF;
@@ -255,7 +275,8 @@ CREATE TRIGGER comment_reader_belongs_to_event
     FOR EACH ROW
     EXECUTE PROCEDURE comment_reader_belongs_to_event();
 
--- ===== TRIGGER13 =====
+-- =========================================== TRIGGER13 ===========================================
+
 DROP TRIGGER IF EXISTS attendee_cannot_send_request ON request;
 DROP FUNCTION IF EXISTS attendee_cannot_send_request;
 CREATE FUNCTION attendee_cannot_send_request() RETURNS TRIGGER AS
@@ -274,21 +295,25 @@ CREATE TRIGGER attendee_cannot_send_request
     FOR EACH ROW
     EXECUTE PROCEDURE attendee_cannot_send_request();
 
--- ===== TRIGGER14 =====
+-- =========================================== TRIGGER14 ===========================================
+
 DROP TRIGGER IF EXISTS vote_made_by_attendee ON vote;
 DROP FUNCTION IF EXISTS vote_made_by_attendee;
 CREATE FUNCTION vote_made_by_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
+    IF NEW.id_user = 0 -- Anonymous user
+    THEN
+        RETURN NEW;
+    END IF;
     IF
         NEW.id_user IN (
             SELECT id_user FROM attendee WHERE id_event IN (
-                SELECT * FROM
+                SELECT post.id_event FROM
                     post 
                     JOIN 
-                    poll ON (post.id = poll.id_post)
-                    JOIN
-                    (SELECT * FROM option WHERE (id=NEW.id_option)) AS opt ON (poll.id = post.id_option) 
+                    (SELECT * FROM option WHERE (id=NEW.id_option)) AS opt
+                    ON (opt.id_poll = post.id)
             )
         )
         THEN
@@ -304,13 +329,14 @@ CREATE TRIGGER vote_made_by_attendee
     FOR EACH ROW
     EXECUTE PROCEDURE vote_made_by_attendee();
 
--- ===== TRIGGER15 =====
+-- =========================================== TRIGGER15 ===========================================
+
 DROP TRIGGER IF EXISTS attendees_vote_once ON vote;
 DROP FUNCTION IF EXISTS attendees_vote_once;
 CREATE FUNCTION attendees_vote_once() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM poll, option, vote WHERE id.poll = option.id_poll AND option.id = vote.id_option AND NEW.id_user = vote.id_user)
+    IF EXISTS (SELECT * FROM poll, option, vote WHERE poll.id_post = option.id_poll AND option.id = vote.id_option AND NEW.id_user = vote.id_user)
     THEN RAISE EXCEPTION 'An attendee can''t vote twice in the same poll';
     END IF;
     RETURN NEW;
@@ -323,7 +349,8 @@ CREATE TRIGGER attendees_vote_once
     FOR EACH ROW
     EXECUTE PROCEDURE attendees_vote_once();
 
--- ===== TRIGGER16 =====
+-- =========================================== TRIGGER16 ===========================================
+
 DROP TRIGGER IF EXISTS cant_invite_attendee ON invite;
 DROP FUNCTION IF EXISTS cant_invite_attendee;
 CREATE FUNCTION cant_invite_attendee() RETURNS TRIGGER AS
@@ -345,7 +372,8 @@ CREATE TRIGGER cant_invite_attendee
     FOR EACH ROW
     EXECUTE PROCEDURE cant_invite_attendee();
 
--- ===== TRIGGER17 =====
+-- =========================================== TRIGGER17 ===========================================
+
 DROP TRIGGER IF EXISTS increment_number_attendees ON attendee;
 DROP FUNCTION IF EXISTS increment_number_attendees;
 CREATE FUNCTION increment_number_attendees() RETURNS TRIGGER AS
@@ -358,28 +386,30 @@ $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER increment_number_attendees
-    AFTER INSERT ON attendee
+    BEFORE INSERT ON attendee
     FOR EACH ROW
     EXECUTE PROCEDURE increment_number_attendees();
 
--- ===== TRIGGER18 =====
+-- =========================================== TRIGGER18 ===========================================
+
 DROP TRIGGER IF EXISTS decrement_number_attendees ON attendee;
 DROP FUNCTION IF EXISTS decrement_number_attendees;
 CREATE FUNCTION decrement_number_attendees() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     UPDATE event SET number_attendees = number_attendees - 1 WHERE OLD.id_event = event.id;
-    RETURN NEW;
+    RETURN OLD;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER decrement_number_attendees
-    BEFORE DELETE ON attendee
+    AFTER DELETE ON attendee
     FOR EACH ROW
     EXECUTE PROCEDURE decrement_number_attendees();
 
--- ===== TRIGGER19 =====
+-- =========================================== TRIGGER19 ===========================================
+
 DROP TRIGGER IF EXISTS increment_number_upvotes ON rating;
 DROP FUNCTION IF EXISTS increment_number_upvotes;
 CREATE FUNCTION increment_number_upvotes() RETURNS TRIGGER AS
@@ -392,11 +422,12 @@ $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER increment_number_upvotes
-    AFTER INSERT ON rating
+    BEFORE INSERT ON rating
     FOR EACH ROW
     EXECUTE PROCEDURE increment_number_upvotes();
 
--- ===== TRIGGER20 =====
+-- =========================================== TRIGGER20 ===========================================
+
 DROP TRIGGER IF EXISTS increment_number_downvotes ON rating;
 DROP FUNCTION IF EXISTS increment_number_downvotes;
 CREATE FUNCTION increment_number_downvotes() RETURNS TRIGGER AS
@@ -409,40 +440,42 @@ $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER increment_number_downvotes
-    AFTER INSERT ON rating
+    BEFORE INSERT ON rating
     FOR EACH ROW
     EXECUTE PROCEDURE increment_number_downvotes();
 
--- ===== TRIGGER21 =====
+-- =========================================== TRIGGER21 ===========================================
+
 DROP TRIGGER IF EXISTS decrement_number_upvotes ON rating;
 DROP FUNCTION IF EXISTS decrement_number_upvotes;
 CREATE FUNCTION decrement_number_upvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     UPDATE comment SET number_upvotes = number_upvotes - 1 WHERE OLD.id_comment = comment.id;
-    RETURN NEW;
+    RETURN OLD;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER decrement_number_upvotes
-    BEFORE DELETE ON rating
+    AFTER DELETE ON rating
     FOR EACH ROW
     EXECUTE PROCEDURE decrement_number_upvotes();
 
--- ===== TRIGGER22 =====
+-- =========================================== TRIGGER22 ===========================================
+
 DROP TRIGGER IF EXISTS decrement_number_downvotes ON rating;
 DROP FUNCTION IF EXISTS decrement_number_downvotes;
 CREATE FUNCTION decrement_number_downvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     UPDATE comment SET number_downvotes = number_downvotes - 1 WHERE OLD.id_comment = comment.id;
-    RETURN NEW;
+    RETURN OLD;
 END
 $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER decrement_number_downvotes
-    BEFORE DELETE ON rating
+    AFTER DELETE ON rating
     FOR EACH ROW
     EXECUTE PROCEDURE decrement_number_downvotes();

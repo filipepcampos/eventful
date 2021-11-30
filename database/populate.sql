@@ -1,3 +1,5 @@
+SET search_path to lbaw2122;
+
 -- ========================= admin =========================
 
 INSERT INTO administrator(id,username,password,last_login) VALUES
@@ -321,6 +323,7 @@ INSERT INTO event(id,id_host,title,event_image,description, location,creation_da
   (149,125,'luctus et ultrices','purus,','lectus rutrum urna, nec luctus felis purus','Ap #920-4292 Imperdiet Rd.','2020-09-20 04:10:18','2022-05-31 01:47:22','True','True',25,9);
 
 -- ========================= attendee =========================
+
 INSERT INTO attendee(id_user,id_event) VALUES
   (76,99),
   (23,76),
@@ -336,7 +339,6 @@ INSERT INTO attendee(id_user,id_event) VALUES
   (143,92),
   (101,48),
   (54,87),
-  (65,76),
   (26,116),
   (41,127),
   (86,22),
@@ -392,13 +394,11 @@ INSERT INTO attendee(id_user,id_event) VALUES
   (17,35),
   (13,8),
   (27,82),
-  (41,129),
   (1,122),
   (59,73),
   (98,61),
   (148,5),
   (103,12),
-  (33,85),
   (144,123),
   (126,61),
   (53,74),
@@ -417,7 +417,6 @@ INSERT INTO attendee(id_user,id_event) VALUES
   (109,58),
   (48,38),
   (122,142),
-  (77,1),
   (7,60),
   (139,105),
   (38,107),
@@ -458,6 +457,8 @@ INSERT INTO attendee(id_user,id_event) VALUES
   (89,43),
   (120,5),
   (112,126),
+  (2,126),
+  (3,126),
   (131,16),
   (112,116),
   (110,135),
@@ -479,20 +480,14 @@ INSERT INTO attendee(id_user,id_event) VALUES
   (123,14),
   (146,2),
   (116,5),
-  (19,11),
   (12,13),
   (42,10),
   (102,12),
   (109,4),
   (134,9),
-  (40,10),
   (132,2),
-  (5,9),
-  (71,13),
   (139,1),
   (113,0),
-  (69,13),
-  (114,4),
   (41,12),
   (74,23),
   (37,36),
@@ -501,28 +496,18 @@ INSERT INTO attendee(id_user,id_event) VALUES
   (50,63),
   (28,54),
   (46,6),
-  (1,122),
   (5,9),
   (71,13),
   (33,85),
   (19,11),
-  (114,4),
   (77,1),
-  (82,29),
-  (40,10),
   (40,10),
   (114,4),
   (69,13),
-  (1,122),
-  (46,130),
-  (90,41),
   (41,129),
-  (88,97),
   (5,125),
   (65,76),
-  (121,51),
   (7,55);
-
 
 -- ========================= request =========================
 
@@ -786,49 +771,26 @@ INSERT INTO comment(id,id_author,id_event,content,creation_date) VALUES
 
 INSERT INTO rating(id_comment,id_reader,vote) VALUES
   (10,49,'Upvote'),
-  (6,74,'Downvote'),
-  (13,55,'Upvote'),
-  (13,30,'Upvote'),
-  (4,111,'Downvote'),
-  (17,69,'Downvote'),
-  (28,34,'Upvote'),
-  (25,28,'Downvote'),
-  (16,142,'Downvote'),
-  (6,15,'Downvote'),
-  (31,56,'Upvote'),
-  (11,52,'Downvote'),
-  (37,113,'Downvote'),
-  (7,38,'Upvote'),
-  (6,32,'Upvote'),
-  (25,21,'Downvote'),
-  (34,27,'Upvote'),
-  (12,7,'Downvote'),
-  (29,5,'Downvote'),
-  (36,25,'Upvote'),
-  (28,83,'Downvote'),
-  (34,63,'Upvote'),
-  (31,102,'Downvote'),
-  (2,18,'Upvote'),
-  (20,50,'Downvote'),
-  (8,143,'Upvote'),
-  (10,116,'Upvote'),
-  (4,9,'Downvote'),
-  (10,107,'Downvote'),
-  (19,97,'Downvote');
+  (1,41,'Downvote'),
+  (1,82,'Upvote'),
+  (1,76,'Upvote'),
+  (26,5, 'Upvote'),
+  (26,148, 'Downvote'),
+  (26,55, 'Downvote');
 
 -- ========================= file =========================
 
 INSERT INTO file(id_comment,path) VALUES
-  (28,'./main/idk.png'),
-  (4,'./oof.png'),
-  (19,'./main/idk.png'),
-  (26,'./main.jpeg'),
-  (21,'./test/test.png'),
-  (29,'./main.jpeg'),
-  (10,'./oof.png'),
+  (28,'./images/idk.png'),
+  (4,'./images/oof.png'),
+  (19,'./images/idkv2.png'),
+  (26,'./images/main.jpeg'),
+  (21,'./images/test.png'),
+  (29,'./images/not_main.jpeg'),
+  (10,'./images/oooof.png'),
   (8,'./test/idk.gif'),
   (25,'./test/test.png'),
-  (9,'./main.jpeg');
+  (9,'./debug.jpeg');
 
 -- ========================= report =========================
 
@@ -848,13 +810,13 @@ INSERT INTO user_report(id_report,target) VALUES
 
 -- ========================= comment_report =========================
 
-INSERT INTO comment_report(id_comment,target) VALUES
-  (2,67),
+INSERT INTO comment_report(id_report,target) VALUES
+  (2,7),
   (3,14);
 
 -- ========================= event_report =========================
 
-INSERT INTO event_report(id_event,target) VALUES
+INSERT INTO event_report(id_report,target) VALUES
   (4,86),
   (5,76);
 
@@ -884,26 +846,131 @@ INSERT INTO transaction(id,id_user,amount,date) VALUES
 
 -- ========================= event_cancelled_notification =========================
 
-INSERT INTO event_cancelled_notification(id,title,notification_date) VALUES
-  (0,"this event was canceled",'2021-01-03 03:58:12'),
-  (1,"mnum",'2020-06-22 14:20:42'),
-  (2,"lcom",'2020-08-29 23:50:36');
+INSERT INTO event_cancelled_notification(title,notification_date) VALUES
+  ('idk event was canceled','2021-01-03 03:58:12'),
+  ('mdis event was canceled','2021-01-03 03:58:12'),
+  ('test event was canceled','2021-01-03 03:58:12'),
+  ('mnum event was canceled','2020-06-22 14:20:42'),
+  ('lcom event was canceled','2020-08-29 23:50:36');
 
 -- ========================= event_cancelled_notification_user =========================
 
---INSERT INTO event_cancelled_notification_user(id_notification,id_user) VALUES
---  ()
-  
+INSERT INTO event_cancelled_notification_user(id_notification,id_user) VALUES
+  (4, 116), 
+  (1, 74), 
+  (2, 94), 
+  (1, 37), 
+  (1, 100), 
+  (3, 147), 
+  (2, 66), 
+  (2, 5), 
+  (2, 133), 
+  (1, 23), 
+  (4, 106), 
+  (2, 145), 
+  (4, 48), 
+  (2, 29), 
+  (2, 20), 
+  (1, 91), 
+  (2, 90), 
+  (4, 8), 
+  (2, 47), 
+  (2, 53), 
+  (1, 48),
+  (2, 120),
+  (3, 68),
+  (3, 71),
+  (1, 11),
+  (1, 8),
+  (3, 39),
+  (4, 111),
+  (1, 87),
+  (4, 126),
+  (3, 124),
+  (4, 71),
+  (4, 10),
+  (1, 102),
+  (2, 49),
+  (3, 72),
+  (4, 77),
+  (1, 56),
+  (4, 28),
+  (4, 147),
+  (1, 146), 
+  (3, 35), 
+  (2, 12), 
+  (3, 24), 
+  (2, 134), 
+  (2, 146), 
+  (2, 27), 
+  (3, 50);
 
+
+
+/*
+-- ========================= event_cancelled_notification_user =========================
+
+INSERT INTO event_cancelled_notification_user(id_notification,id_user) VALUES
+  (4, 116), 
+  (1, 74), 
+  (2, 94), 
+  (1, 37), 
+  (1, 100), 
+  (3, 147), 
+  (2, 66), 
+  (2, 5), 
+  (2, 133), 
+  (1, 23), 
+  (4, 106), 
+  (2, 145), 
+  (4, 48), 
+  (2, 29), 
+  (2, 20), 
+  (1, 91), 
+  (2, 90), 
+  (4, 8), 
+  (2, 47), 
+  (0, 53), 
+  (1, 48),
+  (2, 120),
+  (3, 68),
+  (3, 71),
+  (1, 11),
+  (1, 8),
+  (3, 39),
+  (4, 111),
+  (1, 87),
+  (4, 126),
+  (3, 124),
+  (4, 71),
+  (4, 10),
+  (1, 102),
+  (2, 49),
+  (3, 72),
+  (4, 77),
+  (1, 56),
+  (4, 28),
+  (4, 147),
+  (1, 146), 
+  (3, 35), 
+  (2, 12), 
+  (3, 24), 
+  (2, 134), 
+  (2, 146), 
+  (2, 27), 
+  (3, 50);
+*/
 -- ========================= vote =========================
 
 INSERT INTO vote(id_user,id_option) VALUES
   (112, 0),
   (143, 7),
-  (107, 9);
-  
+  (107, 9),
+  (2,0),
+  (3,2);
 
 -- ========================= tag_event =========================
+
 INSERT INTO tag_event(id_tag, id_event) VALUES
   (9,17),
   (9,133),
@@ -911,7 +978,6 @@ INSERT INTO tag_event(id_tag, id_event) VALUES
   (6,32),
   (11,40),
   (3,59),
-  (2,77),
   (8,22),
   (11,128),
   (11,100),
@@ -953,7 +1019,6 @@ INSERT INTO tag_event(id_tag, id_event) VALUES
   (13,77),
   (11,1),
   (3,91),
-  (11,40),
   (5,87),
   (3,126),
   (8,90),
@@ -980,8 +1045,6 @@ INSERT INTO tag_event(id_tag, id_event) VALUES
   (8,53),
   (0,117),
   (1,18),
-  (1,141),
-  (9,7),
   (8,26),
   (7,116),
   (3,145),
@@ -1006,7 +1069,6 @@ INSERT INTO tag_event(id_tag, id_event) VALUES
   (7,24),
   (1,95),
   (7,54),
-  (12,14),
   (10,80),
   (4,104),
   (10,44),
