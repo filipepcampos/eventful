@@ -190,7 +190,21 @@ paths:
       responses:
         '200':
           description: 'Show Event Page UI'
+  
+  #maybe?
+  /event/{event_id}/comment:
+    post:
+      # Add comment
+  /event/{event_id}/comment/{id}:
+    put:
+      # Update comment
+
+    delete:
+      # Delete comment
+
+
  
+
   /search:  
     get:
       operationId: R202
@@ -229,81 +243,65 @@ paths:
         
       responses:
         '200':
-          description: 'Show search page with events that match the criteria' 
+          description: 'Show search page with events that match the criteria'
+
+# TODO
+# -> Add/edit/delete comment
+# -> Add/change comment rating
+# -> Join/create/update/leave/delete event
+# -> Payment
+
+# -> Recover password
+# -> Invitations and request notification dismissal
+# -> Create/Accept/deny invite + requests
+
+# -> Add user report
+# -> Add comment report
+# -> Add event report
+# -> Remove reports (by admin)
+# -> Block user admin
+# -> Write unblock appeal
+
+# -> Update/Delete user
+# -> Create/update/delete post
+# -> Create/update/delete poll
+# -> Vote on option
 
 
-  /api/works:
-    get:
-     operationId: R202
-     summary: 'R202: Search Works API'
-     description: 'Searches for works and returns the results as JSON. Access: PUB.'
-
-     tags:
-       - 'M02: Works'
-     parameters:
-       - in: query
-         name: query
-         description: String to use for full-text search
-         schema:
-           type: string
-         required: false
-       - in: query
-         name: item
-         description: Category of the works
-         schema:
-           type: string
-         required: false
-       - in: query
-         name: loaned
-         description: Boolean with the loaned flag value
-         schema:
-           type: boolean
-         required: false
-       - in: query
-         name: owner
-         description: Boolean with the owner flag value
-         schema:
-           type: boolean
-         required: false
-       - in: query
-         name: classification
-         description: Integer corresponding to the work classification
-         schema:
-           type: integer
-         required: false
-
-     responses:
-       '200':
-         description: Success
-         content:
-           application/json:
-             schema:
-               type: array
-               items:
-                 type: object
-                 properties:
-                   id:
-                     type: string
-                   title:
-                     type: string
-                   obs:
-                     type: string
-                   year:
-                     type: string
-                   owner:
-                     type: string
-                   type:
-                     type: string
-               example:
-                 - id: 1
-                   title: Rihanna - Unapologetic
-                   obs: Good pop music album.
-                   year: 2012
-                   owner: Joana Lima
-                   type: MP3
-                 - id: 15
-                   title: Mr. Bean
-                   obs: The best comedy movie.
-                   year: 1995
-                   owner: Manuel Teixeira
-                   type: DVD
+#  __   .__.__  .__                            .__           
+# |  | _|__|  | |  |     _____   ____   ______ |  |   ______ 
+# |  |/ /  |  | |  |    /     \_/ __ \  \____ \|  |  /  ___/ 
+# |    <|  |  |_|  |__ |  Y Y  \  ___/  |  |_> >  |__\___ \  
+# |__|_ \__|____/____/ |__|_|  /\___  > |   __/|____/____  > 
+#      \/                    \/     \/  |__|             \/  
+#  __   .__.__  .__                    
+# |  | _|__|  | |  |     _____   ____  
+# |  |/ /  |  | |  |    /     \_/ __ \ 
+# |    <|  |  |_|  |__ |  Y Y  \  ___/ 
+# |__|_ \__|____/____/ |__|_|  /\___  >
+#      \/                    \/     \/ 
+#  __   .__.__  .__     
+# |  | _|__|  | |  |   
+# |  |/ /  |  | |  |   
+# |    <|  |  |_|  |__ 
+# |__|_ \__|____/____/ 
+#  __   .__.__   
+# |  | _|__|  | 
+# |  |/ /  |  | 
+# |    <|  |  |_
+# |__|_ \__|____/
+#  __   .__.   
+# |  | _|__|
+# |  |/ /  |
+# |    <|  |
+# |__|_ \__|
+#  __   
+# |  | _
+# |  |/ /
+# |    <
+# |__|_ \
+# 
+# 
+#
+# 
+#
