@@ -15,6 +15,8 @@ externalDocs:
 
 tags:
   - name: 'M01: Authentication and User Profile'
+  - name: 'M02: Visualizing events'
+  - name: 'M03: Name to be decided.'
 
 paths:
 
@@ -149,6 +151,31 @@ paths:
                   description: 'Failed authentication. Redirect to register form.'
                   value: '/register'
 
+  /api/recover-password:
+    post:
+      operationId: R106
+      summary: 'R106: Recover password'
+      description: 'Recover a password of the account associated to the given email. Access: PUB'
+      tags:
+        - 'M01: Authentication and User Profile'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: string # TODO: I'm not 100% sure if this is valid
+
+      responses:
+        '302':
+          description: 'Redirect after processing the recover password request.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'If an account exists with the given email password recovery information will be sent. Redirect to login page.'
+                  value: '/login'
 
   /user/{id}:
 
@@ -169,7 +196,193 @@ paths:
       responses:
         '200':
           description: 'Show User Profile UI'
-          
+
+  /api/user/{id}/invites:
+    get:
+      operationId: 'RXXX'
+      summary: 'RXXX: Retrieve all invites a user has received'
+      description: 'Return all invites a user has received in json format. Access: USR' # TODO: Make sure this is correct
+      tags:
+        - 'MXX:'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    username:
+                      type: string
+                    eventTitle:
+                      type: string
+                example:
+                - id: 1
+                  username: 'fred'
+                  eventTitle: 'Sample Event 2022'
+                - id: 15
+                  username: 'an0th3rus3r'
+                  eventTitle: 'Defcon 2022'
+        '403':
+          description: 'Access denied'
+
+  /api/user/{user_id}/invite/{id}:
+    post:
+      operationId: 'R302'
+      summary: 'R302: Answer invitation'
+      description: 'Accept/deny an invitation to an event. Access: USR' # TODO: Make sure this is correct
+      tags:
+        - 'M03: Name to be decided.'
+
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: boolean
+
+      responses:
+        '302':
+          description: 'Redirect after processing answer.'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Invite accepted. Redirect to user page.'
+                    value: '/' # TODO: Fix this value
+                    # TODO: Add invite rejected without giving error      
+
+  /api/user/{id}/requests:
+    get:
+      operationId: 'RXXX'
+      summary: 'RXXX: Retrieve all pending event join requests for user.'
+      description: 'Return all pending event join requests for user in json format. Access: USR' # TODO: Make sure this is correct
+      tags:
+        - 'MXX:'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    eventTitle:
+                      type: string
+                example:
+                - id: 1
+                  username: 'fred'
+                  eventTitle: 'Sample Event 2022'
+                - id: 15
+                  username: 'an0th3rus3r'
+                  eventTitle: 'Defcon 2022'
+        '403':
+          description: 'Access denied'
+
+  /api/event/{id}/requests:
+    get:
+      operationId: 'RXXX'
+      summary: 'RXXX: Retrieve all pending event join requests.'
+      description: 'Return all pending event join requests in json format. Access: HOST' # TODO: Make sure this exists
+      tags:
+        - 'MXX:'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    username:
+                      type: string
+                example:
+                - id: 1
+                  username: 'fred'
+                - id: 15
+                  username: 'an0th3rus3r'
+        '403':
+          description: 'Access denied'
+    
+  /api/event/{event_id}/request/{id}:
+    post:
+      operationId: 'RXXX'
+      summary: 'RXXX: Accept/Deny event join request'
+      description: 'Accept/deny request to join event. Access: HOST' # TODO: Make sure this is correct
+      tags:
+        - 'MXX: Name to be decided.'
+
+      parameters:
+        - in: path
+          name: event_id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: boolean
+
+      responses:
+        '302':
+          description: 'Redirect after processing answer.'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Invite accepted. Redirect to user page.'
+                    value: '/event/{event_id}'
+                    # TODO: Add invite rejected without giving error      
+
 
   /event/{id}:
 
@@ -191,19 +404,79 @@ paths:
         '200':
           description: 'Show Event Page UI'
   
-  #maybe?
-  /event/{event_id}/comment:
+  /api/event/{id}/invite:
     post:
-      # Add comment
-  /event/{event_id}/comment/{id}:
-    put:
-      # Update comment
+      operationId: 'R301'
+      summary: 'R301: Create invitation'
+      description: 'Create an invite to an event, from one user to another. Access: ATT' # TODO: Make sure this is correct
+      tags:
+        - 'M03: Name to be decided.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                invitedUsername:
+                  type: string
+              required:
+                - invitedUsername
+      responses:
+        '302':
+          description: 'Redirect after processing invite'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Invite created successfully. Redirect to event page.'
+                    value: '/event/{id}'
+  
+  /api/event/{id}/request:
+    post:
+      operationId: 'RXXX'
+      summary: 'RXXX: Create join request'
+      description: 'Create a request to join the event. Access: USR' # TODO: Make sure this is correct
+      tags:
+        - 'MXX: Name to be decided.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              # TODO: DELETE, I need to figure out how to do this properly
+              type: object
+              properties:
+                invitedUsername:
+                  type: string
+              required:
+                - invitedUsername
+              # TODO: DELETE
+      responses:
+        '302':
+          description: 'Redirect after processing invite'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Invite created successfully. Redirect to event page.'
+                    value: '/event/{id}'
 
-    delete:
-      # Delete comment
-
-
- 
+  ##maybe?
+  #/event/{event_id}/comment:
+  #  post:
+  #    # Add comment
+  #/event/{event_id}/comment/{id}:
+  #  put:
+  #    # Update comment
+#
+  #  delete:
+  #    # Delete comment
+  #
 
   /search:  
     get:
