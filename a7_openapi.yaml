@@ -653,6 +653,166 @@ paths:
         '200':
           description: 'Show search page with events that match the criteria'
 
+  /api/event/{id}/report:
+    post:
+      operationId: 'RXXX'
+      summary: 'RXXX: Add event report'
+      description: 'Report the specified event. Access: USR, ADM'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Report successful.'
+        '403':
+          description: 'Access denied'
+    delete:
+      operationId: 'RXXX'
+      summary: 'RXXX: Delete event report'
+      description: 'Delete an event report. Access: ADM'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Report successfully removed.'
+        '403':
+          description: 'Access denied'
+
+  /event/{event_id}/comment/{comment_id}/report:
+    post:
+      operationId: 'RXXX'
+      summary: 'RXXX: Add comment report'
+      description: 'Report the specified comment. Access: ATT, ADM'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: comment_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '302':
+          description: 'Redirect after successfully report the comment'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Comment reported successfully. Redirect to event page.'
+                    value: '/event/{event_id}'
+    delete:
+      operationId: 'RXXX'
+      summary: 'RXXX: Delete comment report'
+      description: 'Delete a comment report. Access: ADM'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: comment_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Report successfully removed.'
+        '403':
+          description: 'Access denied'
+
+  /api/user/{user_id}/report:
+    post:
+      operationId: 'RXXX'
+      summary: 'RXXX: Add user report'
+      description: 'Report the specified user. Access: USR, ADM'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Report successful.'
+        '403':
+          description: 'Access denied'
+    delete:
+      operationId: 'RXXX'
+      summary: 'RXXX: Delete user report'
+      description: 'Delete a user report. Access: ADM'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Report successfully removed.'
+        '403':
+          description: 'Access denied'
+
+  /api/user/{id}/block:
+    post:
+      operationId: 'RXXX'
+      summary: 'RXXX: Block user'
+      description: 'Block the specified user. Access: ADM'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'User block successful.'
+        '403':
+          description: 'Access denied'
+    delete:
+      operationId: 'RXXX'
+      summary: 'RXXX: Unblock user'
+      description: 'Unblock the specified user. Access: ADM'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Block successfully removed.'
+        '403':
+          description: 'Access denied'
+
 # TODO
 # -> Add/edit/delete comment
 # -> Add/change comment rating
@@ -663,12 +823,13 @@ paths:
 # -> Invitations and request notification dismissal
 # -> Create/Accept/deny invite + requests
 
-# -> Add user report
-# -> Add comment report
-# -> Add event report
-# -> Remove reports (by admin)
-# -> Block user admin
-# -> Write unblock appeal
+# ? -> Adicionar motive nos post dos 3 reports
+# DONE -> Add user report
+# DONE -> Add comment report
+# DONE -> Add event report
+# DONE -> Remove reports (by admin)
+# DONE -> Block/Unblock user (admin)
+# ? -> Write unblock appeal
 
 # -> Update/Delete user
 # -> Create/update/delete post
