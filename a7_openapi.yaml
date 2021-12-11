@@ -20,7 +20,6 @@ tags:
 
 paths:
 
-
   /login:
     get:
       operationId: R101
@@ -31,7 +30,6 @@ paths:
       responses:
         '200':
           description: 'Show login form'
-
     post:
       operationId: R102
       summary: 'R102: Login action'
@@ -67,7 +65,6 @@ paths:
                   description: 'Failed authentication. Redirect to login form.'
                   value: '/login'
 
-
   /logout:
     post:
       operationId: R103
@@ -87,9 +84,7 @@ paths:
                   description: 'Successful logout. Redirect to login form.'
                   value: '/login'
 
-
   /register:
-
     get:
       operationId: R104
       summary: 'R104: Register Form'
@@ -99,14 +94,12 @@ paths:
       responses:
         '200':
           description: 'Show register UI'
-
     post:
       operationId: R105
       summary: 'R105: Register Action'
       description: 'Processes the new user registration form submission. Access: PUB'
       tags:
         - 'M01: Authentication and User Profile'
-
       requestBody:
         required: true
         content:
@@ -135,7 +128,6 @@ paths:
                 - password
                 - name
                 - birthdate
-
       responses:
         '302':
           description: 'Redirect after processing the new user information.'
@@ -164,7 +156,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: string # TODO: I'm not 100% sure if this is valid
-
       responses:
         '302':
           description: 'Redirect after processing the recover password request.'
@@ -178,21 +169,18 @@ paths:
                   value: '/login'
 
   /user/{id}:
-
     get:
       operationId: R106
       summary: 'R106: View user profile'
       description: 'Show the individual user profile. Access: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
-
       parameters:
         - in: path
           name: id
           schema:
             type: integer
           required: true
-
       responses:
         '200':
           description: 'Show User Profile UI'
@@ -242,7 +230,6 @@ paths:
       description: 'Accept/deny an invitation to an event. Access: USR' # TODO: Make sure this is correct
       tags:
         - 'M03: Name to be decided.'
-
       parameters:
         - in: path
           name: user_id
@@ -260,7 +247,6 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: boolean
-
       responses:
         '302':
           description: 'Redirect after processing answer.'
@@ -351,7 +337,6 @@ paths:
       description: 'Accept/deny request to join event. Access: HOST' # TODO: Make sure this is correct
       tags:
         - 'MXX: Name to be decided.'
-
       parameters:
         - in: path
           name: event_id
@@ -369,37 +354,32 @@ paths:
           application/x-www-form-urlencoded:
             schema:
               type: boolean
-
       responses:
         '302':
           description: 'Redirect after processing answer.'
           headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  302Success:
-                    description: 'Invite accepted. Redirect to user page.'
-                    value: '/event/{event_id}'
-                    # TODO: Add invite rejected without giving error      
-
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Invite accepted. Redirect to user page.'
+                  value: '/event/{event_id}'
+                  # TODO: Add invite rejected without giving error      
 
   /event/{id}:
-
     get:
       operationId: R201
       summary: 'R201: View event page'
       description: 'Show event page. Access: ATT'
       tags:
         - 'M02: Visualizing events'
-
       parameters:
       - in: path
         name: id
         schema:
           type: integer
         required: true
-
       responses:
         '200':
           description: 'Show Event Page UI'
@@ -466,27 +446,183 @@ paths:
                     description: 'Invite created successfully. Redirect to event page.'
                     value: '/event/{id}'
 
-  ##maybe?
-  #/event/{event_id}/comment:
-  #  post:
-  #    # Add comment
-  #/event/{event_id}/comment/{id}:
-  #  put:
-  #    # Update comment
-#
-  #  delete:
-  #    # Delete comment
-  #
+  /event/{event_id}/comment:
+    post:
+      operationId: 'RXXX'
+      summary: 'RXXX: Create comment'
+      description: 'Create a comment on an event. Access: ATT'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                files:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      file_path:
+                        type: string
+                  minItems: 1                 # Check this out
+                  maxItems: 10
+              required: 
+                - content                     # Array not required
+      responses:
+        '302':
+          description: 'Redirect after successfully creating comment'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Comment created successfully. Redirect to event page.'
+                    value: '/event/{event_id}'
+
+  /event/{event_id}/comment/{comment_id}:
+    put:
+      operationId: 'RXXX'
+      summary: 'RXXX: Update comment'
+      description: 'Update a comment on an event. Access: ATT'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: comment_id
+        chema:
+          type: integer
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      responses:
+        '302':
+          description: 'Redirect after successfully updating comment'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Comment updated successfully. Redirect to event page.'
+                    value: '/event/{event_id}'
+    delete:
+      operationId: 'RXXX'
+      summary: 'RXXX: Delete comment'
+      description: 'Delete a comment on an event. Access: ATT'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: comment_id
+        chema:
+          type: integer
+        required: true
+      responses:
+        '302':
+          description: 'Redirect after successfully deleting a comment'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Comment deleted successfully. Redirect to event page.'
+                    value: '/event/{event_id}'
+  
+  /event/{event_id}/comment/{comment_id}/user/{user_id}:
+    post:
+      operationId: 'RXXX'
+      summary: 'RXXX: Rating a comment'
+      description: 'Rating a comment on an event. Access: REA'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: comment_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                files:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      file_path:
+                        type: string
+                  minItems: 1                 # Check this out
+                  maxItems: 10
+              required: 
+                - content                     # Array not required
+      responses:
+        '302':
+          description: 'Redirect after successfully creating comment'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Comment created successfully. Redirect to event page.'
+                    value: '/event/{event_id}'
+
 
   /search:  
     get:
       operationId: R202
       summary: 'R202: Search events'
       description: 'Show event search results. Access: PUB'
-
       tags:
         - 'M02: Visualizing events'
-
       parameters:
         - in: query
           name: name
@@ -513,7 +649,6 @@ paths:
             items:
               type: integer
           required: false
-        
       responses:
         '200':
           description: 'Show search page with events that match the criteria'
