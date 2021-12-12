@@ -18,7 +18,7 @@ tags:
   - name: 'M02: Events'
   - name: 'M03: User interactions'
   - name: 'M04: Static Pages and User Management'     # TODO: Add more
-  - name: 'M05: Reports'
+  - name: 'M05: Reports and User Blocks'
 
 # Accesses:
 # -> PUB - Public
@@ -116,7 +116,7 @@ paths:
       summary: 'R103: Logout Action'
       description: 'Logout the current authenticated user. Access: USR, ADM'
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - 'M01: Authentication and User Profile'
       responses:
         '302':
           description: 'Redirect after processing logout.'
@@ -239,7 +239,7 @@ paths:
       summary: 'R108: View User Profile'
       description: 'Show the individual user profile. Access: PUB'
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - 'M01: Authentication and User Profile'
       parameters:
         - in: path
           name: user_id
@@ -888,7 +888,7 @@ paths:
       summary: 'R501: Add Event Report API'
       description: 'Report the specified event. Access: USR, ADM'   # ADM ?
       tags:
-        - 'M05: Reports'
+        - 'M05: Reports and User Blocks'
       parameters:
       - in: query
         name: event_id
@@ -907,7 +907,7 @@ paths:
       summary: 'R502: Delete Event Report API'
       description: 'Delete an event report. Access: ADM'              # We should have a removeReport that aglomerates all three types of report, it shouldn't be individual I think. It would recieve the report id instead
       tags:
-        - 'M05: Reports'
+        - 'M05: Reports and User Blocks'
       parameters:
       - in: query
         name: event_id
@@ -929,7 +929,7 @@ paths:
       summary: 'R503: Add Comment Report API'
       description: 'Report the specified comment. Access: ATT, ADM'
       tags:
-        - 'M05: Reports'
+        - 'M05: Reports and User Blocks'
       parameters:
       - in: query
         name: comment_id
@@ -948,7 +948,7 @@ paths:
       summary: 'R504: Delete Comment Report API'
       description: 'Delete a comment report. Access: ADM'
       tags:
-        - 'M05: Reports'
+        - 'M05: Reports and User Blocks'
       parameters:
       - in: query
         name: comment_id
@@ -970,7 +970,7 @@ paths:
       summary: 'R505: Add User Report API'
       description: 'Report the specified user. Access: USR, ADM'
       tags:
-        - 'M05: Reports'
+        - 'M05: Reports and User Blocks'
       parameters:
       - in: query
         name: user_id
@@ -989,7 +989,7 @@ paths:
       summary: 'R506: Delete User Report API'
       description: 'Delete a user report. Access: ADM'
       tags:
-        - 'M05: Reports'
+        - 'M05: Reports and User Blocks'
       parameters:
       - in: query
         name: user_id
@@ -1011,7 +1011,7 @@ paths:
       summary: 'R507: Block User API'
       description: 'Block the specified user. Access: ADM'
       tags:
-        - 'M05: Reports'
+        - 'M05: Reports and User Blocks'
       parameters:
       - in: query
         name: user_id
@@ -1030,7 +1030,7 @@ paths:
       summary: 'R508: Unblock user'
       description: 'Unblock the specified user. Access: ADM'
       tags:
-        - 'M05: Reports'
+        - 'M05: Reports and User Blocks'
       parameters:
       - in: query
         name: user_id
