@@ -204,7 +204,7 @@ paths:
           description: 'Show recover password form'
     post:
       operationId: R107
-      summary: 'R106: Recover Password Action'
+      summary: 'R107: Recover Password Action'
       description: 'Recover a password of the account associated to the given email. Access: PUB'
       tags:
         - 'M01: Authentication and User Profile'
@@ -269,12 +269,12 @@ paths:
         '200':
           description: 'Show Event Page UI'
 
-  # --------------------------------- CREATE EVENT ---------------------------------
+  # --------------------------------- EVENT MANAGEMENT ---------------------------------
 
   /event:
     get:
       operationId: R202
-      summary: 'R202: Show Event Cretion Form'
+      summary: 'R202: Show Event Creation Form'
       description: 'Provide event creation form. Access: USR'
       tags:
         - 'M02: Events'
@@ -391,7 +391,7 @@ paths:
   /api/createInvite:
     post:
       operationId: 'R301'
-      summary: 'R301: Create Invitation'
+      summary: 'R301: Create Invitation API'
       description: 'Create an invite to an event, from one user to another. Access: USR'
       tags:
         - 'M03: User interactions'
@@ -425,7 +425,7 @@ paths:
   /api/invitesReceived:
     get:
       operationId: 'R302'
-      summary: 'R302: Retrieve All Pending Received Invites'
+      summary: 'R302: Retrieve All Pending Received Invites API'
       description: 'Return all pending invites a user has received in JSON format. Access: USR'
       tags:
         - 'M03: User interactions'
@@ -466,7 +466,7 @@ paths:
   /api/invitesSent:
     get:
       operationId: 'R303'
-      summary: 'R303: Retrieve All Pending Invites Sent'
+      summary: 'R303: Retrieve All Pending Invites Sent API'
       description: 'Return all pending invites a user has sent in JSON format. Access: USR'
       tags:
         - 'M03: User interactions'
@@ -507,7 +507,7 @@ paths:
   /api/inviteResponse:
     put:
       operationId: 'R304'
-      summary: 'R304: Answering Invitation'
+      summary: 'R304: Answering Invitation API'
       description: 'Accept/deny an invitation to an event. Access: USR'
       tags:
         - 'M03: User interactions'
@@ -541,7 +541,7 @@ paths:
   /api/createRequest:    # API's should never redirect right? Only return the result of their queries
     post:
       operationId: 'R305'
-      summary: 'R305: Create Join Event Request'
+      summary: 'R305: Create Join Event Request API'
       description: 'Create a request to join the event. Access: USR'
       tags:
         - 'M03: User interactions'
@@ -569,7 +569,7 @@ paths:
   /api/requestsSent:
     get:
       operationId: 'R306'
-      summary: 'R306: Retrieve All Pending Event Join Requests of a User'
+      summary: 'R306: Retrieve All Pending Event Join Requests of a User API'
       description: 'Return all pending event join requests for user in JSON format. Access: USR'
       tags:
         - 'M03: User interactions'
@@ -606,7 +606,7 @@ paths:
   /api/requestsRecieved:
     get:
       operationId: 'R307'
-      summary: 'R307: Retrieve All Pending Event Join Requests Recieved'
+      summary: 'R307: Retrieve All Pending Event Join Requests Recieved API'
       description: 'Return all pending event join requests in JSON format. Access: HOST'
       tags:
         - 'M03: User interactions'
@@ -643,7 +643,7 @@ paths:
   /api/requestResponse:
     post:
       operationId: 'R308'
-      summary: 'R308: Accept/Deny Event Join Request'
+      summary: 'R308: Accept/Deny Event Join Request API'
       description: 'Accept/deny a request to join event. Access: HOST'
       tags:
         - 'M03: User interactions'
@@ -1027,7 +1027,7 @@ paths:
     
     delete:
       operationId: 'R508'
-      summary: 'R508: Unblock user'
+      summary: 'R508: Unblock User API'
       description: 'Unblock the specified user. Access: ADM'
       tags:
         - 'M05: Reports and User Blocks'
