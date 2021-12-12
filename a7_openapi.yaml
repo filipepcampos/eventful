@@ -16,7 +16,8 @@ externalDocs:
 tags:
   - name: 'M01: Authentication and User Profile'
   - name: 'M02: Visualizing events'
-  - name: 'M03: Name to be decided.'
+  - name: 'M03: User interactions.'
+  - name: 'M04: Static Pages & User Management'
 
 paths:
 
@@ -187,11 +188,11 @@ paths:
 
   /api/user/{id}/invites:
     get:
-      operationId: 'RXXX'
-      summary: 'RXXX: Retrieve all invites a user has received'
+      operationId: 'R301'
+      summary: 'R301: Retrieve all invites a user has received'
       description: 'Return all invites a user has received in json format. Access: USR' # TODO: Make sure this is correct
       tags:
-        - 'MXX:'
+        - 'M03: User interactions'
       parameters:
         - in: path
           name: id
@@ -229,7 +230,7 @@ paths:
       summary: 'R302: Answer invitation'
       description: 'Accept/deny an invitation to an event. Access: USR' # TODO: Make sure this is correct
       tags:
-        - 'M03: Name to be decided.'
+        - 'M03: User interactions.'
       parameters:
         - in: path
           name: user_id
@@ -246,7 +247,7 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              type: boolean
+              type: boolean # TODO: I'm not sure this is valid
       responses:
         '302':
           description: 'Redirect after processing answer.'
@@ -258,15 +259,15 @@ paths:
                   302Success:
                     description: 'Invite accepted. Redirect to user page.'
                     value: '/' # TODO: Fix this value
-                    # TODO: Add invite rejected without giving error      
+                    # TODO: Add invite rejected without giving error
 
   /api/user/{id}/requests:
     get:
-      operationId: 'RXXX'
-      summary: 'RXXX: Retrieve all pending event join requests for user.'
+      operationId: 'R303'
+      summary: 'R303: Retrieve all pending event join requests for user.'
       description: 'Return all pending event join requests for user in json format. Access: USR' # TODO: Make sure this is correct
       tags:
-        - 'MXX:'
+        - 'M03: User interactions'
       parameters:
         - in: path
           name: id
@@ -298,11 +299,11 @@ paths:
 
   /api/event/{id}/requests:
     get:
-      operationId: 'RXXX'
-      summary: 'RXXX: Retrieve all pending event join requests.'
+      operationId: 'R304'
+      summary: 'R304: Retrieve all pending event join requests.'
       description: 'Return all pending event join requests in json format. Access: HOST' # TODO: Make sure this exists
       tags:
-        - 'MXX:'
+        - 'M03: User interactions'
       parameters:
         - in: path
           name: id
@@ -332,11 +333,11 @@ paths:
     
   /api/event/{event_id}/request/{id}:
     post:
-      operationId: 'RXXX'
-      summary: 'RXXX: Accept/Deny event join request'
+      operationId: 'R305'
+      summary: 'R305: Accept/Deny event join request'
       description: 'Accept/deny request to join event. Access: HOST' # TODO: Make sure this is correct
       tags:
-        - 'MXX: Name to be decided.'
+        - 'M03: User interactions'
       parameters:
         - in: path
           name: event_id
@@ -353,7 +354,7 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              type: boolean
+              type: boolean # TODO: I'm not 100% sure if this is correct
       responses:
         '302':
           description: 'Redirect after processing answer.'
@@ -441,11 +442,11 @@ paths:
   
   /api/event/{id}/invite:
     post:
-      operationId: 'R301'
-      summary: 'R301: Create invitation'
+      operationId: 'R306'
+      summary: 'R306: Create invitation'
       description: 'Create an invite to an event, from one user to another. Access: ATT' # TODO: Make sure this is correct
       tags:
-        - 'M03: Name to be decided.'
+        - 'M03: User interactions.'
       requestBody:
         required: true
         content:
@@ -471,11 +472,11 @@ paths:
   
   /api/event/{id}/request:
     post:
-      operationId: 'RXXX'
-      summary: 'RXXX: Create join request'
+      operationId: 'R307'
+      summary: 'R307: Create join request'
       description: 'Create a request to join the event. Access: USR' # TODO: Make sure this is correct
       tags:
-        - 'MXX: Name to be decided.'
+        - 'M03: User interactions.'
       requestBody:
         required: true
         content:
