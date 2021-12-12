@@ -16,7 +16,7 @@ externalDocs:
 tags:
   - name: 'M01: Authentication and User Profile'
   - name: 'M02: Visualizing events'
-  - name: 'M03: User interactions.'
+  - name: 'M03: User interactions'
   - name: 'M04: Static Pages & User Management'
 
 paths:
@@ -230,7 +230,7 @@ paths:
       summary: 'R302: Answer invitation'
       description: 'Accept/deny an invitation to an event. Access: USR' # TODO: Make sure this is correct
       tags:
-        - 'M03: User interactions.'
+        - 'M03: User interactions'
       parameters:
         - in: path
           name: user_id
@@ -446,7 +446,7 @@ paths:
       summary: 'R306: Create invitation'
       description: 'Create an invite to an event, from one user to another. Access: ATT' # TODO: Make sure this is correct
       tags:
-        - 'M03: User interactions.'
+        - 'M03: User interactions'
       requestBody:
         required: true
         content:
@@ -476,7 +476,7 @@ paths:
       summary: 'R307: Create join request'
       description: 'Create a request to join the event. Access: USR' # TODO: Make sure this is correct
       tags:
-        - 'M03: User interactions.'
+        - 'M03: User interactions'
       requestBody:
         required: true
         content:
