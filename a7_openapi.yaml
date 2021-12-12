@@ -365,7 +365,62 @@ paths:
                 302Success:
                   description: 'Invite accepted. Redirect to user page.'
                   value: '/event/{event_id}'
-                  # TODO: Add invite rejected without giving error      
+                  # TODO: Add invite rejected without giving error     
+
+  /event:
+    post:
+      operationId: 'RXXX'
+      summary: 'RXXX: Create event'
+      description: 'Create an event. Access: USR'
+      tags:
+        - 'MXX: Name to be decided.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                image:
+                  type: string    # URL
+                description:
+                  type: string
+                location:
+                  type: string
+                date:
+                  type: string
+                visibility:
+                  type: boolean
+                accessability:
+                  type: boolean
+                capacity:
+                  type: integer
+                price:
+                  type: number
+                  format: float
+              required:
+                - title
+                - image
+                - description
+                - location
+                - date
+                - visibility
+                - accessability
+                - capacity
+                - price
+      responses:
+        '302':
+          description: 'Redirect after creating ecent'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Event created successfully. Redirect to event page.'
+                    value: '/event/{id}'
 
   /event/{id}:
     get:
@@ -495,7 +550,7 @@ paths:
     put:
       operationId: 'RXXX'
       summary: 'RXXX: Update comment'
-      description: 'Update a comment on an event. Access: ATT'
+      description: 'Update a comment on an event. Access: AUT'
       tags:
         - 'MXX: Name to be decided.'
       parameters:
@@ -506,7 +561,7 @@ paths:
         required: true
       - in: path
         name: comment_id
-        chema:
+        schema:
           type: integer
         required: true
       requestBody:
@@ -534,7 +589,7 @@ paths:
     delete:
       operationId: 'RXXX'
       summary: 'RXXX: Delete comment'
-      description: 'Delete a comment on an event. Access: ATT'
+      description: 'Delete a comment on an event. Access: AUT'
       tags:
         - 'MXX: Name to be decided.'
       parameters:
@@ -587,34 +642,101 @@ paths:
         required: true
         content:
           application/x-www-form-urlencoded:
+            name: rating
             schema:
-              type: object
-              properties:
-                content:
-                  type: string
-                files:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      file_path:
-                        type: string
-                  minItems: 1                 # Check this out
-                  maxItems: 10
-              required: 
-                - content                     # Array not required
+              type: string
+              enum:
+                - Upvote
+                - Downvote
+            required: true
       responses:
         '302':
-          description: 'Redirect after successfully creating comment'
+          description: 'Redirect after successfully rating comment'
           headers:
               Location:
                 schema:
                   type: string
                 examples:
                   302Success:
-                    description: 'Comment created successfully. Redirect to event page.'
+                    description: 'Comment rated successfully. Redirect to event page.'
                     value: '/event/{event_id}'
-
+    put:
+      operationId: 'RXXX'
+      summary: 'RXXX: changing rating of a comment'
+      description: 'Changing rating of a comment on an event. Access: REA'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: comment_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: boolean
+              required: 
+                - rating
+      responses:
+        '302':
+          description: 'Redirect after successfully changing rating of a comment'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Comment rating successfully changed. Redirect to event page.'
+                    value: '/event/{event_id}'
+    delete:
+      operationId: 'RXXX'
+      summary: 'RXXX: Deleting rating of a comment'
+      description: 'Changing rating of a comment on an event. Access: REA'
+      tags:
+        - 'MXX: Name to be decided.'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: comment_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '302':
+          description: 'Redirect after successfully deleting rating of a comment'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Comment rating successfully deleted. Redirect to event page.'
+                    value: '/event/{event_id}'
 
   /search:  
     get:
@@ -654,8 +776,9 @@ paths:
           description: 'Show search page with events that match the criteria'
 
 # TODO
-# -> Add/edit/delete comment
-# -> Add/change comment rating
+# DONE -> Add/edit/delete comment
+# DONE -> Add/change comment rating
+# DONE -> Create event
 # -> Join/create/update/leave/delete event
 # -> Payment
 
