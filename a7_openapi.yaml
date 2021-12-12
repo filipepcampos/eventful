@@ -25,6 +25,7 @@ tags:
 # -> USR - Authenticated user
 # -> ADM - Administrator
 # -> ATT - Event attendee
+# -> HOST - Event host
 # -> AUT - Author of a comment
 # -> REA - Reader of a comment AKA not the comment author AKA comment rater
 
@@ -37,11 +38,14 @@ tags:
 # Everything else will be dynamically created in said pages
 # Example: Creating a comment will be done in the event page, hence why we don't have a create comment page, but an api call to the database
 
+
+
+
 # TODO
 # DONE -> Add/edit/delete comment
 # DONE -> Add/change comment rating
-# DONE -> Create event
-# -> Join/update/leave/delete event
+# DONE -> Create/update event
+# -> Join/leave/delete event
 # -> Payment
 
 # -> Recover password
@@ -60,6 +64,9 @@ tags:
 # -> Create/update/delete post
 # -> Create/update/delete poll
 # -> Vote on option
+
+
+
 
 paths:
 
@@ -105,7 +112,7 @@ paths:
               examples:
                 302Success:
                   description: 'Successful authentication. Redirect to user profile.'
-                  value: '/user/{id}'
+                  value: '/user/{user_id}'
                 302Failure:
                   description: 'Failed authentication. Redirect to login form.'
                   value: '/login'
@@ -185,7 +192,7 @@ paths:
               examples:
                 302Success:
                   description: 'Successful authentication. Redirect to user profile.'
-                  value: '/user/{id}'
+                  value: '/user/{user_id}'
                 302Failure:
                   description: 'Failed authentication. Redirect to register form.'
                   value: '/register'
@@ -269,9 +276,9 @@ paths:
         '200':
           description: 'Show Event Page UI'
 
-  # --------------------------------- EVENT MANAGEMENT ---------------------------------
+  # --------------------------------- EVENT CREATION ---------------------------------
 
-  /event:
+  /createEvent:
     get:
       operationId: R202
       summary: 'R202: Show Event Creation Form'
@@ -333,17 +340,88 @@ paths:
                 examples:
                   302Success:
                     description: 'Successful event creation. Redirect to event page.'
-                    value: '/event/{id}'
+                    value: '/event/{event_id}'
                   302Failure:
                     description: 'Failed event creation. Redirect to event creation form.'
                     value: '/event'
+    
+  # --------------------------------- EVENT UPDATE ---------------------------------
+
+  /event/{event_id}/update:
+    get:
+      operationId: R204
+      summary: 'R204: Show Event Update Form'
+      description: 'Provide event update form. Access: HOST'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      tags:
+        - 'M02: Events'
+      responses:
+        '200':
+          description: 'Show event update form'
+    put:
+      operationId: 'R205'
+      summary: 'R205: Event Update Action'
+      description: 'Update an event. Access: HOST'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      tags:
+        - 'M02: Events'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                image:
+                  type: string    # URL
+                description:
+                  type: string
+                location:
+                  type: string
+                date:
+                  type: string
+                visibility:
+                  type: boolean
+                accessability:
+                  type: boolean
+                capacity:
+                  type: integer
+                price:
+                  type: number
+                  format: float
+      responses:
+        '302':
+          description: 'Redirect after updating event.'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Successful event update. Redirect to event page.'
+                    value: '/event/{event_id}'
+                  302Failure:
+                    description: 'Failed event update. Redirect to event update form.'
+                    value: '/event/{event_id}/update'
 
   # --------------------------------- SEARCHING EVENTS ---------------------------------
 
   /search:  
     get:
-      operationId: R203
-      summary: 'R203: Search Events Form'
+      operationId: R206
+      summary: 'R206: Search Events Form'
       description: 'Show search events form. Access: PUB'
       tags:
         - 'M02: Events'
@@ -351,8 +429,8 @@ paths:
         '200':
           description: 'Show search events form'
     post:
-      operationId: R204
-      summary: 'R204: Search Events Action'
+      operationId: R207
+      summary: 'R207: Search Events Action'
       description: 'Showing event search results. Access: PUB'
       tags:
         - 'M02: Events'
