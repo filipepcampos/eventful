@@ -719,7 +719,7 @@ paths:
   # --------------------------------- ACCEPTING/DENYING A REQUEST ---------------------------------
 
   /api/requestResponse:
-    post:
+    put:
       operationId: 'R308'
       summary: 'R308: Accept/Deny Event Join Request API'
       description: 'Accept/deny a request to join event. Access: HOST'
