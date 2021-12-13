@@ -60,7 +60,7 @@ tags:
 # DONE -> Block/Unblock user (admin)
 # ? -> Write unblock appeal
 
-# -> Update/Delete user
+# PLS SOMEONE CONFIRM IDK WHAT IM DOING -> Update/Delete user
 # -> Create/update/delete post
 # -> Create/update/delete poll
 # -> Vote on option
@@ -1119,5 +1119,86 @@ paths:
       responses:
         '200':
           description: 'Block successfully removed'
+        '403':
+          description: 'Access denied'
+
+# --------------------------------- USER UPDATE ---------------------------------
+
+  /user/{user_id}/update:
+    get:
+      operationId: R109
+      summary: 'R109: Show User Update Form'
+      description: 'Provide user update form. Access: USR'
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+        - 'M01: Authentication and User Profile'
+      responses:
+        '200':
+          description: 'Show user update form'
+    put:
+      operationId: 'R110'
+      summary: 'R110: User Update Action'
+      description: 'Update a user. Access: USR'
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+        - 'M01: Authentication and User Profile'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                name:
+                  type: string
+                pic:
+                  type: string    # URL
+                description:
+                  type: string
+      responses:
+        '302':
+          description: 'Redirect after updating user.'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Successful user update. Redirect to user page.'
+                    value: '/user/{user_id}'
+                  302Failure:
+                    description: 'Failed user update. Redirect to user update form.'
+                    value: '/user/{user_id}/update'
+
+    delete:
+      operationId: 'R111'
+      summary: 'R111: Delete User API'
+      description: 'Delete a user. Access: USR'
+      tags:
+        - 'M01: Authentication and User Profile'
+      parameters:
+      - in: query
+        name: user_id
+        description: ID of the user
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Success'
         '403':
           description: 'Access denied'
