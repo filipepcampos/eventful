@@ -16,9 +16,10 @@ externalDocs:
 tags:
   - name: 'M01: Authentication and User Profile'
   - name: 'M02: Events'
-  - name: 'M03: User interactions'
-  - name: 'M04: Static Pages and User Management'     # TODO: Add more
-  - name: 'M05: Reports and User Blocks'
+  - name: 'M03: User Interactions'
+  - name: 'M04: Static Pages'     # TODO: Add more
+  - name: 'M05: Reports'
+  - name: 'M06: Administration'
 
 # Accesses:
 # -> PUB - Public
@@ -44,15 +45,14 @@ tags:
 # TODO
 # DONE -> Add/edit/delete comment
 # DONE -> Add/change comment rating
-# DONE -> Create/update event
-# -> Join/leave/delete event
-# -> Payment
+# DONE -> Create/update/delete event
+# DONE -> Join/leave event
+# DONE -> Payment
 
-# -> Recover password
+# DONE -> Recover password
 # -> Invitations and request notification dismissal
-# -> Create/Accept/deny invite + requests
+# TODO (complete requests) -> Create/Accept/deny invite + requests
 
-# ? -> Adicionar motive nos post dos 3 reports
 # DONE -> Add user report
 # DONE -> Add comment report
 # DONE -> Add event report
@@ -62,7 +62,7 @@ tags:
 
 # PLS SOMEONE CONFIRM IDK WHAT IM DOING -> Update/Delete user
 # PLS SOMEONE CONFIRM IDK WHAT IM DOING -> Create/update/delete post
-# -> Create/update/delete poll
+# -> Create/delete poll
 # -> Vote on option
 
 
@@ -263,7 +263,7 @@ paths:
     get:
       operationId: R201
       summary: 'R201: View Event Page'
-      description: 'Show event page. Access: ATT'
+      description: 'Show event page. Access: PUB'
       tags:
         - 'M02: Events'
       parameters:
@@ -334,16 +334,16 @@ paths:
         '302':
           description: 'Redirect after creating event.'
           headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  302Success:
-                    description: 'Successful event creation. Redirect to event page.'
-                    value: '/event/{event_id}'
-                  302Failure:
-                    description: 'Failed event creation. Redirect to event creation form.'
-                    value: '/event'
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful event creation. Redirect to event page.'
+                  value: '/event/{event_id}'
+                302Failure:
+                  description: 'Failed event creation. Redirect to event creation form.'
+                  value: '/event'
     
   # --------------------------------- EVENT UPDATE ---------------------------------
 
@@ -367,14 +367,14 @@ paths:
       operationId: 'R205'
       summary: 'R205: Event Update Action'
       description: 'Update an event. Access: HOST'
+      tags:
+        - 'M02: Events'
       parameters:
       - in: path
         name: event_id
         schema:
           type: integer
         required: true
-      tags:
-        - 'M02: Events'
       requestBody:
         required: true
         content:
@@ -405,16 +405,37 @@ paths:
         '302':
           description: 'Redirect after updating event.'
           headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  302Success:
-                    description: 'Successful event update. Redirect to event page.'
-                    value: '/event/{event_id}'
-                  302Failure:
-                    description: 'Failed event update. Redirect to event update form.'
-                    value: '/event/{event_id}/update'
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful event update. Redirect to event page.'
+                  value: '/event/{event_id}'
+                302Failure:
+                  description: 'Failed event update. Redirect to event update form.'
+                  value: '/event/{event_id}/update'
+  
+  # --------------------------------- DELETE EVENT ---------------------------------
+  
+  /api/event/{event_id}/delete:
+    delete:
+      operationId: 'R206'
+      summary: 'R206: Delete Event API'
+      description: 'Delete an event. Access: HOST'
+      tags:
+        - 'M02: Events'
+      parameters:
+        - in: path
+          name: event_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
 
   # --------------------------------- SEARCHING EVENTS ---------------------------------
 
@@ -464,15 +485,89 @@ paths:
         '200':    # No redirection, dynamic page using JS
           description: 'Show search page with events that match the given parameters'
 
+  # --------------------------------- TICKET PAYMENT PAGE ---------------------------------
+  
+  /event/{event_id}/payment:
+    get:
+      operationId: R208
+      summary: 'R208: Ticket Payment Form'
+      description: 'Show ticket payment form. Access: USR'
+      tags:
+        - 'M02: Events'
+      parameters:
+        - in: path
+          name: event_id
+          description: ID of the event we want to buy a ticket from
+          schema:
+            type: number
+            format: float
+          required: true
+      responses:
+        '200':
+          description: 'Show ticket payment form'
+    
+    post:
+      operationId: R209
+      summary: 'R209: Ticket Payment Action'
+      description: 'Buying a ticket for an event. Access: USR'
+      tags:
+        - 'M02: Events'
+      parameters:
+        - in: path
+          name: event_id
+          description: ID of the event we want to buy a ticket from
+          schema:
+            type: number
+            format: float
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                cardType:
+                  type: string
+                cardNumber:
+                  type: integer
+                cardExpirationDate:
+                  type: string
+                  format: date
+                CVCNumber:
+                  type: integer
+              required:
+                - name
+                - cardType
+                - cardNumber
+                - cardExpirationDate
+                - CVCNumber
+      responses:
+        '302':
+          description: 'Redirect after buying event ticket.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful transaction. Redirect to event page.'
+                  value: '/event/{event_id}'
+                302Failure:
+                  description: 'Failed transaction. Redirect to ticket payment form.'
+                  value: '/event/{event_id}/payment'
+
   # --------------------------------- CREATING INVITATIONS ---------------------------------
 
-  /api/createInvite:
+  /api/invite:
     post:
       operationId: 'R301'
       summary: 'R301: Create Invitation API'
       description: 'Create an invite to an event, from one user to another. Access: USR'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: event_id
@@ -498,22 +593,25 @@ paths:
         '403':
           description: 'Access denied'
 
-  # --------------------------------- RETRIEVING PENDING INVITATIONS RECEIVED ---------------------------------
-
-  /api/invitesReceived:
     get:
       operationId: 'R302'
-      summary: 'R302: Retrieve All Pending Received Invites API'
+      summary: 'R302: Retrieve All Received/Sent Invites API'
       description: 'Return all pending invites a user has received in JSON format. Access: USR'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
         - in: query
           name: user_id
-          description: ID of the user we want to retrieve invites from
+          description: ID of the user who sent the invite / received the invite
           schema:
             type: integer
           required: true
+        - in: query
+          name: inviteType
+          description: Specifies what invites to retrieve (sent by user / received by user or both)
+          schema:
+            type: string
+            enum: [all, sent, received]
       responses:
         '200':
           description: 'Success'
@@ -525,7 +623,7 @@ paths:
                   properties:
                     inviteId:
                       type: integer
-                    inviterUsername:
+                    username:
                       type: string
                     eventTitle:
                       type: string
@@ -539,56 +637,12 @@ paths:
         '403':
           description: 'Access denied'      # Check if the current authenticated user id matches the id given in the query
 
-  # --------------------------------- RETRIEVING PENDING INVITATIONS SENT ---------------------------------
-
-  /api/invitesSent:
-    get:
-      operationId: 'R303'
-      summary: 'R303: Retrieve All Pending Invites Sent API'
-      description: 'Return all pending invites a user has sent in JSON format. Access: USR'
-      tags:
-        - 'M03: User interactions'
-      parameters:
-        - in: query
-          name: user_id
-          description: ID of the user we want to retrieve invites from
-          schema:
-            type: integer
-          required: true
-      responses:
-        '200':
-          description: 'Success'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  properties:
-                    inviteId:
-                      type: integer
-                    inviteeUsername:
-                      type: string
-                    eventTitle:
-                      type: string
-                example:
-                - inviteId: 1
-                  inviteeUsername: 'fred'
-                  eventTitle: 'Sample Event 2022'
-                - inviteId: 15
-                  inviteeUsername: 'an0th3rus3r'
-                  eventTitle: 'Defcon 2022'
-        '403':
-          description: 'Access denied'
-  
-  # --------------------------------- ACCEPTING/DENYING AN INVITATION ---------------------------------
-
-  /api/inviteResponse:
     put:
-      operationId: 'R304'
-      summary: 'R304: Answering Invitation API'
+      operationId: 'R303'
+      summary: 'R303: Answering Invitation API'
       description: 'Accept/deny an invitation to an event. Access: USR'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
         - in: query
           name: user_id
@@ -616,13 +670,13 @@ paths:
 
   # --------------------------------- CREATING REQUESTS ---------------------------------
 
-  /api/createRequest:    # API's should never redirect right? Only return the result of their queries
+  /api/request:
     post:
       operationId: 'R305'
       summary: 'R305: Create Join Event Request API'
       description: 'Create a request to join the event. Access: USR'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
         - in: query
           name: event_id
@@ -643,14 +697,13 @@ paths:
           description: 'Access denied'
 
   # --------------------------------- RETRIEVING PENDING REQUESTS SENT ---------------------------------
-
   /api/requestsSent:
     get:
       operationId: 'R306'
       summary: 'R306: Retrieve All Pending Event Join Requests of a User API'
       description: 'Return all pending event join requests for user in JSON format. Access: USR'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
         - in: query
           name: user_id
@@ -681,13 +734,13 @@ paths:
 
   # --------------------------------- RETRIEVING PENDING REQUESTS RECIEVED ---------------------------------
 
-  /api/requestsRecieved:
+  /api/requestsReceived:
     get:
       operationId: 'R307'
       summary: 'R307: Retrieve All Pending Event Join Requests Recieved API'
       description: 'Return all pending event join requests in JSON format. Access: HOST'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
         - in: query
           name: user_id
@@ -724,7 +777,7 @@ paths:
       summary: 'R308: Accept/Deny Event Join Request API'
       description: 'Accept/deny a request to join event. Access: HOST'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
         - in: query
           name: host_id
@@ -758,7 +811,7 @@ paths:
       summary: 'R309: Create Comment API'
       description: 'Create a comment on an event. Access: ATT'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: event_id
@@ -800,7 +853,7 @@ paths:
       summary: 'R310: Update Comment API'
       description: 'Update a comment on an event. Access: AUT'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: comment_id
@@ -842,7 +895,7 @@ paths:
       summary: 'R311: Delete Comment API'
       description: 'Delete a comment on an event. Access: AUT'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: comment_id
@@ -870,7 +923,7 @@ paths:
       summary: 'R312: Create Rating on a Comment API'
       description: 'Rating a comment on an event. Access: REA'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: comment_id
@@ -901,10 +954,10 @@ paths:
 
     put:
       operationId: 'R313'
-      summary: 'R313: changing Rating of a Comment API'
+      summary: 'R313: Changing Rating of a Comment API'
       description: 'Changing rating of a comment on an event. Access: REA'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: comment_id
@@ -938,7 +991,7 @@ paths:
       summary: 'R314: Deleting Rating of a Comment API'
       description: 'Deleting rating of a comment on an event. Access: REA'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: comment_id
@@ -958,6 +1011,75 @@ paths:
         '403':
           description: 'Access denied'
 
+  # --------------------------------- JOINING/LEAVING EVENT ---------------------------------
+
+  /api/attendee:
+    post:
+      operationId: 'R315'
+      summary: 'R315: Joining Event API'
+      description: 'Joining event. Access: USR'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+      - in: query
+        name: event_id
+        description: ID of the event the user wants to attend
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+    
+    delete:
+      operationId: 'R316'
+      summary: 'R316: Leaving Event API'
+      description: 'Leaving event. Access: ATT'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+      - in: query
+        name: event_id
+        description: ID of the event the user wants to leave
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
+  # --------------------------------- STATIC PAGES ---------------------------------
+    
+  /home:
+    get:
+      operationId:
+  
+  /about:
+    get:
+      operationId: 'R401'
+      summary: 'R401: About Us page'
+      description: 'Page with information about the development team. Access: PUB'
+      tags:
+        - 'M04: Static Pages'
+      responses:
+        '200':
+          description: 'Show about us page'
+
+  /contact:
+    get:
+      operationId: 'R402'
+      summary: 'R402: Contact Us page'
+      description: 'Page with contact information. Access: PUB'
+      tags:
+        - 'M04: Static Pages'
+      responses:
+        '200':
+          description: 'Show contact page'
+          
   # --------------------------------- REPORTING EVENT ---------------------------------
 
   /api/eventReport:
@@ -966,7 +1088,7 @@ paths:
       summary: 'R501: Add Event Report API'
       description: 'Report the specified event. Access: USR, ADM'   # ADM ?
       tags:
-        - 'M05: Reports and User Blocks'
+        - 'M05: Reports'
       parameters:
       - in: query
         name: event_id
@@ -974,28 +1096,20 @@ paths:
         schema:
           type: integer
         required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                motive:
+                  type: string
+              required:
+                - motive
       responses:
         '200':
           description: 'Report successfully created'
-        '403':
-          description: 'Access denied'
-
-    delete:
-      operationId: 'R502'
-      summary: 'R502: Delete Event Report API'
-      description: 'Delete an event report. Access: ADM'              # We should have a removeReport that aglomerates all three types of report, it shouldn't be individual I think. It would recieve the report id instead
-      tags:
-        - 'M05: Reports and User Blocks'
-      parameters:
-      - in: query
-        name: event_id
-        description: ID of the event the administrator wants to remove the report from
-        schema:
-          type: integer
-        required: true
-      responses:
-        '200':
-          description: 'Report successfully removed'
         '403':
           description: 'Access denied'
   
@@ -1003,11 +1117,11 @@ paths:
 
   /api/commentReport:
     post:
-      operationId: 'R503'
-      summary: 'R503: Add Comment Report API'
+      operationId: 'R502'
+      summary: 'R502: Add Comment Report API'
       description: 'Report the specified comment. Access: ATT, ADM'
       tags:
-        - 'M05: Reports and User Blocks'
+        - 'M05: Reports'
       parameters:
       - in: query
         name: comment_id
@@ -1015,28 +1129,20 @@ paths:
         schema:
           type: integer
         required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                motive:
+                  type: string
+              required:
+                - motive
       responses:
         '200':
           description: 'Report successfully created'
-        '403':
-          description: 'Access denied'
-    
-    delete:
-      operationId: 'R504'
-      summary: 'R504: Delete Comment Report API'
-      description: 'Delete a comment report. Access: ADM'
-      tags:
-        - 'M05: Reports and User Blocks'
-      parameters:
-      - in: query
-        name: comment_id
-        description: ID of the comment the administrator wants remove the report from
-        schema:
-          type: integer
-        required: true
-      responses:
-        '200':
-          description: 'Report successfully removed'
         '403':
           description: 'Access denied'
 
@@ -1044,11 +1150,11 @@ paths:
 
   /api/userReport:
     post:
-      operationId: 'R505'
-      summary: 'R505: Add User Report API'
+      operationId: 'R503'
+      summary: 'R503: Add User Report API'
       description: 'Report the specified user. Access: USR, ADM'
       tags:
-        - 'M05: Reports and User Blocks'
+        - 'M05: Reports'
       parameters:
       - in: query
         name: user_id
@@ -1056,22 +1162,36 @@ paths:
         schema:
           type: integer
         required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                motive:
+                  type: string
+              required:
+                - motive
       responses:
         '200':
           description: 'Report successful'
         '403':
           description: 'Access denied'
-    
-    delete:
-      operationId: 'R506'
-      summary: 'R506: Delete User Report API'
-      description: 'Delete a user report. Access: ADM'
+  
+  # --------------------------------- REMOVE REPORT ---------------------------------
+  
+  /api/removeReport:
+    post:
+      operationId: 'R601'
+      summary: 'R601: Remove User Report API'
+      description: 'Remove the specified report. Access: ADM'
       tags:
-        - 'M05: Reports and User Blocks'
+        - 'M06: Administration'
       parameters:
       - in: query
-        name: user_id
-        description: ID of the user the administrator wants to remove the report from
+        name: report_id
+        description: ID of the report to be deleted
         schema:
           type: integer
         required: true
@@ -1083,13 +1203,13 @@ paths:
 
   # --------------------------------- BLOCKING USER ---------------------------------
 
-  /api/block:           # The block is a boolean in the user, it shouldn't have a delete, but an update right?
-    post:
-      operationId: 'R507'
-      summary: 'R507: Block User API'
-      description: 'Block the specified user. Access: ADM'
+  /api/block:
+    put:
+      operationId: 'R602'
+      summary: 'R602: Change Block Status of User API'
+      description: 'Change block status of the specified user. Access: ADM'
       tags:
-        - 'M05: Reports and User Blocks'
+        - 'M06: Administration'
       parameters:
       - in: query
         name: user_id
@@ -1097,28 +1217,13 @@ paths:
         schema:
           type: integer
         required: true
-      responses:
-        '200':
-          description: 'User block successful'
-        '403':
-          description: 'Access denied'
-    
-    delete:
-      operationId: 'R508'
-      summary: 'R508: Unblock User API'
-      description: 'Unblock the specified user. Access: ADM'
-      tags:
-        - 'M05: Reports and User Blocks'
-      parameters:
       - in: query
-        name: user_id
-        description: ID of the user the administrator wants to unblock
-        schema:
-          type: integer
+        name: block_status
+        description: Status of the block of the specified user, TRUE if blocked, FALSE otherwise
         required: true
       responses:
         '200':
-          description: 'Block successfully removed'
+          description: 'Change user block status successful'
         '403':
           description: 'Access denied'
 
@@ -1211,13 +1316,19 @@ paths:
       summary: 'R315: Create Post API'
       description: 'Create a post on an event. Access: HOST'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: event_id
         description: ID of the event where the user wants to create a post (must be the host of the event)
         schema:
           type: integer
+        required: true
+      - in: query
+        name: title
+        description: Title of the post
+        schema:
+          type: string
         required: true
       - in: query
         name: description
@@ -1236,7 +1347,7 @@ paths:
       summary: 'R316: Update Post API'
       description: 'Update a post on an event. Access: HOST'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: post_id
@@ -1250,6 +1361,12 @@ paths:
         schema:
           type: integer
         required: true
+      - in: query
+        name: title
+        description: Title of the post
+        schema:
+          type: string
+        required: true 
       - in: query
         name: description
         description: Description of the post
@@ -1267,7 +1384,7 @@ paths:
       summary: 'R317: Delete Post API'
       description: 'Delete a post on an event. Access: HOST'
       tags:
-        - 'M03: User interactions'
+        - 'M03: User Interactions'
       parameters:
       - in: query
         name: post_id
@@ -1278,6 +1395,159 @@ paths:
       - in: query
         name: event_id
         description: ID of the event where the user wants to update a post (must be the host of the event)
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
+# --------------------------------- POLL ---------------------------------
+
+  /api/poll:
+    post:
+      operationId: 'R318'
+      summary: 'R318: Create Poll API'
+      description: 'Create a poll on an event. Access: HOST'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+      - in: query
+        name: event_id
+        description: ID of the event where the user wants to create a poll (must be the host of the event)
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: title
+        description: Title of the poll
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: description
+        description: Description of the poll
+        schema:
+          type: string
+        required: true 
+      - in: query
+        name: options
+        schema:
+          type: array
+          items:
+            type: integer
+        required: true         
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
+    delete:
+      operationId: 'R319'
+      summary: 'R319: Delete Poll API'
+      description: 'Delete a poll on an event. Access: HOST'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+      - in: query
+        name: post_id
+        description: ID of the poll
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: event_id
+        description: ID of the event where the user wants to update a post (must be the host of the event)
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
+# --------------------------------- VOTE ---------------------------------
+
+  /api/vote:
+    post:
+      operationId: 'R320'
+      summary: 'R320: Create Vote on a Poll API'
+      description: 'Voting on a poll on an event. Access: ATT'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+      - in: query
+        name: option_id
+        description: ID of the option
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: user_id
+        description: ID of the user that wants to vote on an option (must be an attendee)
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
+    put:
+      operationId: 'R321'
+      summary: 'R321: Changing Option of a Poll API'
+      description: 'Changing option of a poll on an event. Access: ATT'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+      - in: query
+        name: option_id
+        description: ID of the option
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: user_id
+        description: ID of the user that wants to vote on an option (must be an attendee)
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: rating
+        description: Rating of the comment
+        schema:
+          type: string
+          enum:
+           - Upvote
+           - Downvote
+        required: true
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
+    delete:
+      operationId: 'R314'
+      summary: 'R314: Deleting Rating of a Comment API'
+      description: 'Deleting rating of a comment on an event. Access: REA'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+      - in: query
+        name: comment_id
+        description: ID of the comment
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: user_id
+        description: ID of the user that wants to remove rating of a comment (mustn't be the comment author)
         schema:
           type: integer
         required: true
