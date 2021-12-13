@@ -61,7 +61,7 @@ tags:
 # ? -> Write unblock appeal
 
 # PLS SOMEONE CONFIRM IDK WHAT IM DOING -> Update/Delete user
-# -> Create/update/delete post
+# PLS SOMEONE CONFIRM IDK WHAT IM DOING -> Create/update/delete post
 # -> Create/update/delete poll
 # -> Vote on option
 
@@ -1194,6 +1194,90 @@ paths:
       - in: query
         name: user_id
         description: ID of the user
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
+# --------------------------------- POST ---------------------------------
+
+  /api/post:
+    post:
+      operationId: 'R315'
+      summary: 'R315: Create Post API'
+      description: 'Create a post on an event. Access: HOST'
+      tags:
+        - 'M03: User interactions'
+      parameters:
+      - in: query
+        name: event_id
+        description: ID of the event where the user wants to create a post (must be the host of the event)
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: description
+        description: Description of the post
+        schema:
+          type: string
+        required: true          
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
+    put:
+      operationId: 'R316'
+      summary: 'R316: Update Post API'
+      description: 'Update a post on an event. Access: HOST'
+      tags:
+        - 'M03: User interactions'
+      parameters:
+      - in: query
+        name: post_id
+        description: ID of the post
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: event_id
+        description: ID of the event where the user wants to update a post (must be the host of the event)
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: description
+        description: Description of the post
+        schema:
+          type: string
+        required: true          
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
+    delete:
+      operationId: 'R317'
+      summary: 'R317: Delete Post API'
+      description: 'Delete a post on an event. Access: HOST'
+      tags:
+        - 'M03: User interactions'
+      parameters:
+      - in: query
+        name: post_id
+        description: ID of the post
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: event_id
+        description: ID of the event where the user wants to update a post (must be the host of the event)
         schema:
           type: integer
         required: true
