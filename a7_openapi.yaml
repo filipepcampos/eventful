@@ -147,9 +147,54 @@ paths:
         '200':
           description: 'Show register UI'
 
+  # --------------------------------- RECOVER PASSWORD ---------------------------------
+
+  /recover-password:
+    get:
+      operationId: R106
+      summary: 'R106: Show Recover Password Form'
+      description: 'Provide password recover form. Access: PUB'
+      tags:
+        - 'M01: Authentication and User Profile'
+      responses:
+        '200':
+          description: 'Show recover password form'
+
+    post:
+      operationId: R107
+      summary: 'R107: Recover Password Action'
+      description: 'Recover a password of the account associated to the given email. Access: PUB'
+      tags:
+        - 'M01: Authentication and User Profile'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+               - email
+      responses:
+        '302':
+          description: 'Redirect after processing the recover password request.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'If an account exists with the given email password recovery information will be sent. Redirect to login page.'
+                  value: '/login'
+
+  # --------------------------------- USER PROFILE ---------------------------------
+
+  /user:
     post:
       operationId: R105
-      summary: 'R105: Register Action'
+      summary: 'R105: Create User Action'
       description: 'Processes the new user registration form submission. Access: PUB'
       tags:
         - 'M01: Authentication and User Profile'
@@ -196,50 +241,6 @@ paths:
                   description: 'Failed authentication. Redirect to register form.'
                   value: '/register'
 
-  # --------------------------------- RECOVER PASSWORD ---------------------------------
-
-  /recover-password:
-    get:
-      operationId: R106
-      summary: 'R106: Show Recover Password Form'
-      description: 'Provide password recover form. Access: PUB'
-      tags:
-        - 'M01: Authentication and User Profile'
-      responses:
-        '200':
-          description: 'Show recover password form'
-
-    post:
-      operationId: R107
-      summary: 'R107: Recover Password Action'
-      description: 'Recover a password of the account associated to the given email. Access: PUB'
-      tags:
-        - 'M01: Authentication and User Profile'
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-              required:
-               - email
-      responses:
-        '302':
-          description: 'Redirect after processing the recover password request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'If an account exists with the given email password recovery information will be sent. Redirect to login page.'
-                  value: '/login'
-
-  # --------------------------------- USER PROFILE ---------------------------------
-
   /user/{user_id}:
     get:
       operationId: R108
@@ -257,25 +258,6 @@ paths:
         '200':
           description: 'Show User Profile UI'
 
-  # --------------------------------- USER UPDATE ---------------------------------
-
-  /user/{user_id}/update:
-    get:
-      operationId: R109
-      summary: 'R109: Show User Update Form'
-      description: 'Provide user update form. Access: USR'
-      tags:
-        - 'M01: Authentication and User Profile'
-      parameters:
-      - in: path
-        name: user_id
-        schema:
-          type: integer
-        required: true
-      responses:
-        '200':
-          description: 'Show user update form'
-    
     put:
       operationId: 'R110'
       summary: 'R110: User Update Action'
@@ -302,8 +284,10 @@ paths:
                 name:
                   type: string
                 pic:
-                  type: string    # URL
+                  type: string    # TODO: URL but should be binary (picture)
                 description:
+                  type: string
+                password:
                   type: string
       responses:
         '302':
@@ -319,13 +303,10 @@ paths:
                   302Failure:
                     description: 'Failed user update. Redirect to user update form.'
                     value: '/user/{user_id}/update'
-
-  # --------------------------------- USER DELETE ---------------------------------
-
-  /api/user/{user_id}/delete:
+                    
     delete:
       operationId: 'R111'
-      summary: 'R111: Delete User API'
+      summary: 'R111: Delete User Action'
       description: 'Delete a user. Access: USR'
       tags:
         - 'M01: Authentication and User Profile'
@@ -337,10 +318,38 @@ paths:
           type: integer
         required: true
       responses:
+        '302':
+          description: 'Redirect after deleting user.'
+          headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Successful user delete. Redirect to main page.'
+                    value: '/home'
+                  302Failure:
+                    description: 'Failed user delete. Redirect to user page.'
+                    value: '/user/{user_id}'
+
+  # --------------------------------- USER UPDATE ---------------------------------
+
+  /user/{user_id}/update:
+    get:
+      operationId: R109
+      summary: 'R109: Show User Update Form'
+      description: 'Provide user update form. Access: USR'
+      tags:
+        - 'M01: Authentication and User Profile'
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      responses:
         '200':
-          description: 'Success'
-        '403':
-          description: 'Access denied'
+          description: 'Show user update form'
 
   # --------------------------------- SHOW EVENT ---------------------------------
 
@@ -429,7 +438,7 @@ paths:
                   value: '/event/{event_id}'
                 302Failure:
                   description: 'Failed event creation. Redirect to event creation form.'
-                  value: '/event'
+                  value: '/createEvent'
     
   # --------------------------------- EVENT UPDATE ---------------------------------
 
@@ -785,6 +794,7 @@ paths:
           description: 'Access denied'
 
   # --------------------------------- RETRIEVING PENDING REQUESTS SENT ---------------------------------
+
   /api/requestsSent:
     get:
       operationId: 'R306'
@@ -1281,7 +1291,7 @@ paths:
   # --------------------------------- REMOVE REPORT ---------------------------------
   
   /api/removeReport:
-    post:
+    delete:
       operationId: 'R601'
       summary: 'R601: Remove User Report API'
       description: 'Remove the specified report. Access: ADM'
