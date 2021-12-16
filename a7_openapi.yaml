@@ -147,50 +147,6 @@ paths:
         '200':
           description: 'Show register UI'
 
-  # --------------------------------- RECOVER PASSWORD ---------------------------------
-
-  /recover-password:
-    get:
-      operationId: R106
-      summary: 'R106: Show Recover Password Form'
-      description: 'Provide password recover form. Access: PUB'
-      tags:
-        - 'M01: Authentication and User Profile'
-      responses:
-        '200':
-          description: 'Show recover password form'
-
-    post:
-      operationId: R107
-      summary: 'R107: Recover Password Action'
-      description: 'Recover a password of the account associated to the given email. Access: PUB'
-      tags:
-        - 'M01: Authentication and User Profile'
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-              required:
-               - email
-      responses:
-        '302':
-          description: 'Redirect after processing the recover password request.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'If an account exists with the given email password recovery information will be sent. Redirect to login page.'
-                  value: '/login'
-
-  # --------------------------------- USER PROFILE ---------------------------------
-
   /user:
     post:
       operationId: R105
@@ -241,6 +197,50 @@ paths:
                   description: 'Failed authentication. Redirect to register form.'
                   value: '/register'
 
+  # --------------------------------- RECOVER PASSWORD ---------------------------------
+
+  /recover-password:
+    get:
+      operationId: R106
+      summary: 'R106: Show Recover Password Form'
+      description: 'Provide password recover form. Access: PUB'
+      tags:
+        - 'M01: Authentication and User Profile'
+      responses:
+        '200':
+          description: 'Show recover password form'
+
+    post:
+      operationId: R107
+      summary: 'R107: Recover Password Action'
+      description: 'Recover a password of the account associated to the given email. Access: PUB'
+      tags:
+        - 'M01: Authentication and User Profile'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+               - email
+      responses:
+        '302':
+          description: 'Redirect after processing the recover password request.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'If an account exists with the given email password recovery information will be sent. Redirect to login page.'
+                  value: '/login'
+
+  # --------------------------------- USER PROFILE ---------------------------------
+
   /user/{user_id}:
     get:
       operationId: R108
@@ -259,8 +259,8 @@ paths:
           description: 'Show User Profile UI'
 
     put:
-      operationId: 'R110'
-      summary: 'R110: User Update Action'
+      operationId: R109
+      summary: 'R109: User Update Action'
       description: 'Update a user. Access: USR'
       tags:
         - 'M01: Authentication and User Profile'
@@ -305,8 +305,8 @@ paths:
                     value: '/user/{user_id}/update'
                     
     delete:
-      operationId: 'R111'
-      summary: 'R111: Delete User Action'
+      operationId: R110
+      summary: 'R110: Delete User Action'
       description: 'Delete a user. Access: USR'
       tags:
         - 'M01: Authentication and User Profile'
@@ -336,8 +336,8 @@ paths:
 
   /user/{user_id}/update:
     get:
-      operationId: R109
-      summary: 'R109: Show User Update Form'
+      operationId: R111
+      summary: 'R111: Show User Update Form'
       description: 'Provide user update form. Access: USR'
       tags:
         - 'M01: Authentication and User Profile'
@@ -351,31 +351,12 @@ paths:
         '200':
           description: 'Show user update form'
 
-  # --------------------------------- SHOW EVENT ---------------------------------
-
-  /event/{event_id}:
-    get:
-      operationId: R201
-      summary: 'R201: View Event Page'
-      description: 'Show event page. Access: PUB'
-      tags:
-        - 'M02: Events'
-      parameters:
-      - in: path
-        name: event_id
-        schema:
-          type: integer
-        required: true
-      responses:
-        '200':
-          description: 'Show Event Page UI'
-
   # --------------------------------- EVENT CREATION ---------------------------------
 
   /createEvent:
     get:
-      operationId: R202
-      summary: 'R202: Show Event Creation Form'
+      operationId: R201
+      summary: 'R201: Show Event Creation Form'
       description: 'Provide event creation form. Access: USR'
       tags:
         - 'M02: Events'
@@ -383,9 +364,10 @@ paths:
         '200':
           description: 'Show event creation form'
 
+  /event:
     post:
-      operationId: 'R203'
-      summary: 'R203: Event Create Action'
+      operationId: R202
+      summary: 'R202: Event Create Action'
       description: 'Create an event. Access: USR'
       tags:
         - 'M02: Events'
@@ -439,29 +421,29 @@ paths:
                 302Failure:
                   description: 'Failed event creation. Redirect to event creation form.'
                   value: '/createEvent'
-    
-  # --------------------------------- EVENT UPDATE ---------------------------------
 
-  /event/{event_id}/update:
+  # --------------------------------- EVENT ---------------------------------
+
+  /event/{event_id}:
     get:
-      operationId: R204
-      summary: 'R204: Show Event Update Form'
-      description: 'Provide event update form. Access: HOST'
+      operationId: R203
+      summary: 'R203: View Event Page'
+      description: 'Show event page. Access: PUB'
+      tags:
+        - 'M02: Events'
       parameters:
       - in: path
         name: event_id
         schema:
           type: integer
         required: true
-      tags:
-        - 'M02: Events'
       responses:
         '200':
-          description: 'Show event update form'
+          description: 'Show Event Page UI'
 
     put:
-      operationId: 'R205'
-      summary: 'R205: Event Update Action'
+      operationId: R204
+      summary: 'R204: Event Update Action'
       description: 'Update an event. Access: HOST'
       tags:
         - 'M02: Events'
@@ -511,13 +493,10 @@ paths:
                 302Failure:
                   description: 'Failed event update. Redirect to event update form.'
                   value: '/event/{event_id}/update'
-  
-  # --------------------------------- DELETE EVENT ---------------------------------
-  
-  /api/event/{event_id}/delete:
+
     delete:
-      operationId: 'R206'
-      summary: 'R206: Delete Event API'
+      operationId: R205
+      summary: 'R205: Delete Event Action'
       description: 'Delete an event. Access: HOST'
       tags:
         - 'M02: Events'
@@ -528,17 +507,45 @@ paths:
             type: integer
           required: true
       responses:
+        '302':
+          description: 'Redirect after deleting event.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful event delete. Redirect to main page.'
+                  value: '/event/{event_id}'    # TODO: Change to main page
+                302Failure:
+                  description: 'Failed event delete. Redirect to event page.'
+                  value: '/event/{event_id}'
+    
+  # --------------------------------- EVENT UPDATE ---------------------------------
+
+  /event/{event_id}/update:
+    get:
+      operationId: R206
+      summary: 'R206: Show Event Update Form'
+      description: 'Provide event update form. Access: HOST'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      tags:
+        - 'M02: Events'
+      responses:
         '200':
-          description: 'Success'
-        '403':
-          description: 'Access denied'
+          description: 'Show event update form'    
 
   # --------------------------------- SEARCHING EVENTS ---------------------------------
 
   /search:  
     get:
-      operationId: R206
-      summary: 'R206: Search Events Form'
+      operationId: R207
+      summary: 'R207: Search Events Form'
       description: 'Show search events form. Access: PUB'
       tags:
         - 'M02: Events'
@@ -546,9 +553,10 @@ paths:
         '200':
           description: 'Show search events form'
 
-    post:
-      operationId: R207
-      summary: 'R207: Search Events Action'
+  /api/search:
+    get:
+      operationId: R208
+      summary: 'R208: Search Events API'
       description: 'Showing event search results. Access: PUB'
       tags:
         - 'M02: Events'
@@ -580,14 +588,14 @@ paths:
           required: false
       responses:
         '200':    # No redirection, dynamic page using JS
-          description: 'Show search page with events that match the given parameters'
+          description: 'Success'
 
   # --------------------------------- TICKET PAYMENT PAGE ---------------------------------
   
   /event/{event_id}/payment:
     get:
-      operationId: R208
-      summary: 'R208: Ticket Payment Form'
+      operationId: R209
+      summary: 'R209: Ticket Payment Form'
       description: 'Show ticket payment form. Access: USR'
       tags:
         - 'M02: Events'
@@ -604,8 +612,8 @@ paths:
           description: 'Show ticket payment form'
 
     post:
-      operationId: R209
-      summary: 'R209: Ticket Payment Action'
+      operationId: R210
+      summary: 'R210: Ticket Payment Action'
       description: 'Buying a ticket for an event. Access: USR'
       tags:
         - 'M02: Events'
