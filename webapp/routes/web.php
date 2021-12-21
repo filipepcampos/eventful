@@ -11,7 +11,9 @@
 |
 */
 // Home
-Route::get('/', 'Auth\LoginController@home');
+Route::get('/', function () { return view('pages.home');} );
+
+Route::get('events', 'EventController@list');
 
 // Cards
 Route::get('cards', 'CardController@list');

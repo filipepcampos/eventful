@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class Tag extends Model
 {
   // Don't add create and update timestamps in database.
   public $timestamps  = false;
+  protected $table = 'tag';
 
   /**
-   * The card this item belongs to.
+   * The events this tag is associated to
    */
-  public function card() {
-    return $this->belongsTo('App\Models\Card');
+  public function events() {
+    return $this->hasMany('App\Models\Event');
   }
 }

@@ -40,9 +40,4 @@ class LoginController extends Controller
     public function getUser(){
         return $request->user();
     }
-
-    public function home() {
-        return redirect('login');
-    }
-
 }

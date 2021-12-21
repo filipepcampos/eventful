@@ -4,22 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Card extends Model
+class Vote extends Model
 {
   // Don't add create and update timestamps in database.
   public $timestamps  = false;
+  protected $table = 'vote';
 
   /**
-   * The user this card belongs to
+   * Users that voted in the option
    */
   public function user() {
     return $this->belongsTo('App\Models\User');
   }
 
   /**
-   * Items inside this card
+   * Option that the user voted in
    */
-  public function items() {
-    return $this->hasMany('App\Models\Item');
+  public function option() {
+    return $this->belongsTo('App\Models\Option');
   }
 }
