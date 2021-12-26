@@ -29,7 +29,7 @@
     @endif
 
     <label for="birthdate">Birthdate</label>
-    <input id="birthdate" type="text" name="birthdate" value="{{ old('birthdate') }}" required>
+    <input id="birthdate" type="date" name="birthdate" value="{{ old('birthdate') }}" required>
     @if ($errors->has('birthdate'))
       <span class="error">
           {{ $errors->first('birthdate') }}

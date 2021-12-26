@@ -898,6 +898,8 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (148,'Clio','egestas.blandit.nam@yahoo.org','RJI68QAI6NW','Katell Mejia','06/09/1958'),
   (149,'Macaulay3','mi.enim@aol.ca','PRI18TEK1OL','Neville Nunez','11/22/1954');
 
+select setval('users_id_seq', (select max(id) from users));
+
 -- ========================= unblock_appeal =========================
 
 INSERT INTO unblock_appeal(id_user,message) VALUES

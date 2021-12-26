@@ -51,8 +51,7 @@ class RegisterController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            //'birthdate' => 'required|date|date_format:m/d/Y|before:today',
-            'birthdate' => 'required|string',
+            'birthdate' => 'required|date|before:today',
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
@@ -65,11 +64,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
         return User::create([
             'username' => $data['username'],
             'name' => $data['name'],
             'email' => $data['email'],
-            'birthdate' => $data['birthdate'],
+            'birthdate' => date('Y-m-d', strtotime($data['birthdate'])),
             'password' => bcrypt($data['password']),
         ]);
     }
