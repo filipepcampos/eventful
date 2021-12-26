@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
+use App\Models\Poll;
 use Illuminate\Http\Request;
 
-class EventController extends Controller
+class PollController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,23 +28,6 @@ class EventController extends Controller
     }
 
     /**
-     * Shows all cards.
-     *
-     * @return Response
-     */
-    public function list()
-    {
-      /*
-      if (!Auth::check()) return redirect('/login');
-      $this->authorize('list', Card::class);
-      $cards = Auth::user()->cards()->orderBy('id')->get();
-      return view('pages.cards', ['cards' => $cards]);
-      */
-      $events = Event::all();
-      return view('pages.events', ['events' => $events]);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -58,10 +41,10 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Poll  $poll
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show(Poll $poll)
     {
         //
     }
@@ -69,10 +52,10 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Poll  $poll
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
+    public function edit(Poll $poll)
     {
         //
     }
@@ -81,10 +64,10 @@ class EventController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Poll  $poll
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+    public function update(Request $request, Poll $poll)
     {
         //
     }
@@ -92,10 +75,10 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Poll  $poll
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy(Poll $poll)
     {
         //
     }
