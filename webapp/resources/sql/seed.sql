@@ -80,7 +80,7 @@ CREATE TABLE event (
    is_visible BOOLEAN NOT NULL,
    is_accessible BOOLEAN NOT NULL,
    capacity INT NOT NULL CHECK (capacity > 0),
-   price DECIMAL(2) NOT NULL CHECK (price >= 0),
+   price DECIMAL(8, 2) NOT NULL CHECK (price >= 0),
    number_attendees INT NOT NULL DEFAULT 0 CONSTRAINT event_number_attendees CHECK (number_attendees >= 0 AND number_attendees <= capacity),
    CONSTRAINT check_realization_date CHECK (creation_date < realization_date)
 );
@@ -176,7 +176,7 @@ CREATE TABLE event_report (
 CREATE TABLE transaction (
     id SERIAL PRIMARY KEY,
     id_user INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
-    amount DECIMAL(2) NOT NULL CONSTRAINT transaction_amount_check CHECK(amount > 0),
+    amount DECIMAL(8,2) NOT NULL CONSTRAINT transaction_amount_check CHECK(amount > 0),
     date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT transaction_date_check CHECK (date <= NOW())
 );
 
@@ -896,7 +896,8 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (146,'Justin','nisi.sem.semper@outlook.couk','HMQ19KOV8KW','Octavia Reynolds','11/16/2013'),
   (147,'Nina','dignissim.lacus.aliquam@hotmail.net','JLU31NBX7MT','Judith Holder','07/18/1953'),
   (148,'Clio','egestas.blandit.nam@yahoo.org','RJI68QAI6NW','Katell Mejia','06/09/1958'),
-  (149,'Macaulay3','mi.enim@aol.ca','PRI18TEK1OL','Neville Nunez','11/22/1954');
+  (149,'Macaulay3','mi.enim@aol.ca','PRI18TEK1OL','Neville Nunez','11/22/1954'),
+  (150,'example', 'example@gmail.com', '$2y$10$7KB5tYaJ1b46uHjhKy2CIOapem7Qrf9aR9.DeAHhvu4Q1ltbn14Jq', 'Firstname Lastname', '11/22/1954');
 
 select setval('users_id_seq', (select max(id) from users));
 
@@ -1063,6 +1064,8 @@ INSERT INTO event(id,id_host,title,event_image,description, location,creation_da
   (148,124,'tempus non, lacinia','ac','sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer','765-2936 Nulla Rd.','2020-10-26 01:19:20','2022-05-14 17:08:57','True','True',40,4),
   (149,125,'luctus et ultrices','purus,','lectus rutrum urna, nec luctus felis purus','Ap #920-4292 Imperdiet Rd.','2020-09-20 04:10:18','2022-05-31 01:47:22','True','True',25,9);
 
+
+select setval('event_id_seq', (select max(id) from event));
 -- ========================= attendee =========================
 
 INSERT INTO attendee(id_user,id_event) VALUES

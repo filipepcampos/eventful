@@ -13,7 +13,11 @@
 // Home
 Route::get('/', function () { return view('pages.home');} );
 
+// Events
+Route::get('createEvent', 'EventController@showCreateForm');
 Route::get('events', 'EventController@list');
+Route::get('event/{event_id}', 'EventController@show');
+Route::post('event', 'EventController@create')->name('event');
 
 // Cards
 Route::get('cards', 'CardController@list');

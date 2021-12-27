@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\EventCreateRequest;
 
 class EventController extends Controller
 {
@@ -17,14 +19,63 @@ class EventController extends Controller
         //
     }
 
+    public function showCreateForm(){
+        if (!Auth::check()) return redirect('/login');
+        return view('pages.createEvent');
+    }
+
+     /** TODO: Remove
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'username' => 'required|string|max:255|unique:users',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'birthdate' => 'required|date|before:today',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+    }*/
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(EventCreateRequest $request)
     {
-        //
+        if (!Auth::check()) return redirect('/login');
+        $this->authorize('create', Event::class);
+
+        $validated = $request->validated();
+
+        $event = new Event();
+
+        $event->id_host = Auth::user()->id;
+        $event->title = $request->input('title');
+        $event->event_image = 'ola';
+        $event->description = $request->input('description');
+        $event->location = $request->input('location');
+        $event->realization_date = $request->input('realization_date');
+        $event->is_visible = $request->input('is_visible') ? true : false;
+        $event->is_accessible = $request->input('is_accessible') ? true : false;
+        if($request->has('capacity')){
+            $event->capacity = $request->input('capacity');
+        } else {
+            $event->capacity = +INF;
+        }
+        $event->price = $request->input('price');
+
+        $event->save();
+
+        // todo: remove this, this is stupid
+        $events = Event::all();
+        return view('pages.events', ['events' => $events]);
+        //return route('event/' . $event->id); // TODO: I have no idea if this works...
     }
 
     /**
