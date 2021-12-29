@@ -92,7 +92,7 @@ class EventController extends Controller
       return view('pages.cards', ['cards' => $cards]);
       */
       $events = Event::all();
-      return view('pages.events', ['events' => $events]);
+      return view('pages.home', ['events' => $events]);
     }
 
     /**

@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Cards')
+@section('title', 'Home')
 
 @section('content')
 
-<h1> Hello </h1>
+<h1 class="display-1 text-center mb-5"> Eventful </h1>
 
-<a class="button button-outline" href="{{ route('login') }}">Login</a>
-<a class="button button-outline" href="{{ route('register') }}">Register</a>
+<div class="row justify-content-center">
+    @each('partials.eventCard', $events, 'event')
+</div>
 
 @endsection

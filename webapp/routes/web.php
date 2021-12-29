@@ -11,7 +11,7 @@
 |
 */
 // Home
-Route::get('/', function () { return view('pages.home');} );
+Route::get('/', 'EventController@list' );
 
 // Events
 Route::get('createEvent', 'EventController@showCreateForm');
