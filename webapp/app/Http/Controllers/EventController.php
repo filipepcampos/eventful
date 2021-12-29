@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\EventCreateRequest;
 
+
+
+use App\Models\User; // TODO DELETE THIS PLEASE
+
 class EventController extends Controller
 {
     /**
@@ -93,6 +97,7 @@ class EventController extends Controller
       return view('pages.cards', ['cards' => $cards]);
       */
       $events = Event::all();
+      // TODO: Filter private events
       return view('pages.home', ['events' => $events]);
     }
 
@@ -115,12 +120,13 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Event  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show($id)
     {
-        //
+        $event = Event::find($id); // TODO: Auth
+        return view('pages.event', ['event' => $event]);
     }
 
     /**

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Register')
+
 @section('content')
 <div class="container w-50">
   <form method="POST" action="{{ route('register') }}">

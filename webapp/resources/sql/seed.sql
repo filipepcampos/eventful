@@ -64,13 +64,13 @@ CREATE TABLE users (
 );
 
 CREATE TABLE unblock_appeal (
-    id_user SERIAL PRIMARY KEY REFERENCES users ON UPDATE CASCADE,
+    user_id SERIAL PRIMARY KEY REFERENCES users ON UPDATE CASCADE,
     message TEXT NOT NULL
 );
 
 CREATE TABLE event (
    id SERIAL PRIMARY KEY,
-   id_host INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
+   host_id INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
    title TEXT NOT NULL,
    event_image TEXT NOT NULL,
    description TEXT NOT NULL,
@@ -95,24 +95,24 @@ CREATE TABLE post (
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     creation_date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT post_creation_date_check CHECK (creation_date <= NOW()),
-    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE
+    event_id INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE poll (
-    id_post INTEGER PRIMARY KEY REFERENCES post ON UPDATE CASCADE ON DELETE CASCADE
+    post_id INTEGER PRIMARY KEY REFERENCES post ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE option (
     id SERIAL PRIMARY KEY,
-    id_poll INTEGER NOT NULL REFERENCES poll ON UPDATE CASCADE ON DELETE CASCADE,
+    poll_id INTEGER NOT NULL REFERENCES poll ON UPDATE CASCADE ON DELETE CASCADE,
     description TEXT NOT NULL,
     votes INTEGER NOT NULL DEFAULT 0 CONSTRAINT option_votes_check CHECK (votes >= 0)
 );
 
 CREATE TABLE comment (
     id SERIAL PRIMARY KEY,
-    id_author INTEGER REFERENCES users ON UPDATE CASCADE,
-    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
+    author_id INTEGER REFERENCES users ON UPDATE CASCADE,
+    event_id INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
     content TEXT NOT NULL,
     number_upvotes INTEGER NOT NULL DEFAULT 0 CONSTRAINT comment_number_upvotes CHECK (number_upvotes >= 0),
     number_downvotes INTEGER NOT NULL DEFAULT 0 CONSTRAINT comment_number_downvotes CHECK (number_downvotes >= 0),
@@ -120,38 +120,38 @@ CREATE TABLE comment (
 );
 
 CREATE TABLE rating (
-    id_comment INTEGER REFERENCES comment ON UPDATE CASCADE,
-    id_reader INTEGER REFERENCES users ON UPDATE CASCADE,
+    comment_id INTEGER REFERENCES comment ON UPDATE CASCADE,
+    user_id INTEGER REFERENCES users ON UPDATE CASCADE,
     vote comment_rating NOT NULL,
-    PRIMARY KEY (id_comment, id_reader)
+    PRIMARY KEY (comment_id, user_id)
 );
 
 CREATE TABLE file (
-    id_comment INTEGER PRIMARY KEY REFERENCES comment ON UPDATE CASCADE ON DELETE CASCADE,
+    comment_id INTEGER PRIMARY KEY REFERENCES comment ON UPDATE CASCADE ON DELETE CASCADE,
     path TEXT NOT NULL CONSTRAINT file_path_uk UNIQUE
 );
 
 CREATE TABLE request (
     id SERIAL PRIMARY KEY,
-    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
+    event_id INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
     date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT request_date_check CHECK (date <= NOW()),
     accepted BOOLEAN NOT NULL DEFAULT false,
-    id_requester INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE
+    user_id INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE
 );
 
 CREATE TABLE invite (
     id SERIAL PRIMARY KEY,
-    id_event INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
+    event_id INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
     date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT invite_date_check CHECK (date <= NOW()),
     accepted BOOLEAN NOT NULL DEFAULT false,
-    id_inviter INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
-    id_invitee INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
-    CONSTRAINT invite_invitter_invitee_id_check CHECK (id_inviter <> id_invitee)
+    inviter_id INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
+    invitee_id INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
+    CONSTRAINT invite_invitter_invitee_id_check CHECK (inviter_id <> invitee_id)
 );
 
 CREATE TABLE report (
     id SERIAL PRIMARY KEY,
-    id_author INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
     report_date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT report_date_check CHECK (report_date <= NOW()),
     motive TEXT NOT NULL,
     dismissal_date TIMESTAMP CONSTRAINT report_dismissal_date_check1 CHECK (dismissal_date <= NOW()),
@@ -159,23 +159,23 @@ CREATE TABLE report (
 );
 
 CREATE TABLE user_report (
-    id_report INTEGER PRIMARY KEY REFERENCES report ON UPDATE CASCADE,
+    report_id INTEGER PRIMARY KEY REFERENCES report ON UPDATE CASCADE,
     target INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE
 );
 
 CREATE TABLE comment_report (
-    id_report INTEGER PRIMARY KEY REFERENCES report,
+    report_id INTEGER PRIMARY KEY REFERENCES report,
     target INTEGER NOT NULL REFERENCES comment ON UPDATE CASCADE
 );
 
 CREATE TABLE event_report (
-    id_report INTEGER PRIMARY KEY REFERENCES report ON UPDATE CASCADE,
+    report_id INTEGER PRIMARY KEY REFERENCES report ON UPDATE CASCADE,
     target INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE
 );
 
 CREATE TABLE transaction (
     id SERIAL PRIMARY KEY,
-    id_user INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
     amount DECIMAL(8,2) NOT NULL CONSTRAINT transaction_amount_check CHECK(amount > 0),
     date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT transaction_date_check CHECK (date <= NOW())
 );
@@ -187,27 +187,27 @@ CREATE TABLE event_cancelled_notification (
 );
 
 CREATE TABLE attendee (
-    id_user INTEGER REFERENCES users ON UPDATE CASCADE,
-    id_event INTEGER REFERENCES event ON UPDATE CASCADE,
-    PRIMARY KEY (id_user, id_event)
+    user_id INTEGER REFERENCES users ON UPDATE CASCADE,
+    event_id INTEGER REFERENCES event ON UPDATE CASCADE,
+    PRIMARY KEY (user_id, event_id)
 );
 
 CREATE TABLE vote (
-    id_user INTEGER REFERENCES users,
-    id_option INTEGER REFERENCES option ON UPDATE CASCADE ON DELETE CASCADE,
-    PRIMARY KEY (id_user, id_option)
+    user_id INTEGER REFERENCES users,
+    option_id INTEGER REFERENCES option ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY (user_id, option_id)
 );
 
 CREATE TABLE event_cancelled_notification_user (
-    id_notification INTEGER REFERENCES event_cancelled_notification ON UPDATE CASCADE ON DELETE CASCADE,
-    id_user INTEGER REFERENCES users ON UPDATE CASCADE,
-    PRIMARY KEY (id_notification, id_user)
+    notification_id INTEGER REFERENCES event_cancelled_notification ON UPDATE CASCADE ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON UPDATE CASCADE,
+    PRIMARY KEY (notification_id, user_id)
 );
 
 CREATE TABLE tag_event (
-    id_tag INTEGER REFERENCES tag ON UPDATE CASCADE,
-    id_event INTEGER REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
-    PRIMARY KEY (id_tag, id_event)
+    tag_id INTEGER REFERENCES tag ON UPDATE CASCADE,
+    event_id INTEGER REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY (tag_id, event_id)
 );
 
 
@@ -221,9 +221,9 @@ ALTER TABLE event DROP COLUMN IF EXISTS tsvectors;
 
 -- ========================== Performance Indexes ===========================
 
-CREATE INDEX user_attendee ON attendee USING hash (id_user);
-CREATE INDEX event_comment ON comment USING hash (id_event);
-CREATE INDEX comment_rating ON rating USING hash (id_comment);
+CREATE INDEX user_attendee ON attendee USING hash (user_id);
+CREATE INDEX event_comment ON comment USING hash (event_id);
+CREATE INDEX comment_rating ON rating USING hash (comment_id);
 
 -- ======================== Full-text Search Indexes ========================
 
@@ -265,7 +265,7 @@ DROP FUNCTION IF EXISTS event_attendee_dif_host;
 CREATE FUNCTION event_attendee_dif_host() RETURNS TRIGGER AS 
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM event WHERE NEW.id_event = event.id AND NEW.id_user = event.id_host) THEN
+    IF EXISTS (SELECT * FROM event WHERE NEW.event_id = event.id AND NEW.user_id = event.host_id) THEN
         RAISE EXCEPTION 'The user you''re trying to add to attendees is the event host';
     END IF;
     RETURN NEW;
@@ -285,7 +285,7 @@ DROP FUNCTION IF EXISTS event_request;
 CREATE FUNCTION event_request() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM event WHERE (event.id=NEW.id_event AND is_accessible)) THEN
+    IF EXISTS (SELECT * FROM event WHERE (event.id=NEW.event_id AND is_accessible)) THEN
         RAISE EXCEPTION 'Cannot send request to an accessible event';
     END IF;
     RETURN NEW;
@@ -305,7 +305,7 @@ DROP FUNCTION IF EXISTS user_report;
 CREATE FUNCTION user_report() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM report WHERE (id=NEW.id_report AND id_author=NEW.target)) THEN
+    IF EXISTS (SELECT * FROM report WHERE (id=NEW.report_id AND user_id=NEW.target)) THEN
         RAISE EXCEPTION 'Users can not report themselves.';
     END IF;
     RETURN NEW;
@@ -327,8 +327,8 @@ $BODY$
 BEGIN
     IF EXISTS (
         SELECT * FROM comment
-            WHERE (comment.id=NEW.target AND comment.id_author
-                IN (SELECT id_author FROM report WHERE id=NEW.id_report))        
+            WHERE (comment.id=NEW.target AND comment.author_id
+                IN (SELECT user_id FROM report WHERE id=NEW.report_id))        
     ) THEN
         RAISE EXCEPTION 'Users can not report their own comment.';
     END IF;
@@ -351,8 +351,8 @@ $BODY$
 BEGIN
     IF EXISTS (
         SELECT * FROM event 
-            WHERE (event.id=NEW.target AND event.id_host 
-                IN (SELECT id_author FROM report WHERE id=NEW.id_report))        
+            WHERE (event.id=NEW.target AND event.host_id 
+                IN (SELECT user_id FROM report WHERE id=NEW.report_id))        
     ) THEN
         RAISE EXCEPTION 'Users can not report their own event.';
     END IF;
@@ -373,7 +373,7 @@ DROP FUNCTION IF EXISTS host_invite;
 CREATE FUNCTION host_invite() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM event WHERE (NEW.id_event = id AND NEW.id_invitee = id_host))
+    IF EXISTS (SELECT * FROM event WHERE (NEW.event_id = id AND NEW.invitee_id = host_id))
         THEN
             RAISE EXCEPTION 'Host cannot be invited to his own event.';
     END IF;
@@ -394,7 +394,7 @@ DROP FUNCTION IF EXISTS vote_increase;
 CREATE FUNCTION vote_increase() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE option SET votes = votes + 1 WHERE NEW.id_option = option.id;
+    UPDATE option SET votes = votes + 1 WHERE NEW.option_id = option.id;
     RETURN NEW;
 END
 $BODY$
@@ -413,9 +413,9 @@ CREATE FUNCTION user_report_disjoint() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF EXISTS (
-        SELECT id_report FROM comment_report WHERE id_report = NEW.id_report
+        SELECT report_id FROM comment_report WHERE report_id = NEW.report_id
         UNION
-        SELECT id_report FROM event_report WHERE id_report = NEW.id_report)
+        SELECT report_id FROM event_report WHERE report_id = NEW.report_id)
         THEN
             RAISE EXCEPTION 'A report cannot have multiple types';
     END IF;
@@ -437,9 +437,9 @@ CREATE FUNCTION comment_report_disjoint() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF EXISTS (
-        SELECT id_report FROM user_report WHERE id_report=NEW.id_report
+        SELECT report_id FROM user_report WHERE report_id=NEW.report_id
         UNION
-        SELECT id_report from event_report WHERE id_report=NEW.id_report)
+        SELECT report_id from event_report WHERE report_id=NEW.report_id)
         THEN
             RAISE EXCEPTION 'A report cannot have multiple types';
     END IF;
@@ -461,9 +461,9 @@ CREATE FUNCTION event_report_disjoint() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF EXISTS (
-        SELECT id_report FROM comment_report WHERE id_report=NEW.id_report
+        SELECT report_id FROM comment_report WHERE report_id=NEW.report_id
         UNION 
-        SELECT id_report FROM user_report WHERE id_report=NEW.id_report)
+        SELECT report_id FROM user_report WHERE report_id=NEW.report_id)
         THEN
             RAISE EXCEPTION 'A report cannot have multiple types';
     END IF;
@@ -484,14 +484,14 @@ DROP FUNCTION IF EXISTS comment_author_belongs_to_event;
 CREATE FUNCTION comment_author_belongs_to_event() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.id_author = 0 -- Anonymous user
+    IF NEW.author_id = 0 -- Anonymous user
     THEN
         RETURN NEW;
     END IF;
     IF
-        EXISTS (SELECT * FROM event WHERE id_host=NEW.id_author AND id=NEW.id_event) 
+        EXISTS (SELECT * FROM event WHERE host_id=NEW.author_id AND id=NEW.event_id) 
         OR 
-        EXISTS (SELECT * FROM attendee WHERE id_user=NEW.id_author AND id_event=NEW.id_event)
+        EXISTS (SELECT * FROM attendee WHERE user_id=NEW.author_id AND event_id=NEW.event_id)
         THEN
             RETURN NEW;
     END IF;
@@ -512,14 +512,14 @@ DROP FUNCTION IF EXISTS comment_reader_belongs_to_event;
 CREATE FUNCTION comment_reader_belongs_to_event() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.id_reader = 0 -- Anonymous user
+    IF NEW.user_id = 0 -- Anonymous user
     THEN
         RETURN NEW;
     END IF;
     IF 
-        EXISTS (SELECT * FROM ((SELECT id_event FROM comment WHERE id = NEW.id_comment) AS event_comment JOIN event ON (id_event=event.id)) WHERE id_host=NEW.id_reader)
+        EXISTS (SELECT * FROM ((SELECT event_id FROM comment WHERE id = NEW.comment_id) AS event_comment JOIN event ON (event_id=event.id)) WHERE host_id=NEW.user_id)
         OR
-        EXISTS (SELECT * FROM ((SELECT id_event FROM comment WHERE id = NEW.id_comment) AS event_comment JOIN attendee ON (event_comment.id_event=attendee.id_event)) WHERE id_user=NEW.id_reader)
+        EXISTS (SELECT * FROM ((SELECT event_id FROM comment WHERE id = NEW.comment_id) AS event_comment JOIN attendee ON (event_comment.event_id=attendee.event_id)) WHERE user_id=NEW.user_id)
         THEN
             RETURN NEW;
     END IF;
@@ -540,7 +540,7 @@ DROP FUNCTION IF EXISTS attendee_cannot_send_request;
 CREATE FUNCTION attendee_cannot_send_request() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM attendee WHERE attendee.id_user = NEW.id_requester AND attendee.id_event = NEW.id_event)
+    IF EXISTS (SELECT * FROM attendee WHERE attendee.user_id = NEW.user_id AND attendee.event_id = NEW.event_id)
         THEN RAISE EXCEPTION 'Attendee can''t send request to join the event';
     END IF;
     RETURN NEW;
@@ -560,18 +560,18 @@ DROP FUNCTION IF EXISTS vote_made_by_attendee;
 CREATE FUNCTION vote_made_by_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.id_user = 0 -- Anonymous user
+    IF NEW.user_id = 0 -- Anonymous user
     THEN
         RETURN NEW;
     END IF;
     IF
-        NEW.id_user IN (
-            SELECT id_user FROM attendee WHERE id_event IN (
-                SELECT post.id_event FROM
+        NEW.user_id IN (
+            SELECT user_id FROM attendee WHERE event_id IN (
+                SELECT post.event_id FROM
                     post 
                     JOIN 
-                    (SELECT * FROM option WHERE (id=NEW.id_option)) AS opt
-                    ON (opt.id_poll = post.id)
+                    (SELECT * FROM option WHERE (id=NEW.option_id)) AS opt
+                    ON (opt.poll_id = post.id)
             )
         )
         THEN
@@ -594,7 +594,7 @@ DROP FUNCTION IF EXISTS attendees_vote_once;
 CREATE FUNCTION attendees_vote_once() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF EXISTS (SELECT * FROM poll, option, vote WHERE poll.id_post = option.id_poll AND option.id = vote.id_option AND NEW.id_user = vote.id_user)
+    IF EXISTS (SELECT * FROM poll, option, vote WHERE poll.post_id = option.poll_id AND option.id = vote.option_id AND NEW.user_id = vote.user_id)
     THEN RAISE EXCEPTION 'An attendee can''t vote twice in the same poll';
     END IF;
     RETURN NEW;
@@ -615,7 +615,7 @@ CREATE FUNCTION cant_invite_attendee() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     IF EXISTS (
-        SELECT * FROM attendee WHERE (id_event=NEW.id_event AND id_user=NEW.id_invitee)
+        SELECT * FROM attendee WHERE (event_id=NEW.event_id AND user_id=NEW.invitee_id)
     )
     THEN
         RAISE EXCEPTION 'An user cannot be invited to an event he''s already attending';
@@ -637,7 +637,7 @@ DROP FUNCTION IF EXISTS increment_number_attendees;
 CREATE FUNCTION increment_number_attendees() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE event SET number_attendees = number_attendees + 1 WHERE NEW.id_event = event.id;
+    UPDATE event SET number_attendees = number_attendees + 1 WHERE NEW.event_id = event.id;
     RETURN NEW;
 END
 $BODY$
@@ -655,7 +655,7 @@ DROP FUNCTION IF EXISTS decrement_number_attendees;
 CREATE FUNCTION decrement_number_attendees() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE event SET number_attendees = number_attendees - 1 WHERE OLD.id_event = event.id;
+    UPDATE event SET number_attendees = number_attendees - 1 WHERE OLD.event_id = event.id;
     RETURN OLD;
 END
 $BODY$
@@ -673,7 +673,7 @@ DROP FUNCTION IF EXISTS increment_number_upvotes;
 CREATE FUNCTION increment_number_upvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET number_upvotes = number_upvotes + 1 WHERE NEW.id_comment = comment.id;
+    UPDATE comment SET number_upvotes = number_upvotes + 1 WHERE NEW.comment_id = comment.id;
     RETURN NEW;
 END
 $BODY$
@@ -691,7 +691,7 @@ DROP FUNCTION IF EXISTS increment_number_downvotes;
 CREATE FUNCTION increment_number_downvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET number_downvotes = number_downvotes + 1 WHERE NEW.id_comment = comment.id;
+    UPDATE comment SET number_downvotes = number_downvotes + 1 WHERE NEW.comment_id = comment.id;
     RETURN NEW;
 END
 $BODY$
@@ -709,7 +709,7 @@ DROP FUNCTION IF EXISTS decrement_number_upvotes;
 CREATE FUNCTION decrement_number_upvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET number_upvotes = number_upvotes - 1 WHERE OLD.id_comment = comment.id;
+    UPDATE comment SET number_upvotes = number_upvotes - 1 WHERE OLD.comment_id = comment.id;
     RETURN OLD;
 END
 $BODY$
@@ -727,7 +727,7 @@ DROP FUNCTION IF EXISTS decrement_number_downvotes;
 CREATE FUNCTION decrement_number_downvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET number_downvotes = number_downvotes - 1 WHERE OLD.id_comment = comment.id;
+    UPDATE comment SET number_downvotes = number_downvotes - 1 WHERE OLD.comment_id = comment.id;
     RETURN OLD;
 END
 $BODY$
@@ -903,7 +903,7 @@ select setval('users_id_seq', (select max(id) from users));
 
 -- ========================= unblock_appeal =========================
 
-INSERT INTO unblock_appeal(id_user,message) VALUES
+INSERT INTO unblock_appeal(user_id,message) VALUES
   (120,'fringilla mi lacinia mattis. Integer eu'),
   (144,'Nullam feugiat placerat velit. Quisque varius. Nam porttitor'),
   (67,'Nulla interdum. Curabitur dictum. Phasellus in felis. Nulla tempor'),
@@ -912,7 +912,7 @@ INSERT INTO unblock_appeal(id_user,message) VALUES
 
 -- ========================= event =========================
 
-INSERT INTO event(id,id_host,title,event_image,description, location,creation_date,realization_date,is_visible,is_accessible,capacity,price) VALUES
+INSERT INTO event(id,host_id,title,event_image,description, location,creation_date,realization_date,is_visible,is_accessible,capacity,price) VALUES
   (0,10,'sed, sapien. Nunc','vel,','ac, fermentum vel, mauris. Integer sem elit, pharetra ut, pharetra','P.O. Box 353, 6302 Fringilla Rd.', '2021-02-05 15:43:21', '2021-08-08 16:58:49','True','True',18,1),
   (1,31,'lorem, luctus ut,','non,','Nulla aliquet. Proin velit. Sed malesuada augue ut lacus. Nulla','439-3948 Lobortis St.', '2021-02-20 22:54:17', '2021-03-22 08:57:27','False','False',79,8),
   (2,52,'Nullam lobortis quam','at,','pulvinar arcu et pede. Nunc sed orci lobortis augue scelerisque','786-7331 Tincidunt Ave', '2021-03-17 13:09:55', '2021-04-23 12:04:36','False','True',89,7),
@@ -1069,7 +1069,7 @@ UPDATE event SET event_image='images/default.png';
 
 -- ========================= attendee =========================
 
-INSERT INTO attendee(id_user,id_event) VALUES
+INSERT INTO attendee(user_id,event_id) VALUES
   (76,99),
   (23,76),
   (129,110),
@@ -1256,7 +1256,7 @@ INSERT INTO attendee(id_user,id_event) VALUES
 
 -- ========================= request =========================
 
-INSERT INTO request(id,id_event,date,accepted,id_requester) VALUES
+INSERT INTO request(id,event_id,date,accepted,user_id) VALUES
   (0,1, '2020-01-03 15:24:45','False',97),
   (1,8, '2020-04-04 15:36:08','False',58),
   (2,12, '2021-06-23 20:24:06','False',40),
@@ -1265,7 +1265,7 @@ INSERT INTO request(id,id_event,date,accepted,id_requester) VALUES
 
 -- ========================= invite =========================
 
-INSERT INTO invite(id,id_event,date,accepted,id_inviter,id_invitee) VALUES
+INSERT INTO invite(id,event_id,date,accepted,inviter_id,invitee_id) VALUES
   (0,12, '2020-02-19 13:12:50','True',90,84),
   (1,7, '2019-12-04 23:00:07','True',48,2),
   (2,6, '2021-05-21 14:34:51','True',67,129),
@@ -1293,7 +1293,7 @@ INSERT INTO tag(id,name) VALUES
 
 -- ========================= post =========================
 
-INSERT INTO post(id,title,description,creation_date,id_event) VALUES
+INSERT INTO post(id,title,description,creation_date,event_id) VALUES
   (0,'elit.','gravida sagittis. Duis gravida. Praesent eu nulla at sem','2021-10-20 20:06:02',126),
   (1,'eu','lorem, eget mollis lectus pede et risus. Quisque','2020-12-19 10:41:51',92),
   (2,'tellus.','ipsum cursus vestibulum. Mauris magna. Duis','2021-02-09 04:16:31',10),
@@ -1447,7 +1447,7 @@ INSERT INTO post(id,title,description,creation_date,id_event) VALUES
   
 -- ========================= poll =========================
 
-INSERT INTO poll(id_post) VALUES
+INSERT INTO poll(post_id) VALUES
   (0),
   (1),
   (10),
@@ -1456,7 +1456,7 @@ INSERT INTO poll(id_post) VALUES
 
 -- ========================= option =========================
 
-INSERT INTO option(id,id_poll,description) VALUES
+INSERT INTO option(id,poll_id,description) VALUES
   (0,0,'Mauris non dui nec urna suscipit'),
   (1,0,'dolor vitae dolor. Donec fringilla. Donec feugiat'),
   (2,0,'non quam. Pellentesque habitant morbi tristique senectus et netus'),
@@ -1480,7 +1480,7 @@ INSERT INTO option(id,id_poll,description) VALUES
 
 -- ========================= comment =========================
 
-INSERT INTO comment(id,id_author,id_event,content,creation_date) VALUES
+INSERT INTO comment(id,author_id,event_id,content,creation_date) VALUES
   (0,52,94,'luctus ut, pellentesque eget, dictum placerat, augue. Sed molestie. Sed','2020-02-13 23:19:32'),
   (1,41,127,'non magna. Nam ligula elit,','2020-02-04 00:16:08'),
   (2,74,23,'feugiat metus sit amet ante. Vivamus non lorem vitae','2021-03-14 04:25:47'),
@@ -1514,7 +1514,7 @@ INSERT INTO comment(id,id_author,id_event,content,creation_date) VALUES
 
 -- ========================= rating =========================
 
-INSERT INTO rating(id_comment,id_reader,vote) VALUES
+INSERT INTO rating(comment_id,user_id,vote) VALUES
   (10,49,'Upvote'),
   (1,41,'Downvote'),
   (1,82,'Upvote'),
@@ -1525,7 +1525,7 @@ INSERT INTO rating(id_comment,id_reader,vote) VALUES
 
 -- ========================= file =========================
 
-INSERT INTO file(id_comment,path) VALUES
+INSERT INTO file(comment_id,path) VALUES
   (28,'./images/idk.png'),
   (4,'./images/oof.png'),
   (19,'./images/idkv2.png'),
@@ -1539,7 +1539,7 @@ INSERT INTO file(id_comment,path) VALUES
 
 -- ========================= report =========================
 
-INSERT INTO report(id_author,report_date,motive,dismissal_date) VALUES
+INSERT INTO report(user_id,report_date,motive,dismissal_date) VALUES
   (70,'2021-09-18 23:22:49','quam dignissim pharetra. Nam ac nulla. In tincidunt','2021-10-28 16:19:00'),
   (23,'2020-03-31 17:19:59','blandit congue. In scelerisque scelerisque','2021-10-26 12:45:16'),
   (19,'2020-03-01 21:48:49','Nunc commodo auctor velit. Aliquam nisl. Nulla eu',NULL),
@@ -1549,25 +1549,25 @@ INSERT INTO report(id_author,report_date,motive,dismissal_date) VALUES
 
 -- ========================= user_report =========================
 
-INSERT INTO user_report(id_report,target) VALUES
+INSERT INTO user_report(report_id,target) VALUES
   (1,120),
   (2,144);
 
 -- ========================= comment_report =========================
 
-INSERT INTO comment_report(id_report,target) VALUES
+INSERT INTO comment_report(report_id,target) VALUES
   (3,7),
   (4,14);
 
 -- ========================= event_report =========================
 
-INSERT INTO event_report(id_report,target) VALUES
+INSERT INTO event_report(report_id,target) VALUES
   (5,86),
   (6,76);
 
 -- ========================= transaction =========================
 
-INSERT INTO transaction(id,id_user,amount,date) VALUES
+INSERT INTO transaction(id,user_id,amount,date) VALUES
   (0,141,'4.14','2021-01-27 03:58:12'),
   (1,72,'13.16','2020-12-19 22:34:16'),
   (2,105,'13.80','2021-11-01 15:35:48'),
@@ -1600,7 +1600,7 @@ INSERT INTO event_cancelled_notification(title,notification_date) VALUES
 
 -- ========================= event_cancelled_notification_user =========================
 
-INSERT INTO event_cancelled_notification_user(id_notification,id_user) VALUES
+INSERT INTO event_cancelled_notification_user(notification_id,user_id) VALUES
   (4, 116), 
   (1, 74), 
   (2, 94), 
@@ -1652,7 +1652,7 @@ INSERT INTO event_cancelled_notification_user(id_notification,id_user) VALUES
   
 -- ========================= vote =========================
 
-INSERT INTO vote(id_user,id_option) VALUES
+INSERT INTO vote(user_id,option_id) VALUES
   (112, 0),
   (143, 7),
   (107, 9),
@@ -1661,7 +1661,7 @@ INSERT INTO vote(id_user,id_option) VALUES
 
 -- ========================= tag_event =========================
 
-INSERT INTO tag_event(id_tag, id_event) VALUES
+INSERT INTO tag_event(tag_id, event_id) VALUES
   (9,17),
   (9,133),
   (4,29),

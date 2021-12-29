@@ -19,7 +19,7 @@ class EventPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return $event->public;
     }
 
     /**
@@ -30,7 +30,8 @@ class EventPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function view(User $user, Event $event)
-    {
+    {   
+        $attendee = user->attending()->where()->get();
         return $event->public; // TODO: Verify attendee
     }
 

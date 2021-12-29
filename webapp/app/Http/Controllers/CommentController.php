@@ -41,12 +41,13 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Comment  $comment_id
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show($comment_id)
     {
-        //
+        $comment = Comment::find($id);
+        return view('pages.event', ['event' => $event]);
     }
 
     /**

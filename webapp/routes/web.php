@@ -10,8 +10,19 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Home
-Route::get('/', 'EventController@list' );
+
+// Homepage
+Route::get('/', 'EventController@list' )->name('homepage');
+
+Route::get('/about', function(){return view('pages.about');});
+Route::get('/contact', function(){return view('pages.contact');});
+
+// Authentication
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('login', 'Auth\LoginController@login');
+Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
 
 // Events
 Route::get('createEvent', 'EventController@showCreateForm');
@@ -19,7 +30,20 @@ Route::get('events', 'EventController@list');
 Route::get('event/{event_id}', 'EventController@show');
 Route::post('event', 'EventController@create')->name('event');
 
-// Cards
+// Comments TODO: Controller
+Route::post('api/event/{event_id}/comment', 'CommentController@create');
+Route::put('api/comment/{comment_id}', 'CommentController@update');
+Route::delete('api/comment/{comment_id}', 'CommentController@delete');
+
+// Posts TODO: Controller
+Route::post('api/event/{event_id}/post', 'PostController@create');
+Route::put('api/post/{post_id}', 'PostController@update');
+Route::delete('api/post/{post_id}', 'PostController@delete');
+
+// Images
+Route::get('image/event/{id}', 'EventController@getImage');
+
+/*// Cards
 Route::get('cards', 'CardController@list');
 Route::get('cards/{id}', 'CardController@show');
 
@@ -28,14 +52,4 @@ Route::put('api/cards', 'CardController@create');
 Route::delete('api/cards/{card_id}', 'CardController@delete');
 Route::put('api/cards/{card_id}/', 'ItemController@create');
 Route::post('api/item/{id}', 'ItemController@update');
-Route::delete('api/item/{id}', 'ItemController@delete');
-
-// Images
-Route::get('image/event/{id}', 'EventController@getImage');
-
-// Authentication
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
-Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
+Route::delete('api/item/{id}', 'ItemController@delete');*/

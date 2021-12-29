@@ -1,6 +1,10 @@
-.display-1 {
+.homepage-title {
     font-family: 'Pacifico', 'cursive';
-    font-size: 100rem !important;
+    font-size: 10vh !important;
+}
+
+.navbar-brand {
+    font-family: 'Pacifico', 'cursive';
 }
 
 .card {

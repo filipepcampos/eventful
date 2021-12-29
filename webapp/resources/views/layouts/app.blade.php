@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title')</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/milligram.min.css') }}" rel="stylesheet">
@@ -32,7 +32,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
           
-          @if(Route::current()->getName() != '')
+          @if(Route::currentRouteName() != 'homepage')
             <a class="navbar-brand" href="{{ url('/') }}">Eventful</a>
           @endif
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,12 +44,12 @@
                 <a class="nav-link" href="{{ url('/about')}}">About Us</a>
               </li>
               <li class="nav-item mb-0">
-                <a class="nav-link" href="{{ url('/contactUs') }}">Contact Us</a>
+                <a class="nav-link" href="{{ url('/contact') }}">Contact Us</a>
               </li>
             </ul>
             
-            <form class="form-inline mx-auto mb-0">
-              <input class="form-control text-center" type="search" placeholder="Search" aria-label="Search">
+            <form class="form-inline mx-auto mb-0 w-25">
+              <input class="form-control text-center h-70" type="search" placeholder="Search" aria-label="Search">
             </form>
 
             <ul class="navbar-nav ms-auto">

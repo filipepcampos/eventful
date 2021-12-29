@@ -1,13 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Home')
+@section('title', 'Eventful')
 
 @section('content')
 
-<h1 class="display-1 text-center my-5"> Eventful </h1>
-
+<div class="container">
 <div class="row justify-content-center">
-    @each('partials.eventCard', $events, 'event')
+<h1 class="homepage-title text-center my-5"> Eventful </h1>
+</div>
+
+    <div class="row justify-content-center">
+        @each('partials.eventCard', $events, 'event')
+    </div>
 </div>
 
 @endsection

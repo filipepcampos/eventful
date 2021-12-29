@@ -33,9 +33,9 @@ class User extends Authenticatable
     ];
 
     /**
-     * The cards this user owns.
+     * Events the user is attending
      */
-     public function cards() {
-      return $this->hasMany('App\Models\Card');
+     public function attending() {
+      return $this->belongsToMany('App\Models\Event', 'attendee');
     }
 }
