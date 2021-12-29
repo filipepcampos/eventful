@@ -49,7 +49,7 @@
             </ul>
             
             <form class="form-inline mx-auto mb-0">
-              <input class="form-control" type="search" placeholder="&#128269; Search" aria-label="Search">
+              <input class="form-control text-center" type="search" placeholder="Search" aria-label="Search">
             </form>
 
             <ul class="navbar-nav ms-auto">

@@ -1,7 +1,12 @@
 .display-1 {
     font-family: 'Pacifico', 'cursive';
+    font-size: 100rem !important;
 }
 
 .card {
-    width: 32rem;
+    width: 28rem;
+}
+
+input.form-control {
+    background: #fff;
 }

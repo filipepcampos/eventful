@@ -1064,8 +1064,9 @@ INSERT INTO event(id,id_host,title,event_image,description, location,creation_da
   (148,124,'tempus non, lacinia','ac','sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer','765-2936 Nulla Rd.','2020-10-26 01:19:20','2022-05-14 17:08:57','True','True',40,4),
   (149,125,'luctus et ultrices','purus,','lectus rutrum urna, nec luctus felis purus','Ap #920-4292 Imperdiet Rd.','2020-09-20 04:10:18','2022-05-31 01:47:22','True','True',25,9);
 
+SELECT setval('event_id_seq', (SELECT max(id) FROM event));
+UPDATE event SET event_image='images/default.png';
 
-select setval('event_id_seq', (select max(id) from event));
 -- ========================= attendee =========================
 
 INSERT INTO attendee(id_user,id_event) VALUES

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\EventCreateRequest;
 
 class EventController extends Controller
@@ -93,6 +94,11 @@ class EventController extends Controller
       */
       $events = Event::all();
       return view('pages.home', ['events' => $events]);
+    }
+
+    public function getImage($id){
+        $event = Event::find($id);
+        return Storage::response($event->event_image);
     }
 
     /**
