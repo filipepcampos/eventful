@@ -12,27 +12,25 @@ class EventPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function viewAny(User $user)
-    {
-        return $event->public;
-    }
-
-    /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view the event content (comments/polls).
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Event $event)
-    {   
-        $attendee = user->attending()->where()->get();
-        return $event->public; // TODO: Verify attendee
+    public function viewContent(User $user, Event $event)
+    {
+        return ($event->host() === $user->id) || (optional($user)->attending()->get()->contains($event));
+    }
+
+    public function viewInformation(?User $user, Event $event){
+        if($event->is_visible){
+            return true;
+        }
+        if($user === null){
+            return false;
+        }
+        return ($event->host() === $user->id) || ($user->attending()->get()->contains($event));
     }
 
     /**

@@ -77,10 +77,7 @@ class EventController extends Controller
 
         $event->save();
 
-        // todo: remove this, this is stupid
-        $events = Event::all();
-        return view('pages.events', ['events' => $events]);
-        //return route('event/' . $event->id); // TODO: I have no idea if this works...
+        return route('event/' . $event->id); // TODO: I have no idea if this works...
     }
 
     /**
@@ -125,7 +122,8 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::find($id); // TODO: Auth
+        $event = Event::find($id);
+        $this->authorize('viewInformation', $event);
         return view('pages.event', ['event' => $event]);
     }
 
