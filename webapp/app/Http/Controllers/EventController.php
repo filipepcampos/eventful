@@ -100,6 +100,7 @@ class EventController extends Controller
 
     public function getImage($id){
         $event = Event::find($id);
+        $this->authorize('viewInformation', $event);
         return Storage::response($event->event_image);
     }
 
