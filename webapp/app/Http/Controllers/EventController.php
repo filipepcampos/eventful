@@ -98,14 +98,16 @@ class EventController extends Controller
      */
     public function list()
     {
-        $user = Auth::user();
-        // TODO: Falta host
-        $hosting = Event::where('host_id', $user->id);
-        $attending = Event::whereHas('attendees', function($q) use ($user){
-            $q->where('id', $user->id);
-        });
-        $visible_events = Event::where('is_visible', '=', 'true');
-        $events = $attending->union($visible_events)->union($hosting)->paginate(16);
+        $events = Event::where('is_visible', '=', 'true'); // Visible events
+        if(Auth::check()){
+            $user = Auth::user();
+            $hosting = Event::where('host_id', $user->id);
+            $attending = Event::whereHas('attendees', function($q) use ($user){
+                $q->where('id', $user->id);
+            });
+            $events = $events->union($attending)->union($hosting);
+        }
+        $events = $events->paginate(16);
         return view('pages.home', ['events' => $events]);
     }
 
