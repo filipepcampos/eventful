@@ -4,7 +4,8 @@
 
 @section('content')
 <h1>Update Event</h1>
-<form method="PUT" action="{{ route('updateEvent', ['event_id' => $event->id]) }}" enctype="multipart/form-data">
+<form method='post' action="{{ route('updateEvent', ['event_id' => $event->id]) }}" enctype="multipart/form-data">
+    {{ method_field('PUT') }}
     {{ csrf_field() }}
 
     <label for="title" class="form-label">Title</label>
@@ -48,7 +49,7 @@
     @endif
 
     <label for="is_visible" class="form-label">Visibility</label>
-    <input id="is_visible" type="checkbox" name="is_visible" placeholder="{{ $event->is_visible }}" class="form-check-input">
+    <input id="is_visible" type="checkbox" name="is_visible" value="{{ $event->is_visible }}" class="form-check-input">
     @if ($errors->has('is_visible'))
         <span class="error">
           {{ $errors->first('is_visible') }}
@@ -56,7 +57,7 @@
     @endif
 
     <label for="is_accessible" class="form-label">Accessability</label>
-    <input id="is_accessible" type="checkbox" name="is_accessible" placeholder="{{ $event->is_accessible }}" class="form-check-input">
+    <input id="is_accessible" type="checkbox" name="is_accessible" value="{{ $event->is_accessible }}" class="form-check-input">
     @if ($errors->has('is_accessible'))
         <span class="error">
           {{ $errors->first('is_accessible') }}

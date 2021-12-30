@@ -10,6 +10,23 @@
         </div>
         <div class="col border border-5 border-secondary rounded">
             <h1 class="display-5 text-center">{{ $event->title }}</h1>
+
+            @can('join', $event)
+            <form method="post" action='{{ route("joinEvent", ["event_id" => $event->id]) }}'>
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-success">
+                    Join
+                </button>
+            </form>
+            @elsecan('leave', $event)
+            <form method="post" action='{{ route("leaveEvent", ["event_id" => $event->id]) }}'>
+                {{ method_field('DELETE') }}
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-danger">
+                    Leave
+                </button>
+            </form>
+            @endcan
         </div>
     </div>
     <div class="row my-5">

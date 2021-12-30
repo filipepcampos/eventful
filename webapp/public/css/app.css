@@ -14,3 +14,7 @@
 input.form-control {
     background: #fff;
 }
+
+.pagination {
+    justify-content: center;
+}

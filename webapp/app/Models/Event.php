@@ -35,7 +35,7 @@ class Event extends Model
    * Event attendees
    */
   public function attendees() {
-    return $this->hasMany('App\Models\User', 'attendee');
+    return $this->belongsToMany('App\Models\User', 'attendee');
   }
 
   /**

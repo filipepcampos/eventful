@@ -11,6 +11,9 @@
     <div class="row justify-content-center">
         @each('partials.eventCard', $events, 'event')
     </div>
+    <div class="row justify-content-center">
+        {{ $events->render() }}
+    </div>
 </div>
 
 @endsection

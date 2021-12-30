@@ -6,7 +6,13 @@
         <h5 class="card-title">{{ $event->title }}</h5>
         <p class="card-text">{{ $event->description }}</p>
 
+
         <div class="mt-auto">
+          <div class="mb-2">
+          @foreach($event->tags()->get() as $tag)
+            <span class="badge badge-pill badge-primary bg-secondary">{{ $tag->name }}</span>
+          @endforeach
+          </div>
           <!-- Accessibility -->
           <div class="mb-2">
             <span class="card-text">

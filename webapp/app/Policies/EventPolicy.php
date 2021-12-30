@@ -56,6 +56,17 @@ class EventPolicy
         return ($event->host()->first()->id === $user->id);
     }
 
+    public function join(User $user, Event $event) 
+    {
+        return $event->is_accessible && 
+            !($user->attending()->get()->contains($event)) && 
+            !($event->host()->first()->id === $user->id);
+    }
+
+    public function leave(User $user, Event $event){
+        return $user->attending()->get()->contains($event);
+    }
+
     /**
      * Determine whether the user can delete the model.
      *

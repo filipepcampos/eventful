@@ -4,15 +4,21 @@
 
 @section('content')
 <h1 class="text-center my-5">Searching for: {{ $search }}</h1>
-<div class="row justify-content-center">
-    <div class="col-auto mb-5">
-        <div class="card h-100">
-            <div class="card-body">
-                <h2 class="card-title">Tags</h2>
-                @each('partials.tags', $events, 'event')
-            </div>
+<div class="row">
+    <div class="col-2">
+        <div class="card mx-5">
+            <h2 class="card-title">Tags:</h2>
+            <form method="GET" action="{{ url('event') }}">
+                <input type="hidden" name="search" value="{{ $search }}">
+                @each('partials.tag', $tags, 'tag')
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
     </div>
-    @each('partials.eventCard', $events, 'event')
+    <div class="col">
+        <div class="row justify-content-center">
+            @each('partials.eventCard', $events, 'event')
+        </div>
+    </div>
 </div>
 @endsection
