@@ -41,23 +41,28 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\User  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+        $user = User::find($id);
+        $this->authorize('view', $user);
+        return view('pages.profile', ['user' => $user]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
-    {
-        //
+    public function showUpdateForm($id)
+    {   
+        // TODO: APENAS O USER PODE EDITAR
+        if (!Auth::check()) return redirect('/login');
+        $user = User::find($id);
+        return view('pages.updateProfile', ['user'=>$user]);
     }
 
     /**
@@ -67,9 +72,9 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserUpdateRequest $request, User $user)
     {
-        //
+        
     }
 
     /**

@@ -65,7 +65,7 @@
                   <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
                 </li>
                 <li class="nav-item mb-0">
-                  <span>{{ Auth::user()->name }}</span>
+                  <a class="nav-link text-white" href="{{ url('/user/' . Auth::id()) }}">{{ Auth::user()->name }}</a>
                 </li>
               @endif
             </ul>

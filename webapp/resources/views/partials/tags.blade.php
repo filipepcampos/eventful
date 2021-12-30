@@ -1,0 +1,1 @@
+@each('partials.tag', $event->tags()->distinct()->get(), 'tag')

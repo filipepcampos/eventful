@@ -28,8 +28,16 @@ Route::post('register', 'Auth\RegisterController@register');
 Route::get('createEvent', 'EventController@showCreateForm');
 Route::get('events', 'EventController@list');
 Route::get('event/{event_id}', 'EventController@show');
+Route::put('event/{event_id}', 'EventController@update')->name('updateEvent');  // TODO
+Route::delete('event/{event_id}', 'EventController@delete');  // TODO
+Route::get('event/{event_id}/update', 'EventController@showUpdateForm');
 Route::get('event', 'EventController@search');      // Search
 Route::post('event', 'EventController@create')->name('event');
+
+// Users
+Route::get('user/{user_id}', 'UserController@show');
+Route::put('user/{user_id}', 'UserController@update')->name('updateUser');
+Route::get('user/{user_id}/update', 'UserController@showUpdateForm'); 
 
 // Comments TODO: Controller
 Route::post('api/event/{event_id}/comment', 'CommentController@create');

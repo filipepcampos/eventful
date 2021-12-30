@@ -2,35 +2,34 @@
 
 namespace App\Policies;
 
-use App\Models\Event;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\Auth;
 
-class EventPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view the event content (comments/polls).
+     * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Event  $event
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewContent(User $user, Event $event)
+    public function viewAny(User $user)
     {
-        return ($event->host()->first()->id === $user->id)|| ($user->attending()->get()->contains($event));
+        //
     }
 
-    public function viewInformation(?User $user, Event $event){
-        if($event->is_visible){
-            return true;
-        }
-        if($user === null){
-            return false;
-        }
-        return ($event->host()->first()->id === $user->id) || ($user->attending()->get()->contains($event));
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\User  $model
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function view(User $user, User $model)
+    {
+        return $user->id === $model->id;
     }
 
     /**
@@ -41,41 +40,41 @@ class EventPolicy
      */
     public function create(User $user)
     {
-        return Auth::check();
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Event $event)
+    public function update(User $user, User $model)
     {
-        return ($event->host()->first()->id === $user->id);
+        return $user->id === $model->id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Event $event)
+    public function delete(User $user, User $model)
     {
-        return ($event->host()->first()->id === $user->id);
+        return $user->id === $model->id;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Event $event)
+    public function restore(User $user, User $model)
     {
         //
     }
@@ -84,10 +83,10 @@ class EventPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Event $event)
+    public function forceDelete(User $user, User $model)
     {
         //
     }

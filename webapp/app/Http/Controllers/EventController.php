@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
 
-use App\Models\User; // TODO DELETE THIS PLEASE
-
 class EventController extends Controller
 {
     /**
@@ -28,14 +26,26 @@ class EventController extends Controller
     public function search(Request $request)
     {
         $search = $request->query('search');
-        $events = DB::table('event')->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search])->get();
-        //return $events;
+        $events = Event::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search])->get();
         return view('pages.search')->with('events', $events)->with('search', $search);
     }
 
     public function showCreateForm(){
         if (!Auth::check()) return redirect('/login');
         return view('pages.createEvent');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showUpdateForm($id){
+        // TODO: APENAS HOST PODE EDITAR
+        if (!Auth::check()) return redirect('/login');
+        $event = Event::find($id);
+        return view('pages.updateEvent', ['event'=>$event]);
     }
 
     /**
@@ -54,7 +64,7 @@ class EventController extends Controller
 
         $event->id_host = Auth::user()->id;
         $event->title = $request->input('title');
-        $event->event_image = 'ola';
+        $event->event_image = $request->file('event_image')->store('images');
         $event->description = $request->input('description');
         $event->location = $request->input('location');
         $event->realization_date = $request->input('realization_date');
@@ -69,7 +79,7 @@ class EventController extends Controller
 
         $event->save();
 
-        return route('event/' . $event->id); // TODO: I have no idea if this works...
+        return route('event/' . $event->id);
     }
 
     /**
@@ -79,14 +89,7 @@ class EventController extends Controller
      */
     public function list()
     {
-      /*
-      if (!Auth::check()) return redirect('/login');
-      $this->authorize('list', Card::class);
-      $cards = Auth::user()->cards()->orderBy('id')->get();
-      return view('pages.cards', ['cards' => $cards]);
-      */
       $events = Event::all();
-      // TODO: Filter private events
       return view('pages.home', ['events' => $events]);
     }
 
@@ -110,7 +113,7 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Event  $id
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -121,26 +124,35 @@ class EventController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Event $event)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request\EventUpdateRequest  $request
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+    public function update(EventUpdateRequest $request, Event $event)
     {
-        //
+        if (!Auth::check()) return redirect('/login');
+        $this->authorize('update', Event::class);
+
+        $validated = $request->validated();
+
+        /*
+        $event->title = $request->input('title');
+        $event->event_image = $request->file('event_image')->store('images');
+        $event->description = $request->input('description');
+        $event->location = $request->input('location');
+        $event->realization_date = $request->input('realization_date');
+        $event->is_visible = $request->input('is_visible') ? true : false;
+        $event->is_accessible = $request->input('is_accessible') ? true : false;
+        if($request->has('capacity')){ // NAO PERMITIR CAPACIDADE MENOR QUE ATUAL
+            $event->capacity = $request->input('capacity');
+        }
+        $event->price = $request->input('price');
+
+        $event->save();
+        */
+        return route('event/' . $event->id);
     }
 
     /**

@@ -60,6 +60,7 @@ CREATE TABLE users (
     birthdate DATE NOT NULL,
     description TEXT,
     block_motive TEXT,
+    remember_token TEXT,
     CONSTRAINT user_birthdate_check CHECK (birthdate <= account_creation_date)
 );
 
