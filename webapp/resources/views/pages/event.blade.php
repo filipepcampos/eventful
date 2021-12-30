@@ -9,24 +9,37 @@
             <img class="border border-5 border-secondary rounded" src='{{ url("/image/event/$event->id") }}' alt="Event image">
         </div>
         <div class="col border border-5 border-secondary rounded">
-            <h1 class="display-5 text-center">{{ $event->title }}</h1>
+            <h1 class="display-2 text-center">{{ $event->title }}</h1>
+            <p class="lead text-center">Created by {{ $event->host()->first()->username }}<p>
+            <div class="text-center">
+            @include('partials.eventTags', ['tags' => $event->tags()->get()])                
+            </div>
 
-            @can('join', $event)
-            <form method="post" action='{{ route("joinEvent", ["event_id" => $event->id]) }}'>
-                {{ csrf_field() }}
-                <button type="submit" class="btn btn-success">
-                    Join
-                </button>
-            </form>
-            @elsecan('leave', $event)
-            <form method="post" action='{{ route("leaveEvent", ["event_id" => $event->id]) }}'>
-                {{ method_field('DELETE') }}
-                {{ csrf_field() }}
-                <button type="submit" class="btn btn-danger">
-                    Leave
-                </button>
-            </form>
-            @endcan
+            <div class="row">
+                <div class="col">
+                    @include('partials.eventDetails', ['event' => $event])
+                </div>
+                <div class="col">
+                    <div class="float-right">
+                        @can('join', $event)
+                        <form method="post" action='{{ route("joinEvent", ["event_id" => $event->id]) }}'>
+                            {{ csrf_field() }}
+                            <button type="submit" class="btn btn-success">
+                                Join
+                            </button>
+                        </form>
+                        @elsecan('leave', $event)
+                        <form method="post" action='{{ route("leaveEvent", ["event_id" => $event->id]) }}'>
+                            {{ method_field('DELETE') }}
+                            {{ csrf_field() }}
+                            <button type="submit" class="btn btn-danger">
+                                Leave
+                            </button>
+                        </form>
+                        @endcan
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row my-5">
