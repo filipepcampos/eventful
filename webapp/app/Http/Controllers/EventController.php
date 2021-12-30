@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\EventCreateRequest;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Log;
+
 use App\Models\User; // TODO DELETE THIS PLEASE
 
 class EventController extends Controller
@@ -27,6 +29,7 @@ class EventController extends Controller
     {
         $search = $request->query('search');
         $events = DB::table('event')->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search])->get();
+        //return $events;
         return view('pages.search')->with('events', $events)->with('search', $search);
     }
 
@@ -66,10 +69,7 @@ class EventController extends Controller
 
         $event->save();
 
-        // todo: remove this, this is stupid
-        $events = Event::all();
-        return view('pages.events', ['events' => $events]);
-        //return route('event/' . $event->id); // TODO: I have no idea if this works...
+        return route('event/' . $event->id); // TODO: I have no idea if this works...
     }
 
     /**
@@ -92,6 +92,7 @@ class EventController extends Controller
 
     public function getImage($id){
         $event = Event::find($id);
+        $this->authorize('viewInformation', $event);
         return Storage::response($event->event_image);
     }
 
@@ -114,7 +115,8 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::find($id); // TODO: Auth
+        $event = Event::find($id);
+        $this->authorize('viewInformation', $event);
         return view('pages.event', ['event' => $event]);
     }
 

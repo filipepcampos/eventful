@@ -881,7 +881,7 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (131,'illi','consequat.auctor.nunc@aol.net','ZVB15TBA2RY','Mia Collier','09/02/2009'),
   (132,'Heather','senectus.et@hotmail.org','HCV74DCD6UJ','Dominique White','01/06/1960'),
   (133,'Armand','id@protonmail.ca','WGE46VKP0WI','Norman Barnes','11/15/1968'),
-  (134,'quuuuamar','cursus.vestibulum@hotmail.edu','CIB19EIU8WU','Alvin Mccarthy','03/11/1953'),
+  (134,'example', 'example@gmail.com', '$2y$10$7KB5tYaJ1b46uHjhKy2CIOapem7Qrf9aR9.DeAHhvu4Q1ltbn14Jq', 'Firstname Lastname', '11/22/1954'),
   (135,'Stella','et.pede@icloud.couk','RYI24TUQ2QW','Michelle Clements','01/24/1955'),
   (136,'Camden','rhoncus@hotmail.couk','XOV91WHN6VU','Hedley Pope','05/22/1972'),
   (137,'Conan','bibendum@icloud.net','SCT69UGJ7AC','Akeem Woods','10/24/1998'),
@@ -896,8 +896,7 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (146,'Justin','nisi.sem.semper@outlook.couk','HMQ19KOV8KW','Octavia Reynolds','11/16/2013'),
   (147,'Nina','dignissim.lacus.aliquam@hotmail.net','JLU31NBX7MT','Judith Holder','07/18/1953'),
   (148,'Clio','egestas.blandit.nam@yahoo.org','RJI68QAI6NW','Katell Mejia','06/09/1958'),
-  (149,'Macaulay3','mi.enim@aol.ca','PRI18TEK1OL','Neville Nunez','11/22/1954'),
-  (150,'example', 'example@gmail.com', '$2y$10$7KB5tYaJ1b46uHjhKy2CIOapem7Qrf9aR9.DeAHhvu4Q1ltbn14Jq', 'Firstname Lastname', '11/22/1954');
+  (149,'quuuuamar','cursus.vestibulum@hotmail.edu','CIB19EIU8WU','Alvin Mccarthy','03/11/1953');
 
 select setval('users_id_seq', (select max(id) from users));
 
@@ -1252,7 +1251,8 @@ INSERT INTO attendee(user_id,event_id) VALUES
   (41,129),
   (5,125),
   (65,76),
-  (7,55);
+  (7,55),
+  (134,2);
 
 -- ========================= request =========================
 

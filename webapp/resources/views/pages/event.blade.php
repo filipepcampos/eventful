@@ -16,6 +16,7 @@
         <h2 class="display-4">Description</h2>
         <p>{{ $event->description }}</p>
     </div>
+    @can('viewContent', $event)
     <div class="row my-5">
         <div class="col-5">
             @include('partials.comments', ['comments' => $event->comments()->orderBy('creation_date', 'DESC')->get()])
@@ -24,5 +25,6 @@
             @include('partials.posts', ['posts' => $event->posts()->orderBy('creation_date', 'DESC')->get()])
         </div>
     </div>
+    @endcan
 </div>
 @endsection
