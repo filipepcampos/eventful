@@ -48,8 +48,8 @@
               </li>
             </ul>
             
-            <form class="form-inline mx-auto mb-0 w-25">
-              <input class="form-control text-center h-70" type="search" placeholder="Search" aria-label="Search">
+            <form class="form-inline mx-auto mb-0 w-25" action="{{ url('/event')}}">
+              <input class="form-control text-center h-70" type="search" id="search" name="search" placeholder="Search">
             </form>
 
             <ul class="navbar-nav ms-auto">

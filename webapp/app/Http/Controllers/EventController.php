@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\EventCreateRequest;
-
-
+use Illuminate\Support\Facades\DB;
 
 use App\Models\User; // TODO DELETE THIS PLEASE
 
@@ -24,27 +23,17 @@ class EventController extends Controller
         //
     }
 
+    public function search(Request $request)
+    {
+        $search = $request->query('search');
+        $events = DB::table('event')->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search])->get();
+        return view('pages.search')->with('events', $events)->with('search', $search);
+    }
+
     public function showCreateForm(){
         if (!Auth::check()) return redirect('/login');
         return view('pages.createEvent');
     }
-
-     /** TODO: Remove
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'username' => 'required|string|max:255|unique:users',
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'birthdate' => 'required|date|before:today',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-    }*/
 
     /**
      * Show the form for creating a new resource.

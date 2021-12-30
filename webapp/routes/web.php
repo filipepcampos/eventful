@@ -28,6 +28,7 @@ Route::post('register', 'Auth\RegisterController@register');
 Route::get('createEvent', 'EventController@showCreateForm');
 Route::get('events', 'EventController@list');
 Route::get('event/{event_id}', 'EventController@show');
+Route::get('event', 'EventController@search');      // Search
 Route::post('event', 'EventController@create')->name('event');
 
 // Comments TODO: Controller
