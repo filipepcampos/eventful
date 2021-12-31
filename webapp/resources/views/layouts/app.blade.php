@@ -23,7 +23,7 @@
   </head>
   <body>
     <main>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
         <div class="container-fluid">
           
           @if(Route::currentRouteName() != 'homepage')
