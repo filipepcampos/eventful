@@ -4,27 +4,7 @@
 
 @section('content')
 
-<!-- Modal -->
-<div class="modal fade" id="attendees" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="attendeesLabel">Attendees</h5>
-      </div>
-      <div class="modal-body">
-        @foreach($event->attendees()->get() as $user)
-            <p>{{ $user->username }}</p>
-            @can('update', $event)
-            <button>Begone pleb</button>
-            @endcan
-        @endforeach
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+@include('partials.attendeeListModal', ['event' => $event])
 
 <div class="container">
     <div class="row my-5">
@@ -39,42 +19,50 @@
             </div>
 
             <div class="row">
-                <div class="col">
+                <div class="col-sm">
                     @include('partials.eventDetails', ['event' => $event])
                 </div>
-                <div class="col">
-                    <div class="float-right">
-                        <!-- Host buttons -->
-                        @can('update', $event)
-                        <a class="btn btn-secondary" href="">Update (Broken)</a>
-                        @endcan
-
-                        @can('delete', $event)
-                        <a class="btn btn-danger" href="">Delete (Broken)</a>
-                        @endcan
-
-                        <!-- Regular user buttons -->
-                        @can('join', $event)
-                        <form method="post" action='{{ route("joinEvent", ["event_id" => $event->id]) }}'>
-                            {{ csrf_field() }}
-                            <button type="submit" class="btn btn-success">
-                                Join
-                            </button>
-                        </form>
-                        @elsecan('leave', $event)
-                        <form method="post" action='{{ route("leaveEvent", ["event_id" => $event->id]) }}'>
-                            {{ method_field('DELETE') }}
-                            {{ csrf_field() }}
-                            <button type="submit" class="btn btn-danger">
-                                Leave
-                            </button>
-                        </form>
-                        @endcan
-
-                        @can('viewInformation', $event)
-                        <button class="btn btn-secondary" type="button" data-bs-toggle="modal" href="#attendees">View Attendees</button>
-                        @endcan
+                <div class="col-sm">
+                    <!-- Host buttons -->
+                    @can('update', $event)
+                    <div class="row mb-1">
+                    <a class="btn btn-secondary" href="">Update (Broken)</a>
                     </div>
+                    @endcan
+
+                    @can('delete', $event)
+                    <div class="row mb-1">
+                    <a class="btn btn-danger" href="">Delete (Broken)</a>
+                    </div>
+                    @endcan
+
+                    <!-- Regular user buttons -->
+                    @can('join', $event)
+                    <div class="row mb-1">
+                    <form method="post" action='{{ route("joinEvent", ["event_id" => $event->id]) }}'>
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-success">
+                            Join
+                        </button>
+                    </form>
+                    </div>
+                    @elsecan('leave', $event)
+                    <div class="row mb-1">
+                    <form method="post" action='{{ route("leaveEvent", ["event_id" => $event->id]) }}'>
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-danger">
+                            Leave
+                        </button>
+                    </form>
+                    </div>
+                    @endcan
+
+                    @can('viewInformation', $event)
+                    <div class="row">
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" href="#attendees">View Attendees</button>
+                    </div>
+                    @endcan
                 </div>
             </div>
         </div>
