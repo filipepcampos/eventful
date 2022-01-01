@@ -14,6 +14,6 @@ class Tag extends Model
    * The events this tag is associated to
    */
   public function events() {
-    return $this->hasMany('App\Models\Event', 'tag_event');
+    return $this->belongsToMany('App\Models\Event');
   }
 }

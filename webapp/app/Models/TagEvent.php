@@ -8,7 +8,7 @@ class TagEvent extends Model
 {
   // Don't add create and update timestamps in database.
   public $timestamps  = false;
-  protected $table = 'tag_event';
+  protected $table = 'event_tag';
 
   /**
    * Tag

@@ -7,12 +7,16 @@
 <div class="row">
     <div class="col-2">
         <div class="card mx-5">
-            <h2 class="card-title">Tags:</h2>
-            <form method="GET" action="{{ url('event') }}">
-                <input type="hidden" name="search" value="{{ $search }}">
-                @each('partials.tag', $tags, 'tag')
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            <h2 class="card-title mx-3 my-3">Tags:</h2>
+            <div class="card-body mx-3">
+                <form method="GET" action="{{ url('event') }}" class="mb-3">
+                    <input type="hidden" name="search" value="{{ $search }}">
+                    @foreach ($tags as $tag)
+                        @include('partials.tag', ['selected' => $tagsSelected])
+                    @endforeach
+                    <button type="submit" class="btn btn-dark">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
     <div class="col">

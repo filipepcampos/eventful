@@ -29,14 +29,15 @@ class EventController extends Controller
     public function search(Request $request)
     {
         $search = $request->query('search');
-        $tags = array_keys($request->except('search'));
-        if (empty($tags)) {
-            $events = Event::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search])->get();
-        } else {
-            $events = Event::whereHas('tags', function($q) use ($tags) {$q->whereIn('name', $tags);})->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$search])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$search])->get();
-        }
+        $searchString = str_replace(' ', '&', $search);
+        $tagsSelected = $request->query('tag');
         $tags = Tag::all();
-        return view('pages.search')->with('events', $events)->with('search', $search)->with('tags', $tags);
+        if (empty($tagsSelected)) {
+            $events = Event::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString])->get();
+        } else {
+            $events = Event::whereHas('tags', function($q) use ($tagsSelected) {$q->whereIn('id', $tagsSelected);})->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString])->get();
+        }
+        return view('pages.search')->with('search', $search)->with('tagsSelected', $tagsSelected)->with('tags', $tags)->with('events', $events);
     }
 
     public function showCreateForm(){

@@ -5,7 +5,7 @@ SET search_path TO lbaw2122;
 -- Drop Tables and Types
 ----------------------------------------- 
 
-DROP TABLE IF EXISTS tag_event;
+DROP TABLE IF EXISTS event_tag;
 DROP TABLE IF EXISTS vote;
 DROP TABLE IF EXISTS attendee;
 DROP TABLE IF EXISTS event_cancelled_notification_user;
@@ -205,7 +205,7 @@ CREATE TABLE event_cancelled_notification_user (
     PRIMARY KEY (notification_id, user_id)
 );
 
-CREATE TABLE tag_event (
+CREATE TABLE event_tag (
     tag_id INTEGER REFERENCES tag ON UPDATE CASCADE,
     event_id INTEGER REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (tag_id, event_id)
@@ -1660,9 +1660,9 @@ INSERT INTO vote(user_id,option_id) VALUES
   (2,0),
   (3,2);
 
--- ========================= tag_event =========================
+-- ========================= event_tag =========================
 
-INSERT INTO tag_event(tag_id, event_id) VALUES
+INSERT INTO event_tag(tag_id, event_id) VALUES
   (9,17),
   (9,133),
   (4,29),
