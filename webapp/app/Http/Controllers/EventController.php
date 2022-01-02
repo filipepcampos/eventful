@@ -164,6 +164,17 @@ class EventController extends Controller
         return redirect('/');
     }
 
+    public function kick(Request $request, $id){
+        $event = Event::find($id);
+        $this->authorize('update', $event);
+        $user_id = $request->input('user_id');
+        if($user_id != null){
+            DB::table('attendee')->where([['user_id', '=', $user_id], 
+                                    ['event_id', '=', $event->id]])->delete();
+        }
+        return response(null, 200);;
+    }
+
     /**
      * Update the specified resource in storage.
      *

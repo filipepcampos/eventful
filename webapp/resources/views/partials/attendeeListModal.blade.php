@@ -1,7 +1,4 @@
-<script>
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', {{URL::to('/api/event/$event->id/kick')}})
-</script>
+<script type="text/javascript" src={{ asset('js/attendeeManagement.js') }}></script>
 
 <!-- Modal -->
 <div class="modal fade" id="attendees" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -13,13 +10,13 @@
       <div class="modal-body">
         <div class="wrapper container">
         @foreach($event->attendees()->get() as $user)
-            <div class="row align-content-start">
+            <div class="row align-content-start" id="attendee{{ $user->id }}">
                 <div class="col-sm">
                     <p>{{ $user->username }}</p>
                 </div>
                 @can('update', $event)
                 <div class="col-md">
-                    <button class="btn btn-outline-danger">Kick</button>
+                    <button onclick="kick({{$event->id}}, {{$user->id}})" class="btn btn-outline-danger">Kick</button>
                 </div>
                 @endcan
             </div>
