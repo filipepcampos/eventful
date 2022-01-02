@@ -11,6 +11,21 @@ class EventPolicy
 {
     use HandlesAuthorization;
 
+    private function isHost(User $user, Event $event)
+    {
+        return $event->host()->first()->id === $user->id;
+    }
+
+    private function isAttendee(User $user, Event $event)
+    {
+        return $user->attending()->get()->contains($event);
+    }
+
+    private function participatingInEvent(User $user, Event $event)
+    {
+        return $this->isHost($user,$event) || $this->isAttendee($user,$event);
+    }
+
     /**
      * Determine whether the user can view the event content (comments/polls).
      *
@@ -20,7 +35,7 @@ class EventPolicy
      */
     public function viewContent(User $user, Event $event)
     {
-        return ($event->host()->first()->id === $user->id)|| ($user->attending()->get()->contains($event));
+        return $this->participatingInEvent($user, $event);
     }
 
     public function viewInformation(?User $user, Event $event){
@@ -30,7 +45,11 @@ class EventPolicy
         if($user === null){
             return false;
         }
-        return ($event->host()->first()->id === $user->id) || ($user->attending()->get()->contains($event));
+        return $this->participatingInEvent($user, $event);
+    }
+
+    public function invite(User $inviter, User $invitee, Event $event){
+        return $this->participatingInEvent($inviter, $event) && !($this->participatingInEvent($invitee, $event));
     }
 
     /**
@@ -53,18 +72,17 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        return ($event->host()->first()->id === $user->id);
+        return $this->isHost($user, $event);
     }
 
     public function join(User $user, Event $event) 
     {
         return $event->is_accessible && 
-            !($user->attending()->get()->contains($event)) && 
-            !($event->host()->first()->id === $user->id);
+            !($this->participatingInEvent($user, $event));
     }
 
     public function leave(User $user, Event $event){
-        return $user->attending()->get()->contains($event);
+        return $this->isAttendee($user, $event);
     }
 
     /**
@@ -76,7 +94,7 @@ class EventPolicy
      */
     public function delete(User $user, Event $event)
     {
-        return ($event->host()->first()->id === $user->id);
+        return $this->isHost($user, $event);
     }
 
     /**
