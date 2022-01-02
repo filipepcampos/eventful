@@ -12,6 +12,8 @@
                     <label class="col-sm-2 col-form-label" for="invitedUsername">Username</label>
                     <div class="col-sm-10">
                         <input class="form-control" type="text" id="invitedUsername"></input>
+                        <div class="d-block" id="inviteFeedback">
+                        </div>
                     </div>
                 </div>
             </form>

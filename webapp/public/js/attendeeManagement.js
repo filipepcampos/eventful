@@ -45,6 +45,7 @@ function kick(eventId,userId) {
 function invite(eventId) {
     let url = '/api/event/' + eventId + '/invite';
     let input_box = document.getElementById('invitedUsername');
+    let feedback = document.getElementById('inviteFeedback');
     if(input_box == null){
         return;
     }
@@ -54,7 +55,17 @@ function invite(eventId) {
         r.setParam('username', username);
         r.send(function (xhr) {
             if(xhr.status == 200){
-                alert("Invitation sent");
+                input_box.classList.remove('is-invalid');
+                input_box.classList.add('is-valid');
+                feedback.classList.remove('invalid-feedback');
+                feedback.classList.add('valid-feedback');
+                feedback.innerHTML = 'Invitation sent.';
+            } else {
+                input_box.classList.remove('is-valid');
+                input_box.classList.add('is-invalid');
+                feedback.classList.remove('valid-feedback');
+                feedback.classList.add('invalid-feedback');
+                feedback.innerHTML = 'Invitation not sent.';
             }
         });
     }
