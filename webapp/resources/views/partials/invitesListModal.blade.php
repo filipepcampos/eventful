@@ -8,22 +8,24 @@
       <div class="modal-body">
         <div class="wrapper container">
         @foreach($user->invites()->get() as $invite)
-            <div class="row align-content-start" id="invite{{ $invite->id }}">
-                <div class="col">
-                    <span>{{ $invite->inviter()->first()->username }} invites you to </span>
+          @if(!$invite->accepted)
+            <div class="row my-2" id="invite{{ $invite->id }}">
+                <div class="col-8 d-flex align-self-center">
+                    <span>{{ $invite->inviter()->first()->username }} invites you to&nbsp;</span>
                     <a href="{{ url('/event/' . $invite->event()->first()->id) }}">{{ $invite->event()->first()->title }}</a>
                 </div>
-                <div class="col-sm">
-                    <button onclick="accept({{$invite->id}})" class="btn btn-outline-success">
+                <div class="col d-flex justify-content-end">
+                    <button onclick="accept({{$invite->id}})" class="btn btn-outline-success mx-1">
                     @if($invite->event()->first()->is_accessible)
                       Accept
                     @else
                       Request
                     @endif
                     </button>
-                    <button onclick="reject({{$invite->id}})" class="btn btn-outline-danger">Reject</button>
+                    <button onclick="reject({{$invite->id}})" class="btn btn-outline-danger mx-1">Reject</button>
                 </div>
             </div>
+          @endif
         @endforeach
         </div>
       </div>

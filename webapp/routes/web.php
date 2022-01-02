@@ -61,7 +61,7 @@ Route::put('/api/invite/{invite_id}/accept', 'InviteController@accept');
 Route::delete('/api/invite/{invite_id}/reject', 'InviteController@reject');
 
 // Requests
-//Route::
+Route::put('/api/event/{event_id}/request', 'RequestController@send');
 
 // Comments TODO: Controller
 Route::post('api/event/{event_id}/comment', 'CommentController@create');

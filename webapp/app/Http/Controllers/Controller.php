@@ -12,10 +12,10 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function authorize($ability, $arguments = [])
+    /*public function authorize($ability, $arguments = [])
     {
         if (!Auth::guard('admin')->check()) {
             $this->laravelAuthorize($ability, $arguments);
         }
-    }
+    }*/
 }

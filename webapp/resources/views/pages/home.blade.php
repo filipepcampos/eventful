@@ -3,7 +3,7 @@
 @section('title', 'Eventful')
 
 @section('content')
-
+<script type="text/javascript" src="{{ asset('/js/requestsManagement.js') }}" ></script>
 <div class="container">
     <div class="row justify-content-center">
         <h1 class="homepage-title text-center my-5"> Eventful </h1>

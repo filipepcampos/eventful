@@ -11,12 +11,12 @@
         </div>
       </div>
       <div class="card-footer">
-        <a href="/event/{{ $event->id }}" class="btn btn-primary ml-auto">Event page</a>
+        <a href="{{ url('/event/' . $event->id) }}" class="btn btn-primary ml-auto">Event page</a>
         @cannot('viewContent', $event)
           @if($event->is_accessible)
-            <a href="/event/{{ $event->id }}" class="btn btn-success ml-auto">Join event</a>
+            <a href="{{ url('/event/' . $event->id) }}" class="btn btn-success ml-auto">Join event</a>    <!-- TODO: Change url -->
           @else()
-            <a href="/event/{{ $event->id }}" class="btn btn-danger ml-auto">Request to join</a>
+            <a id="request{{ $event->id }}" onclick="sendRequest({{ $event->id }})" class="btn btn-danger ml-auto">Request to join</a>
           @endif
         @endcan
       </div>
