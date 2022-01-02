@@ -33,6 +33,7 @@ Route::delete('event/{event_id}', 'EventController@delete');
 Route::get('event/{event_id}/update', 'EventController@showUpdateForm');
 Route::get('event', 'EventController@search');      // Search
 Route::post('event', 'EventController@create')->name('createEvent');
+Route::get('event/{event_id}/image', 'EventController@getImage');
 
 // Event API
 Route::post('/api/event/{event_id}/attend', 'EventController@join')->name('joinEvent');
@@ -40,14 +41,27 @@ Route::delete('/api/event/{event_id}/attend', 'EventController@leave')->name('le
 Route::post('/api/event/{event_id}/kick', 'EventController@kick'); // TODO A7
 Route::post('/api/event/{event_id}/invite', 'EventController@invite'); // TODO A7
 
+// Admin Auth
+Route::get('/admin/login', 'Auth\AdminLoginController@showLoginForm')->name('adminLogin'); // TODO: A7
+Route::post('/admin/login', 'Auth\AdminLoginController@login'); // TODO: A7
+Route::get('/admin/logout', 'Auth\AdminLoginController@logout')->name('adminLogout'); // TODO: A7
+
 // Admin
 Route::get('/admin', 'AdministratorController@home'); // TODO: A7
+Route::get('/admin/users', 'AdministratorController@users');
 
 // Users
 Route::get('user/{user_id}', 'UserController@show');
 Route::put('user/{user_id}', 'UserController@update')->name('updateUser');
-Route::get('user/{user_id}/update', 'UserController@showUpdateForm'); 
+Route::get('user/{user_id}/update', 'UserController@showUpdateForm')->name('updateUserForm'); 
 Route::get('user/{user_id}/profile_pic', 'UserController@getImage');
+
+// Invites
+Route::put('/api/invite/{invite_id}/accept', 'InviteController@accept');
+Route::delete('/api/invite/{invite_id}/reject', 'InviteController@reject');
+
+// Requests
+//Route::
 
 // Comments TODO: Controller
 Route::post('api/event/{event_id}/comment', 'CommentController@create');
@@ -59,8 +73,7 @@ Route::post('api/event/{event_id}/post', 'PostController@create');
 Route::put('api/post/{post_id}', 'PostController@update');
 Route::delete('api/post/{post_id}', 'PostController@delete');
 
-// Images
-Route::get('image/event/{id}', 'EventController@getImage');
+
 
 /*// Cards
 Route::get('cards', 'CardController@list');

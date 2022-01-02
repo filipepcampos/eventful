@@ -744,7 +744,7 @@ CREATE TRIGGER decrement_number_downvotes
 -- ========================= admin =========================
 
 INSERT INTO administrator(id,username,password,last_login) VALUES
-  (0,'admin','admin','01/01/1960');
+  (0,'admin','$2y$10$uRYTEY02X1ymC8qIwibmOOVGxSRGBq6H/zmf.TV.hM8przN0mZZ2y','01/01/1960');
 
 -- ========================= users =========================
 
@@ -901,6 +901,7 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (149,'quuuuamar','cursus.vestibulum@hotmail.edu','CIB19EIU8WU','Alvin Mccarthy','03/11/1953');
 
 select setval('users_id_seq', (select max(id) from users));
+UPDATE users SET profile_pic='profile_pictures/default.png';
 
 -- ========================= unblock_appeal =========================
 

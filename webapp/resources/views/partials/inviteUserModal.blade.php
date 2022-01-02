@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </form>
-            <button class="btn btn-outline-primary" onclick="invite({{$event->id}})"=>Invite</button>
+            <button class="btn btn-outline-primary" onclick="invite({{$event->id}})">Invite</button>
         </div>
       </div>
       <div class="modal-footer">

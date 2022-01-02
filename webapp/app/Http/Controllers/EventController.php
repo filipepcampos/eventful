@@ -27,7 +27,7 @@ class EventController extends Controller
     public function search(Request $request)
     {
         $search = $request->query('search');
-        $searchString = str_replace(' ', '&', $search);
+        $searchString = str_replace(' ', ':*&', $search);
         $tagsSelected = $request->query('tag');
         $tags = Tag::all();
         if (empty($tagsSelected)) {
@@ -204,6 +204,12 @@ class EventController extends Controller
         $this->authorize('update', $event);
 
         $validated = $request->validated();
+
+        if(!is_null($request->input('capacity'))){
+            $capacity = (int)$request->input('capacity');
+            if($capacity < $event->number_attendees) return redirect()->back();
+            $event->capacity = $capacity;
+        }
         
         if(!is_null($request->input('title'))){
             $event->title = $request->input('title');
@@ -222,9 +228,6 @@ class EventController extends Controller
         }
         $event->is_visible = $request->input('is_visible') ? true : false;
         $event->is_accessible = $request->input('is_accessible') ? true : false;
-        if(!is_null($request->input('capacity'))){ // TODO: NAO PERMITIR CAPACIDADE MENOR QUE ATUAL
-            $event->capacity = $request->input('capacity');
-        }
         if(!is_null($request->input('price'))){
             $event->price = $request->input('price');
         }

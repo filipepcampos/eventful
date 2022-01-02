@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
 @section('title', $event->title)
 
 @section('content')
 
-<script type="text/javascript" src={{ asset('js/attendeeManagement.js') }}></script>
+<script type="text/javascript" src="{{ asset('/js/attendeeManagement.js') }}" ></script>
 @can('viewContent', $event)
 @include('partials.attendeeListModal', ['event' => $event])
 @include('partials.inviteUserModal', ['event' => $event])
@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row my-5">
         <div class="col">
-            <img class="border border-3 border-secondary rounded" src='{{ url("/image/event/$event->id") }}' alt="Event image">
+            <img class="border border-3 border-secondary rounded" src='{{ url("/event/$event->id" . "/image") }}' alt="Event image">
         </div>
         <div class="col border border-3 border-secondary rounded">
             <h1 class="display-2 text-center">{{ $event->title }}</h1>

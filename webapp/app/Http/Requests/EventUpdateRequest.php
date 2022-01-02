@@ -13,7 +13,6 @@ class EventUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        // TODO: USER MUST BE HOST
         return true;
     }
 
@@ -24,7 +23,6 @@ class EventUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        // TODO: UPDATE CHECKBOX RULES
         return [
             'title' => 'nullable|string|min:1',
             'event_image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=100,min_height=100,ratio=1',

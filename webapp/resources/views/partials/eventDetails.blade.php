@@ -26,3 +26,10 @@
     {{ $event->price == 0.00 ? 'Free' : $event->price . '€' }}
 </span>
 </div>
+<!-- Capacity -->
+<div>
+<span class="card-text">
+    <i class="bi bi-person" style="font-size: 1.5rem"></i>
+    {{ $event->number_attendees . '/' . $event->capacity }}
+</span>
+</div>
