@@ -70,7 +70,7 @@
 
                     @can('viewContent', $event)
                     <div class="row">
-                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" href="#inviteUser">Invite</button>
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" onclick="clearInviteFeedback()" href="#inviteUser">Invite</button>
                     </div>
                     @endcan
                 </div>

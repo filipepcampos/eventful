@@ -55,18 +55,36 @@ function invite(eventId) {
         r.setParam('username', username);
         r.send(function (xhr) {
             if(xhr.status == 200){
-                input_box.classList.remove('is-invalid');
-                input_box.classList.add('is-valid');
-                feedback.classList.remove('invalid-feedback');
-                feedback.classList.add('valid-feedback');
-                feedback.innerHTML = 'Invitation sent.';
+                validInviteFeedback(input_box,feedback);
             } else {
-                input_box.classList.remove('is-valid');
-                input_box.classList.add('is-invalid');
-                feedback.classList.remove('valid-feedback');
-                feedback.classList.add('invalid-feedback');
-                feedback.innerHTML = 'Invitation not sent.';
+                invalidInviteFeedback(input_box,feedback);
             }
         });
     }
+}
+
+function validInviteFeedback(input_box, feedback){
+    input_box.classList.remove('is-invalid');
+    feedback.classList.remove('invalid-feedback');
+    input_box.classList.add('is-valid');
+    feedback.classList.add('valid-feedback');
+    feedback.innerHTML = 'Invitation sent.';
+}
+
+function invalidInviteFeedback(input_box, feedback){
+    input_box.classList.remove('is-valid');
+    input_box.classList.add('is-invalid');
+    feedback.classList.remove('valid-feedback');
+    feedback.classList.add('invalid-feedback');
+    feedback.innerHTML = 'Invitation not sent.';
+}
+
+function clearInviteFeedback(){
+    let input_box = document.getElementById('invitedUsername');
+    let feedback = document.getElementById('inviteFeedback');
+    input_box.classList.remove('is-invalid');
+    input_box.classList.remove('is-valid');
+    feedback.classList.remove('invalid-feedback');
+    feedback.classList.remove('valid-feedback');
+    feedback.innerHTML = '';
 }
