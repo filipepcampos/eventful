@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\EventCreateRequest;
 use App\Http\Requests\EventUpdateRequest;
 
-use Illuminate\Support\Facades\Log;
-
 class EventController extends Controller
 {
     /**
@@ -184,7 +182,6 @@ class EventController extends Controller
         $inviter_id = Auth::id();
         $invitee_id = User::where('username', $username)->first()->id;
 
-        error_log($invitee_id);
         DB::table('invite')->insert([
             'invitee_id' => $invitee_id,
             'inviter_id' => $inviter_id,

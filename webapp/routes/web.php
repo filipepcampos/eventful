@@ -40,6 +40,9 @@ Route::delete('/api/event/{event_id}/attend', 'EventController@leave')->name('le
 Route::post('/api/event/{event_id}/kick', 'EventController@kick'); // TODO A7
 Route::post('/api/event/{event_id}/invite', 'EventController@invite'); // TODO A7
 
+// Admin
+Route::get('/admin', 'AdministratorController@home'); // TODO: A7
+
 // Users
 Route::get('user/{user_id}', 'UserController@show');
 Route::put('user/{user_id}', 'UserController@update')->name('updateUser');
