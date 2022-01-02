@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
 use App\Models\Tag;
-use App\Models\TagEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -172,7 +172,25 @@ class EventController extends Controller
             DB::table('attendee')->where([['user_id', '=', $user_id], 
                                     ['event_id', '=', $event->id]])->delete();
         }
-        return response(null, 200);;
+        // TODO: Should include error if user_id doesnt exist?
+        return response(null, 200);
+    }
+
+    public function invite(Request $request, $id){
+        $event = Event::find($id);
+        $this->authorize('viewContent', $event);
+        $username = $request->input('username');
+
+        $inviter_id = Auth::id();
+        $invitee_id = User::where('username', $username)->first()->id;
+
+        error_log($invitee_id);
+        DB::table('invite')->insert([
+            'invitee_id' => $invitee_id,
+            'inviter_id' => $inviter_id,
+            'event_id' => $event->id
+        ]);
+        return response(null, 200);
     }
 
     /**

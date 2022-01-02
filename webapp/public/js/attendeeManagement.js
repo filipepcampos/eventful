@@ -41,3 +41,21 @@ function kick(eventId,userId) {
         }
     });
 }
+
+function invite(eventId) {
+    let url = '/api/event/' + eventId + '/invite';
+    let input_box = document.getElementById('invitedUsername');
+    if(input_box == null){
+        return;
+    }
+    let username = input_box.value;
+    if(username != null){
+        r = new AJAXRequest(url, 'POST');
+        r.setParam('username', username);
+        r.send(function (xhr) {
+            if(xhr.status == 200){
+                alert("Invitation sent");
+            }
+        });
+    }
+}

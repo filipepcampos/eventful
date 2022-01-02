@@ -4,7 +4,11 @@
 
 @section('content')
 
+<script type="text/javascript" src={{ asset('js/attendeeManagement.js') }}></script>
+@can('viewContent', $event)
 @include('partials.attendeeListModal', ['event' => $event])
+@include('partials.inviteUserModal', ['event' => $event])
+@endcan
 
 <div class="container">
     <div class="row my-5">
@@ -59,8 +63,14 @@
                     @endcan
 
                     @can('viewInformation', $event)
-                    <div class="row">
+                    <div class="row mb-1">
                     <button class="btn btn-secondary" type="button" data-bs-toggle="modal" href="#attendees">View Attendees</button>
+                    </div>
+                    @endcan
+
+                    @can('viewContent', $event)
+                    <div class="row">
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" href="#inviteUser">Invite</button>
                     </div>
                     @endcan
                 </div>

@@ -147,7 +147,8 @@ CREATE TABLE invite (
     accepted BOOLEAN NOT NULL DEFAULT false,
     inviter_id INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
     invitee_id INTEGER NOT NULL REFERENCES users ON UPDATE CASCADE,
-    CONSTRAINT invite_invitter_invitee_id_check CHECK (inviter_id <> invitee_id)
+    CONSTRAINT invite_invitter_invitee_id_check CHECK (inviter_id <> invitee_id),
+    UNIQUE(event_id, inviter_id, invitee_id)
 );
 
 CREATE TABLE report (
@@ -1264,6 +1265,8 @@ INSERT INTO request(id,event_id,date,accepted,user_id) VALUES
   (3,9, '2020-02-27 13:56:31','False',119),
   (4,5, '2021-09-01 04:51:03','True',128);
 
+select setval('request_id_seq', (select max(id) from request));
+
 -- ========================= invite =========================
 
 INSERT INTO invite(id,event_id,date,accepted,inviter_id,invitee_id) VALUES
@@ -1272,6 +1275,8 @@ INSERT INTO invite(id,event_id,date,accepted,inviter_id,invitee_id) VALUES
   (2,6, '2021-05-21 14:34:51','True',67,129),
   (3,3, '2020-09-04 16:04:02','False',12,10),
   (4,13, '2021-03-07 21:27:24','False',81,49);
+
+select setval('invite_id_seq', (select max(id) from invite));
 
 -- ========================= tag =========================
 

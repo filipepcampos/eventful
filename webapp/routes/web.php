@@ -37,7 +37,8 @@ Route::post('event', 'EventController@create')->name('createEvent');
 // Event API
 Route::post('/api/event/{event_id}/attend', 'EventController@join')->name('joinEvent');
 Route::delete('/api/event/{event_id}/attend', 'EventController@leave')->name('leaveEvent');
-Route::post('/api/event/{event_id}/kick', 'EventController@kick');
+Route::post('/api/event/{event_id}/kick', 'EventController@kick'); // TODO A7
+Route::post('/api/event/{event_id}/invite', 'EventController@invite'); // TODO A7
 
 // Users
 Route::get('user/{user_id}', 'UserController@show');
