@@ -9,17 +9,12 @@ use Illuminate\Http\Request;
 
 class AdministratorController extends Controller
 {
-    public function __construct() 
-    {
-        $this->middleware('auth:admin')->except('logout');
-    }
-
     public function home()
     {
-        if(Auth::guard('admin')->check()){
+        if(Auth::check()){
             return view('pages.admin');
         }
-        return redirect('/admin/login');
+        return redirect('/login');
     }
 
     public function users(){

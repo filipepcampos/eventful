@@ -26,6 +26,10 @@ class EventPolicy
         return $this->isHost($user,$event) || $this->isAttendee($user,$event);
     }
 
+    private function isAdmin(User $user) {
+        return $user->is_admin;
+    }
+
     /**
      * Determine whether the user can view the event content (comments/polls).
      *
@@ -35,7 +39,7 @@ class EventPolicy
      */
     public function viewContent(User $user, Event $event)
     {
-        return $this->participatingInEvent($user, $event);
+        return $this->participatingInEvent($user, $event) || $this->isAdmin($user);
     }
 
     public function viewInformation(?User $user, Event $event){
@@ -45,7 +49,7 @@ class EventPolicy
         if($user === null){
             return false;
         }
-        return $this->participatingInEvent($user, $event);
+        return $this->participatingInEvent($user, $event) || $this->isAdmin($user);
     }
 
     public function invite(User $inviter, User $invitee, Event $event){
@@ -60,7 +64,7 @@ class EventPolicy
      */
     public function create(User $user)
     {
-        return Auth::check();
+        return Auth::check() && !$this->isAdmin($user);
     }
 
     /**
@@ -72,13 +76,14 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        return $this->isHost($user, $event);
+        return $this->isHost($user, $event) || $this->isAdmin($user);
     }
 
     public function join(User $user, Event $event) 
     {
         return $event->is_accessible && 
-            !($this->participatingInEvent($user, $event));
+            !($this->participatingInEvent($user, $event)) &&
+            !($this->isAdmin($user));
     }
 
     public function leave(User $user, Event $event){
@@ -94,7 +99,7 @@ class EventPolicy
      */
     public function delete(User $user, Event $event)
     {
-        return $this->isHost($user, $event);
+        return $this->isHost($user, $event) || $this->isAdmin($user);
     }
 
     /**

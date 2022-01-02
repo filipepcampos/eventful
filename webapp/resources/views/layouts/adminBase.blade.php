@@ -12,19 +12,22 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto">
             <li class="nav-item mb-0">
-            <a class="nav-link" href="{{ url('/about')}}">Reports</a>
+            <a class="nav-link" href="{{ url('/admin')}}">Home</a>
             </li>
             <li class="nav-item mb-0">
-            <a class="nav-link" href="{{ url('/contact') }}">Whatever</a>
+            <a class="nav-link" href="{{ url('/admin/users')}}">Users</a>
+            </li>
+            <li class="nav-item mb-0">
+            <a class="nav-link" href="{{ url('/admin/reports') }}">Reports</a>
             </li>
         </ul>
         
         <ul class="navbar-nav ms-auto">
             <li class="nav-item mb-0">
-                <a class="nav-link" href="{{ url('/admin/logout') }}">Logout</a>
+                <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
             </li>
             <li class="nav-item mb-0">
-                <a class="nav-link text-white">{{ Auth::guard('admin')->user()->username }}</a>
+            <a class="nav-link text-white" href="{{ url('/user/' . Auth::id()) }}">{{ Auth::user()->name }}</a>
             </li>
         </ul>
         </div>

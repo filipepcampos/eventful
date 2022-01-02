@@ -4,10 +4,7 @@
 <main>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
     <div class="container-fluid">
-        
-        @if(Route::currentRouteName() != 'homepage')
         <a class="navbar-brand" href="{{ url('/') }}">Eventful</a>
-        @endif
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -19,6 +16,11 @@
             <li class="nav-item mb-0">
             <a class="nav-link" href="{{ url('/contact') }}">Contact Us</a>
             </li>
+            @if(Auth::check() && Auth::user()->is_admin)
+            <li class="nav-item mb-0">
+            <a class="nav-link" href="{{ url('/admin') }}">Admin Panel</a>
+            </li>
+            @endif
         </ul>
         
         <form class="form-inline mx-auto mb-0 w-25" action="{{ url('/event')}}">

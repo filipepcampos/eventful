@@ -10,6 +10,10 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
+    private function isAdmin(User $user) {
+        return $user->is_admin;
+    }
+
     /**
      * Determine whether the user can view any models.
      *
@@ -30,7 +34,7 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        return $user->id === $model->id;
+        return $user->id === $model->id || $this->isAdmin($user);
     }
 
     /**
@@ -53,7 +57,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {  
-        return $user->id === $model->id;
+        return $user->id === $model->id || $this->isAdmin($user);
     }
 
     /**
@@ -65,7 +69,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        return $user->id === $model->id;
+        return $user->id === $model->id || $this->isAdmin($user);
     }
 
     /**

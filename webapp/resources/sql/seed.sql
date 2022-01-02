@@ -27,7 +27,6 @@ DROP TABLE IF EXISTS request;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS unblock_appeal;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS administrator;
 
 -----------------------------------------
 -- Types
@@ -42,13 +41,6 @@ CREATE TYPE comment_rating AS ENUM ('Upvote', 'Downvote');
 
 -- Note that a plural 'users' name was adopted because user is a reserved word in PostgreSQL.
 
-CREATE TABLE administrator (
-    id SERIAL PRIMARY KEY,
-    username TEXT NOT NULL CONSTRAINT administrator_username_uk UNIQUE,
-    password TEXT NOT NULL,
-    last_login TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT administrator_last_login_check CHECK (last_login <= NOW())
-);
-
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT NOT NULL CONSTRAINT user_username_uk UNIQUE,
@@ -61,6 +53,7 @@ CREATE TABLE users (
     description TEXT,
     block_motive TEXT,
     remember_token TEXT,
+    is_admin BOOLEAN,
     CONSTRAINT user_birthdate_check CHECK (birthdate <= account_creation_date)
 );
 
@@ -741,11 +734,6 @@ CREATE TRIGGER decrement_number_downvotes
     EXECUTE PROCEDURE decrement_number_downvotes();
 
 
--- ========================= admin =========================
-
-INSERT INTO administrator(id,username,password,last_login) VALUES
-  (0,'admin','$2y$10$uRYTEY02X1ymC8qIwibmOOVGxSRGBq6H/zmf.TV.hM8przN0mZZ2y','01/01/1960');
-
 -- ========================= users =========================
 
 INSERT INTO users(id,username,email,password,name,birthdate) VALUES
@@ -901,6 +889,7 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (149,'quuuuamar','cursus.vestibulum@hotmail.edu','CIB19EIU8WU','Alvin Mccarthy','03/11/1953');
 
 select setval('users_id_seq', (select max(id) from users));
+INSERT INTO users(username,is_admin,email,password,name,birthdate) VALUES ('admin','True','admin@eventful.com','$2y$10$uRYTEY02X1ymC8qIwibmOOVGxSRGBq6H/zmf.TV.hM8przN0mZZ2y','Admin','01/01/1960');
 UPDATE users SET profile_pic='profile_pictures/default.png';
 
 -- ========================= unblock_appeal =========================

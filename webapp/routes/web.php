@@ -41,14 +41,12 @@ Route::delete('/api/event/{event_id}/attend', 'EventController@leave')->name('le
 Route::post('/api/event/{event_id}/kick', 'EventController@kick'); // TODO A7
 Route::post('/api/event/{event_id}/invite', 'EventController@invite'); // TODO A7
 
-// Admin Auth
-Route::get('/admin/login', 'Auth\AdminLoginController@showLoginForm')->name('adminLogin'); // TODO: A7
-Route::post('/admin/login', 'Auth\AdminLoginController@login'); // TODO: A7
-Route::get('/admin/logout', 'Auth\AdminLoginController@logout')->name('adminLogout'); // TODO: A7
-
 // Admin
-Route::get('/admin', 'AdministratorController@home'); // TODO: A7
-Route::get('/admin/users', 'AdministratorController@users');
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
+    Route::get('/', 'AdministratorController@home'); // TODO: A7
+    Route::get('/users', 'AdministratorController@users');
+    Route::get('/reports', function () { return view('pages.reports'); });
+});
 
 // Users
 Route::get('user/{user_id}', 'UserController@show');
