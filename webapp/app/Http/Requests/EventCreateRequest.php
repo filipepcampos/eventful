@@ -24,15 +24,15 @@ class EventCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|min:1',
+            'title' => 'required|string|min:1|max:255',
             'event_image' => 'required|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=100,min_height=100,ratio=1',
-            'description' => 'required|string|min:1',
-            'location' => 'required|string|min:1',
+            'description' => 'required|string|min:1|max:8192',
+            'location' => 'required|string|min:1|max:255',
             'realization_date' => 'required|date|after:today',
-            /*'is_visible' => 'string',
-            'is_accessible' => 'string',*/
+            'visibility' => 'required|string',
+            'accessibility' => 'required|string',
             'capacity' => 'integer',
-            'price' => 'digits_between:0,8'
+            'price' => 'required|numeric|between:0,999999.99'
         ];
     }
 }

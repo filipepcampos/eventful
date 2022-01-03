@@ -119,7 +119,6 @@ class UserController extends Controller
 
     public function getImage($id){
         $user = User::find($id);
-        $this->authorize('view', $user);
         return Storage::response($user->profile_pic);
     }
 

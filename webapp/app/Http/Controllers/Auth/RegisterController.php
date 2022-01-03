@@ -27,7 +27,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/events';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -68,6 +68,7 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'name' => $data['name'],
             'email' => $data['email'],
+            'profile_pic' => 'profile_pictures/default.png',
             'birthdate' => date('Y-m-d', strtotime($data['birthdate'])),
             'password' => bcrypt($data['password']),
         ]);

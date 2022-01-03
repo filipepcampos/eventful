@@ -38,7 +38,7 @@
 
     <div class="form-group mb-3">
       <label for="description" class="form-label">Description</label>
-      <textarea id="description" type="textarea" name="description" placeholder="{{ $event->description }}" class="form-control @if($errors->has('description')) is-invalid @endif"></textarea>
+      <textarea id="description" maxlength="8192" type="textarea" name="description" placeholder="{{ $event->description }}" class="form-control @if($errors->has('description')) is-invalid @endif"></textarea>
       @if ($errors->has('description'))
         <div class="invalid-feedback d-block">
             {{ $errors->first('description') }}
@@ -67,28 +67,30 @@
     </div>
 
     <div class="form-group mb-3">
-      <div class="form-check">
-        <input id="is_visible" type="checkbox" name="is_visible" value="{{ $event->is_visible }}" class="form-check-input @if($errors->has('is_visible')) is-invalid @endif">
-        <label for="is_visible" class="form-check-label">Visibility</label>
+    <label for="visibility" class="form-check-label">Visibility</label>
+    <select class="form-control @if($errors->has('visibility')) is-invalid @endif"  placeholder="{{ old('visibility') }}" id="visibility" name="visibility">
+      <option value="public">Public</option>
+      <option value="private">Private</option>
+    </select>
+    @if ($errors->has('visibility'))
+      <div class="invalid-feedback d-block">
+          {{ $errors->first('visibility') }}
       </div>
-      @if ($errors->has('is_visible'))
-        <div class="invalid-feedback d-block">
-            {{ $errors->first('is_visible') }}
-        </div>
-      @endif
-    </div>
+    @endif
+  </div>
 
-    <div class="form-group mb-3">
-      <div class="form-check">
-        <input id="is_accessible" type="checkbox" name="is_accessible" value="{{ $event->is_accessible }}" class="form-check-input @if($errors->has('is_accessible')) is-invalid @endif">
-        <label for="is_accessible" class="form-check-label">Accessability</label>
+  <div class="form-group mb-3">
+    <label for="accessibility" class="form-check-label">Accessibility</label>
+    <select class="form-control @if($errors->has('accessibility')) is-invalid @endif" placeholder="{{ old('accessibility') }}" id="accessibility" name="accessibility">
+      <option value="public">Public</option>
+      <option value="private">Private</option>
+    </select>
+    @if ($errors->has('accessibility'))
+      <div class="invalid-feedback d-block">
+          {{ $errors->first('accessibility') }}
       </div>
-      @if ($errors->has('is_accessible'))
-        <div class="invalid-feedback d-block">
-            {{ $errors->first('is_accessible') }}
-        </div>
-      @endif
-    </div>
+    @endif
+  </div>
 
     <div class="form-group mb-3">
       <label for="capacity" class="form-label">Capacity</label>

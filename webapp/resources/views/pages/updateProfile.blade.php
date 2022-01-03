@@ -45,7 +45,7 @@
 
     <div class="form-group mb-3">
       <label for="description" class="form-label">Description</label>
-      <textarea id="description" type="textarea" name="description" placeholder="{{ $user->description }}" class="form-control @if($errors->has('description')) is-invalid @endif"></textarea>
+      <textarea id="description" maxlength="8192" type="textarea" name="description" placeholder="{{ $user->description }}" class="form-control @if($errors->has('description')) is-invalid @endif"></textarea>
       @if ($errors->has('description'))
       <div class="invalid-feedback d-block">
         {{ $errors->first('description') }}

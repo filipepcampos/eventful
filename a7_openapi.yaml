@@ -131,8 +131,11 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful logout. Redirect to login form.'     # 302Failure missing
-                  value: '/login'
+                  description: 'Successful logout. Redirect to homepage.'
+                  value: '/'
+                302Failure:
+                  description: 'Failed logout. Redirect to homepage.'
+                  value: '/'
 
   # --------------------------------- REGISTER ---------------------------------
 
@@ -191,7 +194,7 @@ paths:
               examples:
                 302Success:
                   description: 'Successful authentication. Redirect to user profile.'
-                  value: '/user/{user_id}'
+                  value: '/'
                 302Failure:
                   description: 'Failed authentication. Redirect to register form.'
                   value: '/register'
@@ -249,6 +252,9 @@ paths:
                 302Success:
                   description: 'If an account exists with the given email password recovery information will be sent. Redirect to login page.'
                   value: '/login'
+                302Failure:
+                  description: 'Failed authentication. Redirect to login form.'
+                  value: '/login'
 
   # --------------------------------- USER PROFILE ---------------------------------
 
@@ -294,8 +300,9 @@ paths:
                   type: string
                 name:
                   type: string
-                pic:
-                  type: string    # TODO: URL but should be binary (picture)
+                picture:
+                  type: string
+                  format: binary
                 description:
                   type: string
                 password:
@@ -337,8 +344,8 @@ paths:
                   type: string
                 examples:
                   302Success:
-                    description: 'Successful user delete. Redirect to main page.'
-                    value: '/home'
+                    description: 'Successful user delete. Redirect to homepage.'
+                    value: '/'
                   302Failure:
                     description: 'Failed user delete. Redirect to user page.'
                     value: '/user/{user_id}'
@@ -368,7 +375,7 @@ paths:
     get:
       operationId: R112
       summary: 'R112: Return User Profile Picture'
-      description: 'Provide user profile picture. Access: USR'
+      description: 'Provide user profile picture. Access: PUB'
       tags:
         - 'M01: Authentication and User Profile'
       parameters:
@@ -379,9 +386,9 @@ paths:
         required: true
       responses:
         '200':
-          description: 'Returns user profile picture'
+          description: 'Return user profile picture'
 
-  # --------------------------------- EVENT CREATION ---------------------------------
+  # --------------------------------- EVENT ---------------------------------
 
   /createEvent:
     get:
@@ -395,9 +402,34 @@ paths:
           description: 'Show event creation form'
 
   /event:
-    post:
+    get:
       operationId: R202
-      summary: 'R202: Event Create Action'
+      summary: 'R202: Search Events'
+      description: 'Show search results. Access: PUB'
+      tags:
+        - 'M02: Events'
+      parameters:
+      - in: query
+        name: search
+        description: Text used to search for event titles and event descriptions
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: tags
+        description: Array with the id of the tags that we want to cross-reference with the resultant events
+        schema:
+          type: array
+          items:
+            type: integer
+        required: false
+      responses:
+        '200':
+          description: 'Show search results'
+
+    post:
+      operationId: R203
+      summary: 'R203: Event Create Action'
       description: 'Create an event. Access: USR'
       tags:
         - 'M02: Events'
@@ -456,8 +488,8 @@ paths:
 
   /event/{event_id}:
     get:
-      operationId: R203
-      summary: 'R203: View Event Page'
+      operationId: R204
+      summary: 'R204: View Event Page'
       description: 'Show event page. Access: PUB'
       tags:
         - 'M02: Events'
@@ -472,8 +504,8 @@ paths:
           description: 'Show Event Page UI'
 
     put:
-      operationId: R204
-      summary: 'R204: Event Update Action'
+      operationId: R205
+      summary: 'R205: Event Update Action'
       description: 'Update an event. Access: HOST'
       tags:
         - 'M02: Events'
@@ -493,7 +525,8 @@ paths:
                 title:
                   type: string
                 image:
-                  type: string    # URL
+                  type: string
+                  format: binary
                 description:
                   type: string
                 location:
@@ -525,8 +558,8 @@ paths:
                   value: '/event/{event_id}/update'
 
     delete:
-      operationId: R205
-      summary: 'R205: Delete Event Action'
+      operationId: R206
+      summary: 'R206: Delete Event Action'
       description: 'Delete an event. Access: HOST'
       tags:
         - 'M02: Events'
@@ -545,8 +578,8 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful event delete. Redirect to main page.'
-                  value: '/event/{event_id}'    # TODO: Change to main page
+                  description: 'Successful event delete. Redirect to homepage.'
+                  value: '/'
                 302Failure:
                   description: 'Failed event delete. Redirect to event page.'
                   value: '/event/{event_id}'
@@ -555,8 +588,8 @@ paths:
 
   /event/{event_id}/update:
     get:
-      operationId: R206
-      summary: 'R206: Show Event Update Form'
+      operationId: R207
+      summary: 'R207: Show Event Update Form'
       description: 'Provide event update form. Access: HOST'
       parameters:
       - in: path
@@ -568,64 +601,14 @@ paths:
         - 'M02: Events'
       responses:
         '200':
-          description: 'Show event update form'    
-
-  # --------------------------------- SEARCHING EVENTS ---------------------------------
-
-  /search:  
-    get:
-      operationId: R207
-      summary: 'R207: Search Events Form'
-      description: 'Show search events form. Access: PUB'
-      tags:
-        - 'M02: Events'
-      responses:
-        '200':
-          description: 'Show search events form'
-
-  /api/search:
-    get:
-      operationId: R208
-      summary: 'R208: Search Events API'
-      description: 'Showing event search results. Access: PUB'
-      tags:
-        - 'M02: Events'
-      parameters:    # Every query parameter is not required (if none are given: all the events are shown)
-        - in: query
-          name: name
-          description: String to use in full-text search
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: start_date
-          schema:
-            type: string
-            format: date
-          required: false
-        - in: query
-          name: end_date
-          schema:
-            type: string
-            format: date
-          required: false
-        - in: query
-          name: tag
-          schema:
-            type: array
-            items:
-              type: integer
-          required: false
-      responses:
-        '200':    # No redirection, dynamic page using JS
-          description: 'Success'
+          description: 'Show event update form'
 
   # --------------------------------- TICKET PAYMENT PAGE ---------------------------------
   
   /event/{event_id}/payment:
     get:
-      operationId: R209
-      summary: 'R209: Ticket Payment Form'
+      operationId: R208
+      summary: 'R208: Ticket Payment Form'
       description: 'Show ticket payment form. Access: USR'
       tags:
         - 'M02: Events'
@@ -642,8 +625,8 @@ paths:
           description: 'Show ticket payment form'
 
     post:
-      operationId: R210
-      summary: 'R210: Ticket Payment Action'
+      operationId: R209
+      summary: 'R209: Ticket Payment Action'
       description: 'Buying a ticket for an event. Access: USR'
       tags:
         - 'M02: Events'
@@ -694,9 +677,41 @@ paths:
                   description: 'Failed transaction. Redirect to ticket payment form.'
                   value: '/event/{event_id}/payment'
 
+  # --------------------------------- LIST EVENTS ---------------------------------
+
+  /events:
+    get:
+      operationId: R210
+      summary: 'R210: Show List of All Events'
+      description: 'Show a list with all events. Access: USR'
+      tags:
+        - 'M02: Events'
+      responses:
+        '200':
+          description: 'Show list with all events'
+
+  # --------------------------------- OBTAIN EVENT IMAGE ---------------------------------
+
+  /event/{event_id}/image:
+    get:
+      operationId: R211
+      summary: 'R211: Return Event Image'
+      description: 'Provide event image. Access: PUB'
+      tags:
+        - 'M02: Events'
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Return event image'
+
   # --------------------------------- INVITATIONS ---------------------------------
 
-  /api/event/{event_id}/user/{user_id}/invite:
+  /api/event/{event_id}/invite:
     post:
       operationId: 'R301'
       summary: 'R301: Create Invitation API'
@@ -710,72 +725,43 @@ paths:
         schema:
           type: integer
         required: true
-      - in: path
-        name: user_id
-        description: ID of the user that's being invited
-        schema:
-          type: integer
-        required: true
       responses:
         '200':
           description: 'Success'
-
-  /api/invites:
-    get:
-      operationId: 'R302'
-      summary: 'R302: Retrieve All Received/Sent Invites API'
-      description: 'Return all pending invites a user has received in JSON format. Access: USR'
-      tags:
-        - 'M03: User Interactions'
-      parameters:
-        - in: query
-          name: inviteType
-          description: Specifies what invites to retrieve (sent by user / received by user or both)
-          schema:
-            type: string
-            enum: [all, sent, received]
-      responses:
-        '200':
-          description: 'Success'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  properties:
-                    inviteId:
-                      type: integer
-                    username:
-                      type: string
-                    eventTitle:
-                      type: string
-                example:
-                - inviteId: 1
-                  inviterUsername: 'fred'
-                  eventTitle: 'Sample Event 2022'
-                - inviteId: 15
-                  inviterUsername: 'an0th3rus3r'
-                  eventTitle: 'Defcon 2022'
     
-  /api/invite/{invite_id}:
+  /api/invite/{invite__id}/accept:
     put:
-      operationId: 'R303'
-      summary: 'R303: Answering Invitation API'
-      description: 'Accept/deny an invitation to an event. Access: USR'
+      operationId: 'R302'
+      summary: 'R302: Accepting Invitation API'
+      description: 'Accept an invitation to an event. Access: USR'
       tags:
         - 'M03: User Interactions'
       parameters:
         - in: path
           name: invite_id
-          description: ID of the invite of the user that we want to modify with the response
+          description: ID of the invite that the user wants to accept (by altering its response)
           schema:
             type: integer
           required: true
-        - in: query
-          name: response
-          description: The response, TRUE if it was accepted, FALSE otherwise
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+  
+  /api/invite/{invite__id}/reject:
+    delete:
+      operationId: 'R303'
+      summary: 'R303: Rejecting Invitation API'
+      description: 'Reject an invitation to an event. Access: USR'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+        - in: path
+          name: invite_id
+          description: ID of the invite that the user wants to reject (by deleting it from the database)
           schema:
-            type: boolean
+            type: integer
           required: true
       responses:
         '200':
@@ -803,85 +789,39 @@ paths:
         '200':
           description: 'Success'
 
-    get:
-      operationId: 'R305'
-      summary: 'R305: Retrieve All Pending Event Join Requests Recieved API'
-      description: 'Return all pending event join requests in JSON format. Access: HOST'
-      tags:
-        - 'M03: User Interactions'
-      parameters:
-        - in: path
-          name: event_id
-          description: ID of the event that's hosted by the authenticated user
-          schema:
-            type: integer
-          required: true
-      responses:
-        '200':
-          description: 'Success'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  properties:
-                    requestId:
-                      type: integer
-                    username:
-                      type: string
-                example:
-                - requestId: 1
-                  username: 'fred'
-                - requestId: 15
-                  username: 'an0th3rus3r'
-        '403':
-          description: 'Access denied'
-
-  /api/requests:
-    get:
-      operationId: 'R306'
-      summary: 'R306: Retrieve All Pending Event Join Requests of a User API'
-      description: 'Return all pending event join requests for user in JSON format. Access: USR'
-      tags:
-        - 'M03: User Interactions'
-      responses:
-        '200':
-          description: 'Success'
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  properties:
-                    requestId:
-                      type: integer
-                    eventTitle:
-                      type: string
-                example:
-                - requestId: 1
-                  eventTitle: 'Sample Event 2022'
-                - requestId: 15
-                  eventTitle: 'Defcon 2022'
-
-  /api/request/{request_id}:
+  /api/request/{request_id}/accept:
     put:
-      operationId: 'R307'
-      summary: 'R307: Accept/Deny Event Join Request API'
-      description: 'Accept/deny a request to join event. Access: HOST'
+      operationId: 'R305'
+      summary: 'R305: Accepting Event Join Request API'
+      description: 'Accept a request to join event. Access: HOST'
       tags:
         - 'M03: User Interactions'
       parameters:
         - in: path
           name: request_id
-          description: ID of the request of the host that we want to modify with the response
+          description: ID of the request that the host wants to accept (by altering its response)
           schema:
             type: integer
           required: true
-        - in: query
-          name: response
-          description: The response, TRUE if it was accepted, FALSE otherwise
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+  
+  /api/request/{request_id}/reject:
+    delete:
+      operationId: 'R306'
+      summary: 'R306: Rejecting Event Join Request API'
+      description: 'Reject a request to join event. Access: HOST'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+        - in: path
+          name: request_id
+          description: ID of the request that the host wants to reject (by deleting it from the database)
           schema:
-            type: boolean
+            type: integer
           required: true
       responses:
         '200':

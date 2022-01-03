@@ -8,15 +8,13 @@
       <div class="modal-body">
         <div class="wrapper container">
         @foreach($event->attendees()->get() as $user)
-            <div class="row align-content-start" id="attendee{{ $user->id }}">
-                <div class="col-sm">
-                    <img class="img-fluid border border-radius-circle" src="{{ route('userImage', ['user_id' => $user->id]) }}">
-                </div>
-                <div class="col-sm">
+            <div class="flex-row justify-content-between d-flex" id="attendee{{ $user->id }}">
+                <div class="p-2">
+                    <img class="img-fluid rounded-circle mx-2" style="height:4em;" src="{{ route('userImage', ['user_id' => $user->id]) }}">
                     <a  @can('update', $event) href="{{ url('/user/' . $user->id) }}" @endcan>{{ $user->username }}</a>
                 </div>
                 @can('update', $event)
-                <div class="col-md">
+                <div class="p-2 my-auto">
                   <button onclick="kick({{$event->id}}, {{$user->id}})" class="btn btn-outline-danger">Kick</button>
                 </div>
                 @endcan

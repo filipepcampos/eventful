@@ -24,15 +24,15 @@ class EventUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'nullable|string|min:1',
+            'title' => 'nullable|string|min:1|max:255',
             'event_image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=100,min_height=100,ratio=1',
-            'description' => 'nullable|string|min:1',
-            'location' => 'nullable|string|min:1',
+            'description' => 'nullable|string|min:1|max:8192',
+            'location' => 'nullable|string|min:1|max:255',
             'realization_date' => 'nullable|date|after:today',
-            /*'is_visible' => 'string',
-            'is_accessible' => 'string',*/
+            'visibility' => 'nullable|string',
+            'accessibility' => 'nullable|string',
             'capacity' => 'nullable|integer',
-            'price' => 'nullable|digits_between:0,8'
+            'price' => 'nullable|numeric|between:0,999999.99'
         ];
     }
 }
