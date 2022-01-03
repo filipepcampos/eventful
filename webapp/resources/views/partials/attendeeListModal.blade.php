@@ -10,11 +10,11 @@
         @foreach($event->attendees()->get() as $user)
             <div class="row align-content-start" id="attendee{{ $user->id }}">
                 <div class="col-sm">
-                    <p>{{ $user->username }}</p>
+                    <a  @can('update', $event) href="{{ url('/user/' . $user->id) }}" @endcan>{{ $user->username }}</a>
                 </div>
                 @can('update', $event)
                 <div class="col-md">
-                    <button onclick="kick({{$event->id}}, {{$user->id}})" class="btn btn-outline-danger">Kick</button>
+                  <button onclick="kick({{$event->id}}, {{$user->id}})" class="btn btn-outline-danger">Kick</button>
                 </div>
                 @endcan
             </div>

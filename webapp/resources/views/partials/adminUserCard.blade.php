@@ -18,6 +18,7 @@
             </div>
         </div>
         <div class="card-footer">
+            <a role="button" class="btn btn-outline-primary" href="{{ url('/user/' . $user->id) }}">Profile</a>
             <a role="button" class="btn btn-outline-success" href="{{ route('updateUserForm', ['user_id' => $user->id]) }}">Edit</a>
             <button class="btn btn-outline-danger">Delete</button>
             @if($user->block_motive == null)
