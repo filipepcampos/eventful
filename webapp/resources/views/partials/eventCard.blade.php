@@ -1,6 +1,6 @@
 @can('viewInformation', $event)
-<div class="col-auto mb-5">
-    <div class="card h-100 rounded shadow-sm">
+<div class="col-auto mb-5 rounded-lg">
+    <div class="card h-100 rounded shadow-lg">
       <img class="card-img-top" src='{{ url("/event/$event->id" . "/image") }}' alt="Event image">
       <div class="card-body d-flex flex-column">
         <h5 class="card-title">{{ $event->title }}</h5>

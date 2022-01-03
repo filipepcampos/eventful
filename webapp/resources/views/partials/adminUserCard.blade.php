@@ -1,5 +1,5 @@
-<div class="col-auto mb-3">
-    <div id="userCard{{ $user->id }}" class="card @if($user->block_motive!=null) border-danger @endif" style="width: 26rem;">
+<div class="col-auto mb-3 userCardCol">
+    <div id="userCard{{ $user->id }}" class="rounded-lg shadow card @if($user->block_motive!=null) border-secondary border-1 @endif" style="width: 26rem; box-sizing: border-box;">
         <img class="card-img-top" src='{{ url("/user/$user->id" . "/profile_pic") }}' alt="Profile Picture">
         <div class="card-body">
             <h5 class="card-title">{{ $user->username }}</h5>
@@ -24,7 +24,7 @@
             @if($user->block_motive == null)
             <a role="button" class="btn btn-outline-secondary" id="blockButtonUser{{ $user->id }}" onclick="blockUser({{ $user->id }})">Block</a>
             @else
-            <a role="button" class="btn btn-outline-secondary" id="blockButtonUser{{ $user->id }}" onclick="unblockUser({{ $user->id }})">Unblock</a>
+            <a role="button" class="btn btn-secondary" id="blockButtonUser{{ $user->id }}" onclick="unblockUser({{ $user->id }})">Unblock</a>
             @endif
         </div>
     </div>
