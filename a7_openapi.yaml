@@ -443,7 +443,8 @@ paths:
                 title:
                   type: string
                 image:
-                  type: string    # URL
+                  type: string
+                  format: binary
                 description:
                   type: string
                 location:
@@ -833,8 +834,8 @@ paths:
 
   /api/event/{event_id}/comment:
     post:
-      operationId: 'R308'
-      summary: 'R308: Create Comment API'
+      operationId: 'R307'
+      summary: 'R307: Create Comment API'
       description: 'Create a comment on an event. Access: ATT'
       tags:
         - 'M03: User Interactions'
@@ -845,23 +846,24 @@ paths:
         schema:
           type: integer
         required: true
-      - in: query
-        name: content
-        description: Content of the comment
-        schema:
-          type: string
-        required: true          # TODO: We should be able to send a comment without content but with files
-      - in: query
-        name: files
-        description: Files of the comment
-        schema:
-          type: array
-          items:
-            file_path:
-              type: string      # URL
-          minItems: 1
-          maxItems: 10
-        required: false         # Files not required
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  minItems: 1
+                  maxItems: 10
+              required:
+                - content
       responses:
         '200':
           description: 'Success'
@@ -870,8 +872,8 @@ paths:
 
   /api/comment/{comment_id}:
     put:
-      operationId: 'R309'
-      summary: 'R309: Update Comment API'
+      operationId: 'R308'
+      summary: 'R308: Update Comment API'
       description: 'Update a comment on an event. Access: AUT'
       tags:
         - 'M03: User Interactions'
@@ -882,23 +884,22 @@ paths:
         schema:
           type: integer
         required: true
-      - in: query
-        name: content
-        description: Content of the comment
-        schema:
-          type: string
-        required: true          # TODO: We should be able to send a comment without content but with files
-      - in: query
-        name: files
-        description: Files of the comment
-        schema:
-          type: array
-          items:
-            file_path:
-              type: string      # URL
-          minItems: 1
-          maxItems: 10
-        required: false         # Files not required
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  minItems: 1
+                  maxItems: 10
       responses:
         '200':
           description: 'Success'
@@ -906,8 +907,8 @@ paths:
           description: 'Access denied'
 
     delete:
-      operationId: 'R310'
-      summary: 'R310: Delete Comment API'
+      operationId: 'R309'
+      summary: 'R309: Delete Comment API'
       description: 'Delete a comment on an event. Access: AUT'
       tags:
         - 'M03: User Interactions'
@@ -928,9 +929,9 @@ paths:
   
   /api/comment/{comment_id}/rating:
     post:
-      operationId: 'R311'
-      summary: 'R311: Create Rating on a Comment API'
-      description: 'Rating a comment on an event. Access: REA'
+      operationId: 'R310'
+      summary: 'R310: Creating a Rating on a Comment API'
+      description: 'Create a rating a comment on an event. Access: REA'
       tags:
         - 'M03: User Interactions'
       parameters:
@@ -940,15 +941,17 @@ paths:
         schema:
           type: integer
         required: true
-      - in: query
-        name: rating
-        description: Rating of the comment
-        schema:
-          type: string
-          enum:
-           - Upvote
-           - Downvote
+      requestBody:
         required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: boolean
+              required:
+                - rating
       responses:
         '200':
           description: 'Success'
@@ -956,8 +959,8 @@ paths:
           description: 'Access denied'
     
     put:
-      operationId: 'R312'
-      summary: 'R312: Changing Rating of a Comment API'
+      operationId: 'R311'
+      summary: 'R311: Changing Rating of a Comment API'
       description: 'Changing rating of a comment on an event. Access: REA'
       tags:
         - 'M03: User Interactions'
@@ -968,15 +971,17 @@ paths:
         schema:
           type: integer
         required: true
-      - in: query
-        name: rating
-        description: Rating of the comment
-        schema:
-          type: string
-          enum:
-           - Upvote
-           - Downvote
+      requestBody:
         required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: boolean
+              required:
+                - rating
       responses:
         '200':
           description: 'Success'
@@ -984,8 +989,8 @@ paths:
           description: 'Access denied'
 
     delete:
-      operationId: 'R313'
-      summary: 'R313: Deleting Rating of a Comment API'
+      operationId: 'R312'
+      summary: 'R312: Deleting Rating of a Comment API'
       description: 'Deleting rating of a comment on an event. Access: REA'
       tags:
         - 'M03: User Interactions'
@@ -1004,10 +1009,10 @@ paths:
 
   # --------------------------------- JOINING/LEAVING EVENT ---------------------------------
 
-  /api/event/{event_id}/attend:
+  /event/{event_id}/attend:
     post:
-      operationId: 'R314'
-      summary: 'R314: Joining Event API'
+      operationId: 'R313'
+      summary: 'R313: Joining Event'
       description: 'Joining event. Access: USR'
       tags:
         - 'M03: User Interactions'
@@ -1019,14 +1024,23 @@ paths:
           type: integer
         required: true
       responses:
-        '200':
-          description: 'Success'
-        '403':
-          description: 'Access denied'
+        '302':
+          description: 'Redirect after joining event.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful event join. Redirect to event page.'
+                  value: '/event/{event_id}'
+                302Failure:
+                  description: 'Failed event join. Redirect to event homepage.'
+                  value: '/'
     
     delete:
-      operationId: 'R315'
-      summary: 'R315: Leaving Event API'
+      operationId: 'R314'
+      summary: 'R314: Leaving Event'
       description: 'Leaving event. Access: ATT'
       tags:
         - 'M03: User Interactions'
@@ -1038,17 +1052,26 @@ paths:
           type: integer
         required: true
       responses:
-        '200':
-          description: 'Success'
-        '403':
-          description: 'Access denied'
+        '302':
+          description: 'Redirect after leaving event.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully left event. Redirect to homepage.'
+                  value: '/'
+                302Failure:
+                  description: 'Failed to leave event. Redirect to event page.'
+                  value: '/event/{event_id}'
 
 # --------------------------------- POST ---------------------------------
 
   /api/event/{event_id}/post:
     post:
-      operationId: 'R316'
-      summary: 'R316: Create Post API'
+      operationId: 'R315'
+      summary: 'R315: Create Post API'
       description: 'Create a post on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1059,18 +1082,20 @@ paths:
         schema:
           type: integer
         required: true
-      - in: query
-        name: title
-        description: Title of the post
-        schema:
-          type: string
+      requestBody:
         required: true
-      - in: query
-        name: description
-        description: Description of the post
-        schema:
-          type: string
-        required: true          
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+              required:
+                - title
+                - description    
       responses:
         '200':
           description: 'Success'
@@ -1079,8 +1104,8 @@ paths:
 
   /api/post/{post_id}:
     put:
-      operationId: 'R317'
-      summary: 'R317: Update Post API'
+      operationId: 'R316'
+      summary: 'R316: Update Post API'
       description: 'Update a post on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1091,18 +1116,17 @@ paths:
         schema:
           type: integer
         required: true
-      - in: query
-        name: title
-        description: Title of the post
-        schema:
-          type: string
-        required: true 
-      - in: query
-        name: description
-        description: Description of the post
-        schema:
-          type: string
-        required: true          
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string         
       responses:
         '200':
           description: 'Success'
@@ -1110,8 +1134,8 @@ paths:
           description: 'Access denied'
 
     delete:
-      operationId: 'R318'
-      summary: 'R318: Delete Post API'
+      operationId: 'R317'
+      summary: 'R317: Delete Post API'
       description: 'Delete a post on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1119,12 +1143,6 @@ paths:
       - in: path
         name: post_id
         description: ID of the post
-        schema:
-          type: integer
-        required: true
-      - in: query
-        name: event_id
-        description: ID of the event where the user wants to update a post (must be the host of the event)
         schema:
           type: integer
         required: true
@@ -1138,8 +1156,8 @@ paths:
 
   /api/event/{event_id}/poll:
     post:
-      operationId: 'R319'
-      summary: 'R319: Create Poll API'
+      operationId: 'R318'
+      summary: 'R318: Create Poll API'
       description: 'Create a poll on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1150,25 +1168,25 @@ paths:
         schema:
           type: integer
         required: true
-      - in: query
-        name: title
-        description: Title of the poll
-        schema:
-          type: string
+      requestBody:
         required: true
-      - in: query
-        name: description
-        description: Description of the poll
-        schema:
-          type: string
-        required: true 
-      - in: query
-        name: options
-        schema:
-          type: array
-          items:
-            type: string
-        required: true         
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string   
+                options:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - title
+                - description
+                - options
       responses:
         '200':
           description: 'Success'
@@ -1177,8 +1195,8 @@ paths:
 
   /api/poll/{poll_id}:
     delete:
-      operationId: 'R320'
-      summary: 'R320: Delete Poll API'
+      operationId: 'R319'
+      summary: 'R319: Delete Poll API'
       description: 'Delete a poll on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1199,28 +1217,9 @@ paths:
 
   /api/option/{option_id}/vote:
     post:
-      operationId: 'R321'
-      summary: 'R321: Create Vote on a Poll API'
-      description: 'Voting on a poll on an event. Access: ATT'
-      tags:
-        - 'M03: User Interactions'
-      parameters:
-      - in: path
-        name: option_id
-        description: ID of the option
-        schema:
-          type: integer
-        required: true
-      responses:
-        '200':
-          description: 'Success'
-        '403':
-          description: 'Access denied'
-
-    put:
-      operationId: 'R322'
-      summary: 'R322: Changing Option of a Poll API'
-      description: 'Changing option of a poll on an event. Access: ATT'
+      operationId: 'R320'
+      summary: 'R320: Create Vote on an Option of a Poll API'
+      description: 'Create vote on an option of a poll. Access: ATT'
       tags:
         - 'M03: User Interactions'
       parameters:
@@ -1237,9 +1236,9 @@ paths:
           description: 'Access denied'
 
     delete:
-      operationId: 'R323'
-      summary: 'R323: Deleting Option of a Poll API'
-      description: 'Deleting option of a poll on an event. Access: ATT'
+      operationId: 'R321'
+      summary: 'R321: Delete Vote on an Option of a Poll API'
+      description: 'Delete vote on an option of a poll. Access: ATT'
       tags:
         - 'M03: User Interactions'
       parameters:
@@ -1255,12 +1254,45 @@ paths:
         '403':
           description: 'Access denied'
 
+  # --------------------------------- KICK ATTENDEE ---------------------------------
+
+  /api/event/{event_id}/kick:
+    delete:
+      operationId: 'R322'
+      summary: 'R322: Kick Attendee From an Event API'
+      description: 'Kick attendee from an event. Access: HOST'
+      tags:
+        - 'M03: User Interactions'
+      parameters:
+      - in: path
+        name: event_id
+        description: ID of the event
+        schema:
+          type: integer
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+              required:
+                - user_id
+      responses:
+        '200':
+          description: 'Success'
+        '403':
+          description: 'Access denied'
+
   # --------------------------------- STATIC PAGES ---------------------------------
 
   /about:
     get:
       operationId: 'R401'
-      summary: 'R401: About Us page'
+      summary: 'R401: About Us Page'
       description: 'Page with information about the development team. Access: PUB'
       tags:
         - 'M04: Static Pages'
@@ -1271,7 +1303,7 @@ paths:
   /contact:
     get:
       operationId: 'R402'
-      summary: 'R402: Contact Us page'
+      summary: 'R402: Contact Us Page'
       description: 'Page with contact information. Access: PUB'
       tags:
         - 'M04: Static Pages'
@@ -1318,7 +1350,7 @@ paths:
     post:
       operationId: 'R502'
       summary: 'R502: Add Comment Report API'
-      description: 'Report the specified comment. Access: ATT, ADM'
+      description: 'Report the specified comment. Access: ATT'
       tags:
         - 'M05: Reports'
       parameters:
@@ -1351,7 +1383,7 @@ paths:
     post:
       operationId: 'R503'
       summary: 'R503: Add User Report API'
-      description: 'Report the specified user. Access: USR, ADM'
+      description: 'Report the specified user. Access: USR'
       tags:
         - 'M05: Reports'
       parameters:
@@ -1384,12 +1416,12 @@ paths:
     post:
       operationId: 'R504'
       summary: 'R504: Add Unblock Appeal. Access: BLK'
-      description: 'Appeal to the account unblock'
+      description: 'Appeal to the unblocking of the account'
       tags:
         - 'M05: Reports'
       responses:
         '200':
-          description: 'Unblock request successful'
+          description: 'Unblock appeal request successful'
         '403':
           description: 'Access denied'
 
@@ -1427,14 +1459,21 @@ paths:
       parameters:
       - in: path
         name: user_id
-        description: ID of the user the administrator wants to block
+        description: ID of the user the administrator wants to block/unblock
         schema:
           type: integer
         required: true
-      - in: query
-        name: block_status
-        description: Status of the block of the specified user, TRUE if blocked, FALSE otherwise
+      requestBody:
         required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                block_status:
+                  type: boolean
+              required:
+                - block_status
       responses:
         '200':
           description: 'Change user block status successful'
