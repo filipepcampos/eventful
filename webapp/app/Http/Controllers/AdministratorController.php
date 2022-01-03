@@ -21,4 +21,22 @@ class AdministratorController extends Controller
         $users = User::paginate(24);
         return view('pages.adminUserList', ['users' => $users]);
     }
+
+    public function blockUser(Request $request, $id){
+        $user = User::find($id);
+        $motive = $request->input('block_motive');
+        if($motive != null){
+            $user->block_motive = $motive;
+            $user->save();
+            return response(null, 200);
+        }
+        return response(null, 403);
+    }
+
+    public function unblockUser(Request $request, $id){
+        $user = User::find($id);
+        $user->block_motive = null;
+        $user->save();
+        return response(null, 200);
+    }
 }

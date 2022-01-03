@@ -47,6 +47,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
     Route::get('/users', 'AdministratorController@users');
     Route::get('/reports', function () { return view('pages.reports'); });
 });
+Route::post('/api/user/{user_id}/block', 'AdministratorController@blockUser')->middleware('admin');
+Route::post('/api/user/{user_id}/unblock', 'AdministratorController@unblockUser')->middleware('admin');
 
 // Users
 Route::get('user/{user_id}', 'UserController@show');
