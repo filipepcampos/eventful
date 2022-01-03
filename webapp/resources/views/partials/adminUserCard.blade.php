@@ -20,11 +20,11 @@
         <div class="card-footer">
             <a role="button" class="btn btn-outline-primary" href="{{ url('/user/' . $user->id) }}">Profile</a>
             <a role="button" class="btn btn-outline-success" href="{{ route('updateUserForm', ['user_id' => $user->id]) }}">Edit</a>
-            <button class="btn btn-outline-danger">Delete</button>
+            <a class="btn btn-outline-danger">Delete</a>
             @if($user->block_motive == null)
-            <button class="btn btn-outline-secondary" id="blockButtonUser{{ $user->id }}" onclick="blockUser({{ $user->id }})">Block</button>
+            <a role="button" class="btn btn-outline-secondary" id="blockButtonUser{{ $user->id }}" onclick="blockUser({{ $user->id }})">Block</a>
             @else
-            <button class="btn btn-outline-secondary" id="blockButtonUser{{ $user->id }}" onclick="unblockUser({{ $user->id }})">Unblock</button>
+            <a role="button" class="btn btn-outline-secondary" id="blockButtonUser{{ $user->id }}" onclick="unblockUser({{ $user->id }})">Unblock</a>
             @endif
         </div>
     </div>
