@@ -30,7 +30,7 @@
                     <!-- Host buttons -->
                     @can('update', $event)
                     <div class="row mb-1">
-                    <a class="btn btn-secondary" href="">Update (Broken)</a>
+                    <a class="btn btn-secondary" href="{{ route('updateEventForm', ['event_id' => $event->id]) }}">Update</a>
                     </div>
                     @endcan
 

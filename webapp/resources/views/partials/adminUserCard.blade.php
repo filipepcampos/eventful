@@ -1,5 +1,5 @@
 <div class="col-auto mb-3">
-    <div class="card" style="width: 26rem;">
+    <div class="card @if($user->block_motive!=null) border-danger @endif" style="width: 26rem;">
         <img class="card-img-top" src='{{ url("/user/$user->id" . "/profile_pic") }}' alt="Profile Picture">
         <div class="card-body">
             <h5 class="card-title">{{ $user->username }}</h5>
@@ -18,9 +18,13 @@
             </div>
         </div>
         <div class="card-footer">
-            <button class="btn btn-outline-success">Edit</button>
+            <a role="button" class="btn btn-outline-success" href="{{ route('updateUserForm', ['user_id' => $user->id]) }}">Edit</a>
             <button class="btn btn-outline-danger">Delete</button>
+            @if($user->block_motive == null)
             <button class="btn btn-outline-secondary">Block</button>
+            @else
+            <button class="btn btn-outline-secondary">Unblock</button>
+            @endif
         </div>
     </div>
 </div>

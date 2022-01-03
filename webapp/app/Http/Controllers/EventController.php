@@ -97,17 +97,23 @@ class EventController extends Controller
      */
     public function list()
     {
-        $events = Event::where('is_visible', '=', 'true'); // Visible events
-        if(Auth::check()){
-            $user = Auth::user();
-            $hosting = Event::where('host_id', $user->id);
-            $attending = Event::whereHas('attendees', function($q) use ($user){
-                $q->where('id', $user->id);
-            });
-            $events = $events->union($attending)->union($hosting);
+        $has_auth = Auth::check();
+        if($has_auth && Auth::user()->is_admin){
+            $events = Event::paginate(16);
+            return view('pages.home', ['events' => $events]);
+        } else {
+            $events = Event::where('is_visible', '=', 'true'); // Visible events
+            if(Auth::check()){
+                $user = Auth::user();
+                $hosting = Event::where('host_id', $user->id);
+                $attending = Event::whereHas('attendees', function($q) use ($user){
+                    $q->where('id', $user->id);
+                });
+                $events = $events->union($attending)->union($hosting);
+            }
+            $events = $events->paginate(16);
+            return view('pages.home', ['events' => $events]);
         }
-        $events = $events->paginate(16);
-        return view('pages.home', ['events' => $events]);
     }
 
     public function getImage($id){

@@ -30,7 +30,7 @@ Route::get('events', 'EventController@list');
 Route::get('event/{event_id}', 'EventController@show')->name('event');
 Route::put('event/{event_id}', 'EventController@update')->name('updateEvent');
 Route::delete('event/{event_id}', 'EventController@delete');
-Route::get('event/{event_id}/update', 'EventController@showUpdateForm');
+Route::get('event/{event_id}/update', 'EventController@showUpdateForm')->name('updateEventForm');
 Route::get('event', 'EventController@search');      // Search
 Route::post('event', 'EventController@create')->name('createEvent');
 Route::get('event/{event_id}/image', 'EventController@getImage');
