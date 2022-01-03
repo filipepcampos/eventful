@@ -53,7 +53,7 @@ CREATE TABLE users (
     description TEXT,
     block_motive TEXT,
     remember_token TEXT,
-    is_admin BOOLEAN,
+    is_admin BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT user_birthdate_check CHECK (birthdate <= account_creation_date)
 );
 

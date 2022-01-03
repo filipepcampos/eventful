@@ -18,7 +18,7 @@ class AdministratorController extends Controller
     }
 
     public function users(){
-        $users = User::paginate(24);
+        $users = User::where('is_admin', false)->orderBy('username')->paginate(24);
         return view('pages.adminUserList', ['users' => $users]);
     }
 
