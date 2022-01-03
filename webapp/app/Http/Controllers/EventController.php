@@ -24,7 +24,8 @@ class EventController extends Controller
         //
     }
 
-    public function join($event_id){
+    public function join($event_id)
+    {
         if (!Auth::check()) return redirect('/login');
         $event = Event::find($event_id);
         $this->authorize('join', $event);
@@ -36,13 +37,16 @@ class EventController extends Controller
         return redirect('event/' . $event->id);
     }
 
-    public function leave($event_id){
+    public function leave($event_id)
+    {
         if (!Auth::check()) return redirect('/login');
         $event = Event::find($event_id);
         $this->authorize('leave', $event);
         $user = Auth::user();
-        DB::table('attendee')->where([['user_id', '=', $user->id], 
-                                    ['event_id', '=', $event->id]])->delete();
+        DB::table('attendee')->where([
+            ['user_id', '=', $user->id],
+            ['event_id', '=', $event->id]
+        ])->delete();
         return redirect('/');
     }
 
@@ -55,14 +59,17 @@ class EventController extends Controller
         if (empty($tagsSelected)) {
             $events = Event::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString])->get();
         } else {
-            $events = Event::whereHas('tags', function($q) use ($tagsSelected) {$q->whereIn('id', $tagsSelected);})->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString])->get();
+            $events = Event::whereHas('tags', function ($q) use ($tagsSelected) {
+                $q->whereIn('id', $tagsSelected);
+            })->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString])->get();
         }
         return view('pages.search')->with('search', $search)->with('tagsSelected', $tagsSelected)->with('tags', $tags)->with('events', $events);
     }
 
-    public function showCreateForm(){
+    public function showCreateForm()
+    {
         if (!Auth::check()) return redirect('/login');
-        return view('pages.createEvent');
+        return view('pages.createEvent', ['tags' => Tag::all()]);
     }
 
     /**
@@ -71,11 +78,11 @@ class EventController extends Controller
      * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function showUpdateForm($id){
-        // TODO: APENAS HOST PODE EDITAR
+    public function showUpdateForm($id)
+    {
         if (!Auth::check()) return redirect('/login');
         $event = Event::find($id);
-        return view('pages.updateEvent', ['event'=>$event]);
+        return view('pages.updateEvent', ['event' => $event, 'tags' => Tag::all()]);
     }
 
     /**
@@ -88,13 +95,11 @@ class EventController extends Controller
         if (!Auth::check()) return redirect('/login');
         $this->authorize('create', Event::class);
 
-        $validated = $request->validated(); // TODO: Is this necessary btw?
-
         $event = new Event();
 
         $event->host_id = Auth::user()->id;
         $event->title = $request->input('title');
-        if($request->has('event_image')){
+        if ($request->has('event_image')) {
             $event->event_image = $request->file('event_image')->store('images');
         } else {
             $event->event_image = 'images/default.png';
@@ -102,18 +107,26 @@ class EventController extends Controller
         $event->description = $request->input('description');
         $event->location = $request->input('location');
         $event->realization_date = $request->input('realization_date');
-        
+
         $event->is_visible = $request->input('visibility') === 'public';
         $event->is_accessible = $request->input('accessibility') === 'public';
-        
-        if($request->has('capacity')){
+
+        if ($request->has('capacity')) {
             $event->capacity = $request->input('capacity');
         } else {
             $event->capacity = +INF;
         }
         $event->price = $request->input('price');
-
         $event->save();
+
+        $tagsSelected = $request->has('tag') ? $request->input('tag') : [];
+        foreach ($tagsSelected as $tag) {
+            $insertions[] = [
+                'tag_id' => $tag,
+                'event_id' => $event->id
+            ];
+        }
+        DB::table('event_tag')->insert($insertions);
 
         return redirect('event/' . $event->id);
     }
@@ -126,15 +139,15 @@ class EventController extends Controller
     public function list()
     {
         $has_auth = Auth::check();
-        if($has_auth && Auth::user()->is_admin){
+        if ($has_auth && Auth::user()->is_admin) {
             $events = Event::paginate(16);
             return view('pages.events', ['events' => $events]);
         } else {
             $events = Event::where('is_visible', '=', 'true'); // Visible events
-            if(Auth::check()){
+            if (Auth::check()) {
                 $user = Auth::user();
                 $hosting = Event::where('host_id', $user->id);
-                $attending = Event::whereHas('attendees', function($q) use ($user){
+                $attending = Event::whereHas('attendees', function ($q) use ($user) {
                     $q->where('id', $user->id);
                 });
                 $events = $events->union($attending)->union($hosting);
@@ -144,7 +157,8 @@ class EventController extends Controller
         }
     }
 
-    public function getImage($id){
+    public function getImage($id)
+    {
         $event = Event::find($id);
         $this->authorize('viewInformation', $event);
         return Storage::response($event->event_image);
@@ -174,19 +188,22 @@ class EventController extends Controller
         return view('pages.event', ['event' => $event]);
     }
 
-    public function kick(Request $request, $id){
+    public function kick(Request $request, $id)
+    {
         $event = Event::find($id);
         $this->authorize('update', $event);
         $user_id = $request->input('user_id');
-        if($user_id != null){
-            DB::table('attendee')->where([['user_id', '=', $user_id], 
-                                    ['event_id', '=', $event->id]])->delete();
+        if ($user_id != null) {
+            DB::table('attendee')->where([
+                ['user_id', '=', $user_id],
+                ['event_id', '=', $event->id]
+            ])->delete();
         }
-        // TODO: Should include error if user_id doesnt exist?
         return response(null, 200);
     }
 
-    public function invite(Request $request, $id){
+    public function invite(Request $request, $id)
+    {
         $event = Event::find($id);
         $this->authorize('viewContent', $event);
         $username = $request->input('username');
@@ -217,38 +234,55 @@ class EventController extends Controller
 
         $validated = $request->validated();
 
-        if(!is_null($request->input('capacity'))){
+        if (!is_null($request->input('capacity'))) {
             $capacity = (int)$request->input('capacity');
-            if($capacity < $event->number_attendees) return redirect()->back();
+            if ($capacity < $event->number_attendees) return redirect()->back();
             $event->capacity = $capacity;
         }
-        
-        if(!is_null($request->input('title'))){
+
+        if (!is_null($request->input('title'))) {
             $event->title = $request->input('title');
         }
-        if(!is_null($request->file('event_image'))){
+        if (!is_null($request->file('event_image'))) {
             $event->event_image = $request->file('event_image')->store('images');
         }
-        if(!is_null($request->input('description'))){
+        if (!is_null($request->input('description'))) {
             $event->description = $request->input('description');
         }
-        if(!is_null($request->input('location'))){
+        if (!is_null($request->input('location'))) {
             $event->location = $request->input('location');
         }
-        if(!is_null($request->input('realization_date'))){
+        if (!is_null($request->input('realization_date'))) {
             $event->realization_date = $request->input('realization_date');
         }
-        if(!is_null($request->input('visibility'))){
+        if (!is_null($request->input('visibility'))) {
             $event->is_visible = $request->input('visibility') === 'public';
         }
-        if(!is_null($request->input('accessibility'))){
+        if (!is_null($request->input('accessibility'))) {
             $event->is_visible = $request->input('accessibility') === 'public';
         }
-        if(!is_null($request->input('price'))){
+        if (!is_null($request->input('price'))) {
             $event->price = $request->input('price');
         }
+
+        $currentTags = $event->tags()->pluck('id')->toArray();
+        $tagsSelected = $request->has('tag') ? $request->input('tag') : [];
+        $tagsToInsert = array_diff($tagsSelected, $currentTags);
+        $tagsToRemove = array_diff($currentTags, $tagsSelected);
+        if (!empty($tagsToInsert)) {
+            foreach ($tagsToInsert as $tag) {
+                $toInsert[] = [
+                    'tag_id' => $tag,
+                    'event_id' => $event->id
+                ];
+            }
+            DB::table('event_tag')->insert($toInsert);
+        }
+        if (!empty($tagsToRemove)) {
+            DB::table('event_tag')->where('event_id', $event->id)->whereIn('tag_id', $tagsToRemove)->delete();
+        }
+
         $event->save();
-        
         return redirect('event/' . $event->id);
     }
 

@@ -11,13 +11,14 @@ class AdministratorController extends Controller
 {
     public function home()
     {
-        if(Auth::check()){
+        if(Auth::check()) {
             return view('pages.admin');
         }
         return redirect('/login');
     }
 
-    public function users(Request $request){
+    public function users(Request $request)
+    {
         if($request->has('username') && $request->input('username') != ''){
             $users = User::where('username', $request->input('username'))->paginate(1);
         } else {
@@ -26,10 +27,11 @@ class AdministratorController extends Controller
         return view('pages.adminUserList', ['users' => $users]);
     }
 
-    public function blockUser(Request $request, $id){
+    public function blockUser(Request $request, $id)
+    {
         $user = User::find($id);
         $motive = $request->input('block_motive');
-        if($motive != null){
+        if ($motive != null) {
             $user->block_motive = $motive;
             $user->save();
             return response(null, 200);

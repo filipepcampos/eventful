@@ -11,59 +11,15 @@ servers:
 
 externalDocs:
   description: Find more info here.
-  url: https://youtu.be/dQw4w9WgXcQ       # TODO: To be changed
+  url: https://git.fe.up.pt/lbaw/lbaw2122/lbaw2122/-/wikis/eap
 
 tags:
   - name: 'M01: Authentication and User Profile'
   - name: 'M02: Events'
   - name: 'M03: User Interactions'
-  - name: 'M04: Static Pages'     # TODO: Add more
+  - name: 'M04: Static Pages'
   - name: 'M05: Reports'
   - name: 'M06: Administration'
-
-# Accesses:
-# -> PUB - Public
-# -> USR - Authenticated user
-# -> ADM - Administrator
-# -> ATT - Event attendee
-# -> HOST - Event host
-# -> AUT - Author of a comment
-# -> REA - Reader of a comment AKA not the comment author AKA comment rater
-# -> BLK - Blocked user
-
-# Responses Used:
-# -> 200 - The request succeeded, no redirecting
-# -> 302 - URL has been changed temporarily AKA redirected successfully
-# -> 403 - The client does not have access rights to the content
-
-# Pages: Home page, login, registration, event, event creation, search
-# Everything else will be dynamically created in said pages
-# Example: Creating a comment will be done in the event page, hence why we don't have a create comment page, but an api call to the database
-
-
-# TODO
-# DONE -> Add/edit/delete comment
-# DONE -> Add/change comment rating
-# DONE -> Create/update/delete event
-# DONE -> Join/leave event
-# DONE -> Payment
-
-# DONE -> Recover password
-# -> Invitations and request notification dismissal
-# TODO (complete requests) -> Create/Accept/deny invite + requests
-
-# DONE -> Add user report
-# DONE -> Add comment report
-# DONE -> Add event report
-# DONE -> Remove reports (by admin)
-# DONE -> Block/Unblock user (admin)
-# DONE -> Write unblock appeal
-
-# DONE -> Update/Delete user
-# VERIFY -> Create/update/delete post
-# VERIFY -> Create/delete poll
-# VERIFY -> Vote on option
-
 
 paths:
 
@@ -116,7 +72,7 @@ paths:
                   value: '/login'
   
   /logout:
-    post:
+    get:
       operationId: R103
       summary: 'R103: Logout Action'
       description: 'Logout the current authenticated user. Access: USR, ADM'
@@ -311,16 +267,16 @@ paths:
         '302':
           description: 'Redirect after updating user.'
           headers:
-              Location:
-                schema:
-                  type: string
-                examples:
-                  302Success:
-                    description: 'Successful user update. Redirect to user page.'
-                    value: '/user/{user_id}'
-                  302Failure:
-                    description: 'Failed user update. Redirect to user update form.'
-                    value: '/user/{user_id}/update'
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful user update. Redirect to user page.'
+                  value: '/user/{user_id}'
+                302Failure:
+                  description: 'Failed user update. Redirect to user update form.'
+                  value: '/user/{user_id}/update'
                     
     delete:
       operationId: R110
@@ -683,8 +639,8 @@ paths:
   /events:
     get:
       operationId: R210
-      summary: 'R210: Show List of All Events'
-      description: 'Show a list with all events. Access: USR'
+      summary: 'R210: Show List of Events'
+      description: 'Show a list with events. Access: PUB'
       tags:
         - 'M02: Events'
       responses:
@@ -697,7 +653,7 @@ paths:
     get:
       operationId: R211
       summary: 'R211: Return Event Image'
-      description: 'Provide event image. Access: PUB'
+      description: 'Provide event image. Access: PUB (Public Event), ATT & HOST (Private Event)'
       tags:
         - 'M02: Events'
       parameters:
@@ -1289,10 +1245,21 @@ paths:
 
   # --------------------------------- STATIC PAGES ---------------------------------
 
-  /about:
+  /:
     get:
       operationId: 'R401'
-      summary: 'R401: About Us Page'
+      summary: 'R401: Homepage'
+      description: 'Homepage to greet the user. Access: PUB'
+      tags:
+        - 'M04: Static Pages'
+      responses:
+        '200':
+          description: 'Show homepage'
+
+  /about:
+    get:
+      operationId: 'R402'
+      summary: 'R402: About Us Page'
       description: 'Page with information about the development team. Access: PUB'
       tags:
         - 'M04: Static Pages'
@@ -1302,8 +1269,8 @@ paths:
 
   /contact:
     get:
-      operationId: 'R402'
-      summary: 'R402: Contact Us Page'
+      operationId: 'R403'
+      summary: 'R403: Contact Us Page'
       description: 'Page with contact information. Access: PUB'
       tags:
         - 'M04: Static Pages'
@@ -1452,28 +1419,37 @@ paths:
   /api/user/{user_id}/block:
     put:
       operationId: 'R602'
-      summary: 'R602: Change Block Status of User API'
-      description: 'Change block status of the specified user. Access: ADM'
+      summary: 'R602: Block User API'
+      description: 'Block user. Access: ADM'
       tags:
         - 'M06: Administration'
       parameters:
       - in: path
         name: user_id
-        description: ID of the user the administrator wants to block/unblock
+        description: ID of the user the administrator wants to block
         schema:
           type: integer
         required: true
-      requestBody:
+      responses:
+        '200':
+          description: 'Change user block status successful'
+        '403':
+          description: 'Access denied'
+
+  /api/user/{user_id}/unblock:
+    put:
+      operationId: 'R603'
+      summary: 'R603: Unblock User API'
+      description: 'Unblock user. Access: ADM'
+      tags:
+        - 'M06: Administration'
+      parameters:
+      - in: path
+        name: user_id
+        description: ID of the user the administrator wants to unblock
+        schema:
+          type: integer
         required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                block_status:
-                  type: boolean
-              required:
-                - block_status
       responses:
         '200':
           description: 'Change user block status successful'

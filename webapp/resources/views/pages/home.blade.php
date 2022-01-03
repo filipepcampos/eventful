@@ -10,7 +10,7 @@
 <div class="container">
     <div class="row justify-content-center my-5">
         <div class="col my-auto mr-5">
-            <h1 class="homepage-title text-center display-1"> Eventful </h1>
+            <h1 class="homepage-title text-center display-1 mb-5"> Eventful </h1>
             <p class="lead text-center">An event platform for all your needs</p>
             <p class="lead text-center">Eventfuls grants you the ability to organize and participate in events, gathering all information needed in one single space.</p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center my-5">

@@ -17,103 +17,123 @@
     {{ csrf_field() }}
 
     <div class="form-group mb-3">
-      <label for="title" class="form-label">Title</label>
-      <input id="title" type="text" name="title" placeholder="{{ $event->title }}" class="form-control @if($errors->has('title')) is-invalid @endif">
-      @if ($errors->has('title'))
+    <label for="title" class="form-label">Title</label>
+    <input id="title" type="text" name="title" placeholder="{{ $event->title }}" class="form-control @if($errors->has('title')) is-invalid @endif">
+    @if ($errors->has('title'))
         <div class="invalid-feedback d-block">
             {{ $errors->first('title') }}
         </div>
-      @endif
+    @endif
     </div>
 
     <div class="form-group mb-3">
-      <label class="form-label" for="event_image">Event Image</label>
-      <input type="file" name="event_image" class="form-control-file @if($errors->has('file')) is-invalid @endif" id="event_image" accept="image/*">
-      @if ($errors->has('event_image'))
+    <label class="form-label" for="event_image">Event Image</label>
+    <input type="file" name="event_image" class="form-control-file @if($errors->has('file')) is-invalid @endif" id="event_image" accept="image/*">
+    @if ($errors->has('event_image'))
         <div class="invalid-feedback d-block">
             {{ $errors->first('event_image') }}
         </div>
-      @endif
+    @endif
     </div>
 
     <div class="form-group mb-3">
-      <label for="description" class="form-label">Description</label>
-      <textarea id="description" maxlength="8192" type="textarea" name="description" placeholder="{{ $event->description }}" class="form-control @if($errors->has('description')) is-invalid @endif"></textarea>
-      @if ($errors->has('description'))
+    <label for="description" class="form-label">Description</label>
+    <textarea id="description" maxlength="8192" type="textarea" name="description" placeholder="{{ $event->description }}" class="form-control @if($errors->has('description')) is-invalid @endif"></textarea>
+    @if ($errors->has('description'))
         <div class="invalid-feedback d-block">
             {{ $errors->first('description') }}
         </div>
-      @endif
+    @endif
     </div>
 
     <div class="form-group mb-3">
-      <label for="location" class="form-label">Location</label>
-      <input id="location" type="text" name="location" placeholder="{{ $event->location }}" class="form-control @if($errors->has('location')) is-invalid @endif">
-      @if ($errors->has('location'))
+    <label for="location" class="form-label">Location</label>
+    <input id="location" type="text" name="location" placeholder="{{ $event->location }}" class="form-control @if($errors->has('location')) is-invalid @endif">
+    @if ($errors->has('location'))
         <div class="invalid-feedback d-block">
             {{ $errors->first('location') }}
         </div>
-      @endif
+    @endif
     </div>
     
     <div class="form-group mb-3">
-      <label for="realization_date" class="form-label">Realization Date</label>
-      <input id="realization_date" type="datetime-local" name="realization_date" placeholder="{{ $event->realization_date }}" class="form-control @if($errors->has('realization_date')) is-invalid @endif">
-      @if ($errors->has('realization_date'))
+    <label for="realization_date" class="form-label">Realization Date</label>
+    <input id="realization_date" type="datetime-local" name="realization_date" placeholder="{{ $event->realization_date }}" class="form-control @if($errors->has('realization_date')) is-invalid @endif">
+    @if ($errors->has('realization_date'))
         <div class="invalid-feedback d-block">
-          {{ $errors->first('realization_date') }}
+        {{ $errors->first('realization_date') }}
         </div>
-      @endif
+    @endif
     </div>
 
     <div class="form-group mb-3">
     <label for="visibility" class="form-check-label">Visibility</label>
     <select class="form-control @if($errors->has('visibility')) is-invalid @endif"  placeholder="{{ old('visibility') }}" id="visibility" name="visibility">
-      <option value="public">Public</option>
-      <option value="private">Private</option>
+    <option value="public">Public</option>
+    <option value="private">Private</option>
     </select>
     @if ($errors->has('visibility'))
-      <div class="invalid-feedback d-block">
-          {{ $errors->first('visibility') }}
-      </div>
+    <div class="invalid-feedback d-block">
+        {{ $errors->first('visibility') }}
+    </div>
     @endif
-  </div>
+</div>
 
-  <div class="form-group mb-3">
+<div class="form-group mb-3">
     <label for="accessibility" class="form-check-label">Accessibility</label>
     <select class="form-control @if($errors->has('accessibility')) is-invalid @endif" placeholder="{{ old('accessibility') }}" id="accessibility" name="accessibility">
-      <option value="public">Public</option>
-      <option value="private">Private</option>
+    <option value="public">Public</option>
+    <option value="private">Private</option>
     </select>
     @if ($errors->has('accessibility'))
-      <div class="invalid-feedback d-block">
-          {{ $errors->first('accessibility') }}
-      </div>
+    <div class="invalid-feedback d-block">
+        {{ $errors->first('accessibility') }}
+    </div>
     @endif
-  </div>
+</div>
 
-    <div class="form-group mb-3">
-      <label for="capacity" class="form-label">Capacity</label>
-      <input id="capacity" type="text" name="capacity" placeholder="{{ $event->capacity }}" class="form-control @if($errors->has('capacity')) is-invalid @endif">
-      @if ($errors->has('capacity'))
-        <div class="invalid-feedback d-block">
-            {{ $errors->first('capacity') }}
+<div class="form-group mb-3">
+    <div class="dropdown">
+    <a class="btn btn-secondary dropdown-toggle" data-bs-auto-close="outside" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+        Tags
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @foreach($tags as $tag)
+        <li>
+        <a class="dropdown-item">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="{{ $tag->id }}" name="tag[]" value="{{ $tag->id }}" @if($event->tags()->get()->contains($tag)) checked @endif>
+            <label class="w-100 form-check-label" for="{{ $tag->id }}">{{ $tag->name }}</label>            
         </div>
-      @endif
+        </a>
+        </li>
+        @endforeach
+    </ul>
     </div>
+</div>
 
-    <div class="form-group mb-3">
-      <label for="price" class="form-label">Price</label>
-      <input id="price" type="number" name="price" placeholder="{{ $event->price }}" class="form-control @if($errors->has('price')) is-invalid @endif">
-      @if ($errors->has('price'))
-        <div class="invalid-feedback d-block">
-            {{ $errors->first('price') }}
-        </div>
-      @endif
+<div class="form-group mb-3">
+    <label for="capacity" class="form-label">Capacity</label>
+    <input id="capacity" type="text" name="capacity" placeholder="{{ $event->capacity }}" class="form-control @if($errors->has('capacity')) is-invalid @endif">
+    @if ($errors->has('capacity'))
+    <div class="invalid-feedback d-block">
+        {{ $errors->first('capacity') }}
     </div>
+    @endif
+</div>
 
-    <button type="submit" class="btn btn-primary">
-        Submit
-    </button>
+<div class="form-group mb-3">
+    <label for="price" class="form-label">Price</label>
+    <input id="price" type="number" name="price" placeholder="{{ $event->price }}" class="form-control @if($errors->has('price')) is-invalid @endif">
+    @if ($errors->has('price'))
+    <div class="invalid-feedback d-block">
+        {{ $errors->first('price') }}
+    </div>
+    @endif
+</div>
+
+<button type="submit" class="btn btn-primary">
+    Submit
+</button>
 </form>
 @endsection

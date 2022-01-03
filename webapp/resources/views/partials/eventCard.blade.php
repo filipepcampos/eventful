@@ -15,12 +15,12 @@
         @cannot('viewContent', $event)
           @if($event->realization_date->isFuture())
             @if($event->is_accessible)
-              <form method="POST" action="{{ route('joinEvent', ['event_id' => $event->id]) }}">
+              <form id="joinEventForm" method="POST" style="display: inline;" action="{{ route('joinEvent', ['event_id' => $event->id]) }}">
                 {{ csrf_field() }}
-                <button type="submit" class="btn btn-success ml-auto">Join event</button>
+                <a onclick="document.getElementById('joinEventForm').submit();" type="submit" class="btn btn-success ml-auto">Join event</a>
               </form>
-            @elseif(is_null($event->requests()->where('user_id', Auth::user()->id)->where('event_id', $event->id)->first()))
-              <a id="request{{ $event->id }}" onclick="sendRequest({{ $event->id }})" class="btn btn-danger ml-auto">Request to join</a>
+            @elseif(Auth::check() && is_null($event->requests()->where('user_id', Auth::user()->id)->where('event_id', $event->id)->first()))
+              <a id="request{{ $event->id }}" onclick="sendRequest('{{ $event->id }}')" class="btn btn-danger ml-auto">Request to join</a>
             @endif
           @endif
         @endcan

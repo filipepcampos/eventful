@@ -19,7 +19,7 @@ class InviteController extends Controller
         if ($event->is_accessible) {
             app('App\Http\Controllers\EventController')->join($invite->event_id);
         } else {
-            // TODO Requests
+            app('App\Http\Controllers\RequestController')->send($invite->event_id);
         }
         return response(null, 200);
     }

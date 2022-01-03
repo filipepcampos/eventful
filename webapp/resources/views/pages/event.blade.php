@@ -62,7 +62,7 @@
                     </form>
                     @elsecan('request', $event)
                         @if(is_null($event->requests()->where('user_id', Auth::user()->id)->where('event_id', $event->id)->first()))
-                            <a id="request{{ $event->id }}" onclick="sendRequest({{ $event->id }})" class="btn btn-danger ml-auto">Request to Join</a>
+                            <a id="request{{ $event->id }}" onclick="sendRequest('{{ $event->id }}')" class="btn btn-danger ml-auto">Request to Join</a>
                         @else
                             <span class="text-primary">Request Sent</span>
                         @endif
@@ -83,8 +83,10 @@
                 </div>
             </div>
             <div class="row my-5">
-                <h2 class="display-4">Description</h2>
-                <p>{{ $event->description }}</p>
+                <div class="col">
+                    <h2 class="display-4">Description</h2>
+                    <p>{{ $event->description }}</p>
+                </div>
             </div>
         </div>
     </div>

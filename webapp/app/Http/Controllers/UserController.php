@@ -62,8 +62,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function showUpdateForm($id)
-    {   
-        // TODO: APENAS O USER PODE EDITAR
+    {
         if (!Auth::check()) return redirect('/login');
         $user = User::find($id);
         return view('pages.updateProfile', ['user'=>$user]);

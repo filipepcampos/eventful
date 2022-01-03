@@ -3,6 +3,11 @@
 @section('title', 'Login')
 @section('form-title', 'Login')
 
+@section('breadcrumbs')
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('homepage') }}">Home</a></li>
+<li class="breadcrumb-item active" aria-current="page">Login</li>
+@endsection
+
 @section('form-content')
 <form method="POST" action="{{ route('login') }}">
     {{ csrf_field() }}

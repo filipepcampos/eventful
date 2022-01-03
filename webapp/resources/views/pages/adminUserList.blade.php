@@ -16,9 +16,11 @@
     </div>
 
     <div class="row justify-content-center mb-5">
-        <form class="form-inline mx-auto mb-0 w-25" action="{{ route('adminUserList') }}">
-            <input class="form-control text-center h-70" type="search" id="username" name="username" placeholder="Username">
-        </form>
+        <div class="col">
+            <form class="form-inline mx-auto mb-0 w-25" action="{{ route('adminUserList') }}">
+                <input class="form-control mx-auto my-auto text-center w-100" type="search" id="username" name="username" placeholder="Username">
+            </form>
+        </div>
     </div>
     
     <div class="row justify-content-center">

@@ -50,12 +50,16 @@
     </div>
    
     <div class="row my-5">
-        <h2 class="display-4">Hosting</h2>
-        @if($user->hosting()->exists())
-        @each('partials.eventCard', $user->hosting()->orderBy('realization_date', 'DESC')->get(), 'event')
-        @else
-        <h3 class="display-6">None</h3>
-        @endif
+        <div class="col">
+            <h2 class="display-4">Hosting</h2>
+            <div class="row">
+                @if($user->hosting()->exists())
+                @each('partials.eventCard', $user->hosting()->orderBy('realization_date', 'DESC')->get(), 'event')
+                @else
+                <h3 class="display-6">None</h3>
+                @endif
+            </div>
+        </div>
     </div>
 
     <div class="row my-5">

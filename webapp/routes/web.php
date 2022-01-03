@@ -11,9 +11,8 @@
 |
 */
 
-// Homepage
+// Static Pages
 Route::get('/', function () { return view('pages.home'); } )->name('homepage');
-
 Route::get('about', function(){return view('pages.about');});
 Route::get('contact', function(){return view('pages.contact');});
 
@@ -39,17 +38,17 @@ Route::post('event/{event_id}/attend', 'EventController@join')->name('joinEvent'
 Route::delete('event/{event_id}/attend', 'EventController@leave')->name('leaveEvent');
 
 // Event API
-Route::post('api/event/{event_id}/kick', 'EventController@kick'); // TODO A7
-Route::post('api/event/{event_id}/invite', 'EventController@invite'); // TODO A7
+Route::delete('api/event/{event_id}/kick', 'EventController@kick');
+Route::post('api/event/{event_id}/invite', 'EventController@invite');
 
 // Admin
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
-    Route::get('/', 'AdministratorController@home')->name('admin'); // TODO: A7
+    Route::get('/', 'AdministratorController@home')->name('admin');
     Route::get('users', 'AdministratorController@users')->name('adminUserList');
     Route::get('reports', function () { return view('pages.reports'); });
 });
-Route::post('api/user/{user_id}/block', 'AdministratorController@blockUser')->middleware('admin');
-Route::post('api/user/{user_id}/unblock', 'AdministratorController@unblockUser')->middleware('admin');
+Route::put('api/user/{user_id}/block', 'AdministratorController@blockUser')->middleware('admin');
+Route::put('api/user/{user_id}/unblock', 'AdministratorController@unblockUser')->middleware('admin');
 
 // Users
 Route::get('user/{user_id}', 'UserController@show')->name('user');
@@ -65,13 +64,3 @@ Route::delete('api/invite/{invite_id}/reject', 'InviteController@reject');
 Route::post('api/event/{event_id}/request', 'RequestController@send');
 Route::put('api/request/{request_id}/accept', 'RequestController@accept');
 Route::delete('api/request/{request_id}/reject', 'RequestController@reject');
-
-// Comments TODO: Controller
-Route::post('api/event/{event_id}/comment', 'CommentController@create');
-Route::put('api/comment/{comment_id}', 'CommentController@update');
-Route::delete('api/comment/{comment_id}', 'CommentController@delete');
-
-// Posts TODO: Controller
-Route::post('api/event/{event_id}/post', 'PostController@create');
-Route::put('api/post/{post_id}', 'PostController@update');
-Route::delete('api/post/{post_id}', 'PostController@delete');

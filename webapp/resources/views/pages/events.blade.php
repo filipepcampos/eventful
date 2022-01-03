@@ -11,8 +11,10 @@
 <script type="text/javascript" src="{{ asset('/js/requestsManagement.js') }}" ></script>
 <div class="container">
     <div class="row justify-content-center my-5">
-        <h1 class="homepage-title text-center"> Eventful </h1>
-        <p class="lead text-center">An event platform for all your needs</p>
+        <div class="col">
+            <h1 class="homepage-title text-center mb-5"> Eventful </h1>
+            <p class="lead text-center">An event platform for all your needs</p>
+        </div>
     </div>
     <div class="row justify-content-center">
         @each('partials.eventCard', $events, 'event')

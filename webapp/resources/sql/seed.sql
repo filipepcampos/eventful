@@ -872,7 +872,7 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (131,'illi','consequat.auctor.nunc@aol.net','ZVB15TBA2RY','Mia Collier','09/02/2009'),
   (132,'Heather','senectus.et@hotmail.org','HCV74DCD6UJ','Dominique White','01/06/1960'),
   (133,'Armand','id@protonmail.ca','WGE46VKP0WI','Norman Barnes','11/15/1968'),
-  (134,'example', 'example@gmail.com', '$2y$10$7KB5tYaJ1b46uHjhKy2CIOapem7Qrf9aR9.DeAHhvu4Q1ltbn14Jq', 'Firstname Lastname', '11/22/1954'),
+  (134,'hoid', 'hoid@gmail.com', '$2y$10$GLxQrIGvr9ZWPG/0PZHDn.z.pL15ae5TYcDcV6NfBpk4GSN5EHBT2', 'Hoid', '11/22/1954'),
   (135,'Stella','et.pede@icloud.couk','RYI24TUQ2QW','Michelle Clements','01/24/1955'),
   (136,'Camden','rhoncus@hotmail.couk','XOV91WHN6VU','Hedley Pope','05/22/1972'),
   (137,'Conan','bibendum@icloud.net','SCT69UGJ7AC','Akeem Woods','10/24/1998'),
@@ -890,7 +890,7 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (149,'quuuuamar','cursus.vestibulum@hotmail.edu','CIB19EIU8WU','Alvin Mccarthy','03/11/1953');
 
 select setval('users_id_seq', (select max(id) from users));
-INSERT INTO users(username,is_admin,email,password,name,birthdate) VALUES ('admin','True','admin@eventful.com','$2y$10$uRYTEY02X1ymC8qIwibmOOVGxSRGBq6H/zmf.TV.hM8przN0mZZ2y','Admin','01/01/1960');
+INSERT INTO users(username,is_admin,email,password,name,birthdate) VALUES ('admin','True','admin@eventful.com','$2y$10$ZV9u8LC4QKYAQnIz2KKCSuEC.AH1LkkQdGFY8RlloR3eIoqICF1j2','Admin','01/01/1960');
 UPDATE users SET profile_pic='profile_pictures/default.png';
 
 -- ========================= unblock_appeal =========================
