@@ -42,6 +42,14 @@ class EventPolicy
         return $this->participatingInEvent($user, $event) || $this->isAdmin($user);
     }
 
+    public function host(User $user, Event $event){
+        return $this->isHost($user, $event);
+    }
+
+    public function attend(User $user, Event $event){
+        return $this->isAttendee($user, $event);
+    }
+
     public function viewInformation(?User $user, Event $event){
         if($event->is_visible){
             return true;
