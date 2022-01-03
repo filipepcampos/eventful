@@ -14,6 +14,10 @@ class User extends Authenticatable
 
     protected $table="users";
 
+    protected $dates = [
+        'account_creation_date',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

@@ -10,6 +10,10 @@ class Post extends Model
   public $timestamps  = false;
   protected $table = 'post';
 
+  protected $dates = [
+    'creation_date',
+  ];
+
   /**
    * The event this post belongs to
    */

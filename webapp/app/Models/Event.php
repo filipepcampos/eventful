@@ -10,6 +10,11 @@ class Event extends Model
   public $timestamps  = false;
   protected $table = 'event';
 
+  protected $dates = [
+    'creation_date',
+    'realization_date'
+  ];
+
   /**
    * Host of this event
    */

@@ -10,6 +10,11 @@ class Report extends Model
   public $timestamps  = false;
   protected $table = 'report';
 
+  protected $dates = [
+    'report_date',
+    'dismissal_date'
+  ];
+
   public function author(){
     return $this->belongsTo('App\Models\User');
   }

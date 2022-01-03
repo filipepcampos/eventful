@@ -10,6 +10,10 @@ class EventCancelledNotification extends Model
   public $timestamps  = false;
   protected $table = 'event_cancelled_notification';
 
+  protected $dates = [
+    'notification_date',
+  ];
+
   /**
    * Users affected by notification
    */

@@ -10,6 +10,10 @@ class Comment extends Model
   public $timestamps  = false;
   protected $table = 'comment';
 
+  protected $dates = [
+    'creation_date',
+  ];
+
   /**
    * Comment author
    */
