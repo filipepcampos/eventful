@@ -26,52 +26,37 @@
                 <div class="col-sm">
                     @include('partials.eventDetails', ['event' => $event])
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-3">
                     <!-- Host buttons -->
                     @can('update', $event)
-                    <div class="row mb-1">
-                    <a class="btn btn-secondary" href="{{ route('updateEventForm', ['event_id' => $event->id]) }}">Update</a>
-                    </div>
+                    <a class="btn btn-secondary mb-2 w-100" href="{{ route('updateEventForm', ['event_id' => $event->id]) }}">Update</a>
                     @endcan
 
                     @can('delete', $event)
-                    <div class="row mb-1">
-                    <a class="btn btn-danger" href="">Delete (Broken)</a>
-                    </div>
+                    <a class="btn btn-danger btn-disabled mb-2 w-100" href="">Delete (Disabled)</a>
                     @endcan
 
                     <!-- Regular user buttons -->
                     @can('join', $event)
-                    <div class="row mb-1">
                     <form method="post" action='{{ route("joinEvent", ["event_id" => $event->id]) }}'>
                         {{ csrf_field() }}
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success mb-2 w-100">
                             Join
                         </button>
                     </form>
-                    </div>
                     @elsecan('leave', $event)
-                    <div class="row mb-1">
                     <form method="post" action='{{ route("leaveEvent", ["event_id" => $event->id]) }}'>
                         {{ method_field('DELETE') }}
                         {{ csrf_field() }}
-                        <button type="submit" class="btn btn-danger">
+                        <button type="submit" class="btn btn-danger mb-2 w-100">
                             Leave
                         </button>
                     </form>
-                    </div>
-                    @endcan
-
-                    @can('viewInformation', $event)
-                    <div class="row mb-1">
-                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" href="#attendees">View Attendees</button>
-                    </div>
                     @endcan
 
                     @can('viewContent', $event)
-                    <div class="row">
-                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" onclick="clearInviteFeedback()" href="#inviteUser">Invite</button>
-                    </div>
+                    <button class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#attendees">View Attendees</button>
+                    <button class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" onclick="clearInviteFeedback()" href="#inviteUser">Invite</button>
                     @endcan
                 </div>
             </div>
