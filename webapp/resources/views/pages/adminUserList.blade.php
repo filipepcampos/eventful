@@ -1,6 +1,12 @@
 @extends('layouts.adminBase')
 
-@section('title', 'User Management')
+@section('title', 'Eventful - User Management')
+
+@section('breadcrumbs')
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('homepage') }}">Home</a></li>
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('admin') }}">Admin</a></li>
+<li class="breadcrumb-item active" aria-current="page">User Management</li>
+@endsection
 
 @section('content')
 <script type="text/javascript" src="{{ asset('/js/administration.js') }}" ></script>
@@ -8,6 +14,13 @@
     <div class="jumbotron text-center mb-5">
         <h1 class="display-2">User Management</h1>
     </div>
+
+    <div class="row justify-content-center mb-5">
+        <form class="form-inline mx-auto mb-0 w-25" action="{{ route('adminUserList') }}">
+            <input class="form-control text-center h-70" type="search" id="username" name="username" placeholder="Username">
+        </form>
+    </div>
+    
     <div class="row justify-content-center">
     @each('partials.adminUserCard', $users, 'user')
     </div>

@@ -47,6 +47,11 @@
         </div>
     </div>
     </nav>
+    <nav aria-label="breadcrumb">
+        <ol class="mx-5 my-5 breadcrumb">
+            @yield('breadcrumbs')
+        </ol>
+    </nav>
     <section id="content">
     @yield('content')
     </section>

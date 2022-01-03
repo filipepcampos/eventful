@@ -17,8 +17,12 @@ class AdministratorController extends Controller
         return redirect('/login');
     }
 
-    public function users(){
-        $users = User::where('is_admin', false)->orderBy('username')->paginate(24);
+    public function users(Request $request){
+        if($request->has('username') && $request->input('username') != ''){
+            $users = User::where('username', $request->input('username'))->paginate(1);
+        } else {
+            $users = User::where('is_admin', false)->orderBy('username')->paginate(24);
+        }
         return view('pages.adminUserList', ['users' => $users]);
     }
 

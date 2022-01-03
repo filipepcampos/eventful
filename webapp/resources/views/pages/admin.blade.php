@@ -1,6 +1,11 @@
 @extends('layouts.adminBase')
 
-@section('title', 'Admin Panel')
+@section('title', 'Eventful - Admin Panel')
+
+@section('breadcrumbs')
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('homepage') }}">Home</a></li>
+<li class="breadcrumb-item active" aria-current="page">Admin</li>
+@endsection
 
 @section('content')
 

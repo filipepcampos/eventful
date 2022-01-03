@@ -10,6 +10,9 @@
         @foreach($event->attendees()->get() as $user)
             <div class="row align-content-start" id="attendee{{ $user->id }}">
                 <div class="col-sm">
+                    <img class="img-fluid border border-radius-circle" src="{{ route('userImage', ['user_id' => $user->id]) }}">
+                </div>
+                <div class="col-sm">
                     <a  @can('update', $event) href="{{ url('/user/' . $user->id) }}" @endcan>{{ $user->username }}</a>
                 </div>
                 @can('update', $event)

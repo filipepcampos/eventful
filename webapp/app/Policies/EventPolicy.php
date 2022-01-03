@@ -95,6 +95,14 @@ class EventPolicy
             !($this->isAdmin($user));
     }
 
+    public function request(User $user, Event $event) 
+    {
+        return !$event->is_accessible &&
+            $event->realization_date->isFuture() &&
+            !($this->participatingInEvent($user, $event)) &&
+            !($this->isAdmin($user));
+    }
+
     public function leave(User $user, Event $event){
         return $this->isAttendee($user, $event);
     }

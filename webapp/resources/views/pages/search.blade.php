@@ -1,6 +1,12 @@
 @extends('layouts.base')
 
-@section('title', 'Search')
+@section('title', 'Eventful - Search')
+
+@section('breadcrumbs')
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('homepage') }}">Home</a></li>
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('events') }}">Events</a></li>
+<li class="breadcrumb-item active" aria-current="page">Search</li>
+@endsection
 
 @section('content')
 <h1 class="text-center my-5">Searching for: {{ $search }}</h1>

@@ -1,13 +1,25 @@
 @extends('layouts.base')
 
-@section('title', $event->title)
+@section('title', 'Eventful - ' . $event->title)
+
+@section('breadcrumbs')
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('homepage') }}">Home</a></li>
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('events') }}">Events</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ $event->title }}</li>
+@endsection
 
 @section('content')
 
-<script type="text/javascript" src="{{ asset('/js/attendeeManagement.js') }}" ></script>
+<script type="text/javascript" src="{{ asset('/js/requestsManagement.js') }}" ></script>
+
 @can('viewContent', $event)
+<script type="text/javascript" src="{{ asset('/js/attendeeManagement.js') }}" ></script>
 @include('partials.attendeeListModal', ['event' => $event])
 @include('partials.inviteUserModal', ['event' => $event])
+@endcan
+
+@can('host', $event)
+@include('partials.requestsListModal', ['requests' => $event->requests()->get()])
 @endcan
 
 <div class="container">
@@ -36,6 +48,10 @@
                     <a class="btn btn-danger btn-disabled mb-2 w-100" href="">Delete (Disabled)</a>
                     @endcan
 
+                    @can('host', $event)
+                    <a class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#requests">Requests</a>
+                    @endcan
+
                     <!-- Regular user buttons -->
                     @can('join', $event)
                     <form method="post" action='{{ route("joinEvent", ["event_id" => $event->id]) }}'>
@@ -44,6 +60,12 @@
                             Join
                         </button>
                     </form>
+                    @elsecan('request', $event)
+                        @if(is_null($event->requests()->where('user_id', Auth::user()->id)->where('event_id', $event->id)->first()))
+                            <a id="request{{ $event->id }}" onclick="sendRequest({{ $event->id }})" class="btn btn-danger ml-auto">Request to Join</a>
+                        @else
+                            <span class="text-primary">Request Sent</span>
+                        @endif
                     @elsecan('leave', $event)
                     <form method="post" action='{{ route("leaveEvent", ["event_id" => $event->id]) }}'>
                         {{ method_field('DELETE') }}
@@ -55,16 +77,16 @@
                     @endcan
 
                     @can('viewContent', $event)
-                    <button class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#attendees">View Attendees</button>
-                    <button class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" onclick="clearInviteFeedback()" href="#inviteUser">Invite</button>
+                    <a class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#attendees">View Attendees</a>
+                    <a class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" onclick="clearInviteFeedback()" href="#inviteUser">Invite</a>
                     @endcan
                 </div>
             </div>
+            <div class="row my-5">
+                <h2 class="display-4">Description</h2>
+                <p>{{ $event->description }}</p>
+            </div>
         </div>
-    </div>
-    <div class="row my-5">
-        <h2 class="display-4">Description</h2>
-        <p>{{ $event->description }}</p>
     </div>
     @can('viewContent', $event)
     <div class="row my-5">

@@ -1,44 +1,70 @@
 @extends('layouts.base')
 
-@section('title', $user->username)
+@section('title', 'Eventful - ' . $user->username)
+
+@section('breadcrumbs')
+<li class="breadcrumb-item" aria-current="page"><a href="{{ route('homepage') }}">Home</a></li>
+<li class="breadcrumb-item active" aria-current="page">Profile</li>
+@endsection
 
 @section('content')
 <script type="text/javascript" src="{{ asset('/js/invitesManagement.js') }}" ></script>
 @include('partials.invitesListModal', ['user' => $user])
-<div class="container">
+<div class="container my-5">
+    <div class="d-flex flex-row justify-content-start">
+        <img class="border border-2 border-secondary rounded w-25" src="{{ route('userImage', ['user_id' => $user->id]) }}" alt="Profile Picture">
+        <div class="p-5 mx-5 border-secondary rounded">
+            <h1 class="display-3 text-center">{{ $user->username }}</h1>
+            <div class="my-2">
+                <span>
+                    <i class="bi bi-person"></i>
+                    {{ $user->name }}
+                </span>
+            </div>
+            <div class="my-2">
+                <span>
+                    <i class="bi bi-envelope-check"></i>
+                    {{ $user->email }}
+                </span>
+            </div>
+            <div class="my-2">
+                <span>
+                    <i class="bi bi-calendar-check"></i>
+                    {{ $user->birthdate }}
+                </span>
+            </div>
+            @if($user->description != null)
+            <div class="my-2">
+                <span>
+                    <i class="bi bi-card-text"></i>
+                    Description
+                </span>
+                <p>{{ $user->description }}</p>
+            </div>
+            @endif
+            @can('update', $user)
+            <a class="btn btn-secondary my-2" type="button" data-bs-toggle="modal" href="#invites">View Invites</a>
+            <a class="btn btn-secondary my-2" href='{{ route("updateUserForm", ["user_id" => $user->id]) }}'>Edit Profile</a>
+            @endcan
+        </div>
+    </div>
+   
     <div class="row my-5">
-        <div class="col">
-            <img class="border border-5 border-secondary rounded" src='{{ url("user/$user->id/profile_pic") }}' alt="Profile Picture">
-        </div>
-        <div class="col border border-5 border-secondary rounded">
-            <h1 class="display-5 text-center">{{ $user->username }}</h1>
-            <button class="btn btn-secondary" type="button" data-bs-toggle="modal" href="#invites">View Invites</button>
-        </div>
+        <h2 class="display-4">Hosting</h2>
+        @if($user->hosting()->exists())
+        @each('partials.eventCard', $user->hosting()->orderBy('realization_date', 'DESC')->get(), 'event')
+        @else
+        <h3 class="display-6">None</h3>
+        @endif
     </div>
 
-    @can('update', $user)
-    <div class="row mb-1">
-    <form method="get" action='{{ route("updateUser", ["user_id" => $user->id]) }}'>
-        {{ csrf_field() }}
-        <button type="submit" class="btn btn-secondary">
-            Edit Profile
-        </button>
-    </form>
-    </div>
-    <a class="btn btn-secondary" href='{{ route("updateUserForm", ["user_id" => $user->id]) }}'>Edit Profile</a>
-    @endcan
-
     <div class="row my-5">
-        <h2 class="display-4">Birthdate</h2>
-        <p>{{ $user->birthdate }}</p>
-    </div>
-    <div class="row my-5">
-        <h2 class="display-4">Description</h2>
-        <p>{{ $user->description }}</p>
-    </div>
-    
-    <div class="row my-5">
+        <h2 class="display-4">Attending</h2>
+        @if($user->attending()->exists())
         @each('partials.eventCard', $user->attending()->orderBy('realization_date', 'DESC')->get(), 'event')
+        @else
+        <h3 class="display-6">None</h3>
+        @endif
     </div>
 </div>
 @endsection

@@ -24,6 +24,28 @@ class EventController extends Controller
         //
     }
 
+    public function join($event_id){
+        if (!Auth::check()) return redirect('/login');
+        $event = Event::find($event_id);
+        $this->authorize('join', $event);
+        $user = Auth::user();
+        DB::table('attendee')->insert([
+            'user_id' => $user->id,
+            'event_id' => $event->id
+        ]);
+        return redirect('event/' . $event->id);
+    }
+
+    public function leave($event_id){
+        if (!Auth::check()) return redirect('/login');
+        $event = Event::find($event_id);
+        $this->authorize('leave', $event);
+        $user = Auth::user();
+        DB::table('attendee')->where([['user_id', '=', $user->id], 
+                                    ['event_id', '=', $event->id]])->delete();
+        return redirect('/');
+    }
+
     public function search(Request $request)
     {
         $search = $request->query('search');
@@ -66,13 +88,17 @@ class EventController extends Controller
         if (!Auth::check()) return redirect('/login');
         $this->authorize('create', Event::class);
 
-        $validated = $request->validated();
+        $validated = $request->validated(); // TODO: Is this necessary btw?
 
         $event = new Event();
 
-        $event->id_host = Auth::user()->id;
+        $event->host_id = Auth::user()->id;
         $event->title = $request->input('title');
-        $event->event_image = $request->file('event_image')->store('images');
+        if($request->has('event_image')){
+            $event->event_image = $request->file('event_image')->store('images');
+        } else {
+            $event->event_image = 'images/default.png';
+        }
         $event->description = $request->input('description');
         $event->location = $request->input('location');
         $event->realization_date = $request->input('realization_date');
@@ -100,7 +126,7 @@ class EventController extends Controller
         $has_auth = Auth::check();
         if($has_auth && Auth::user()->is_admin){
             $events = Event::paginate(16);
-            return view('pages.home', ['events' => $events]);
+            return view('pages.events', ['events' => $events]);
         } else {
             $events = Event::where('is_visible', '=', 'true'); // Visible events
             if(Auth::check()){
@@ -112,7 +138,7 @@ class EventController extends Controller
                 $events = $events->union($attending)->union($hosting);
             }
             $events = $events->paginate(16);
-            return view('pages.home', ['events' => $events]);
+            return view('pages.events', ['events' => $events]);
         }
     }
 
@@ -144,28 +170,6 @@ class EventController extends Controller
         $event = Event::find($id);
         $this->authorize('viewInformation', $event);
         return view('pages.event', ['event' => $event]);
-    }
-
-    public function join($id){
-        if (!Auth::check()) return redirect('/login');
-        $event = Event::find($id);
-        $this->authorize('join', $event);
-        $user = Auth::user();
-        DB::table('attendee')->insert([
-            'user_id' => $user->id,
-            'event_id' => $event->id
-        ]);
-        return redirect('event/' . $event->id);
-    }
-
-    public function leave($id){
-        if (!Auth::check()) return redirect('/login');
-        $event = Event::find($id);
-        $this->authorize('leave', $event);
-        $user = Auth::user();
-        DB::table('attendee')->where([['user_id', '=', $user->id], 
-                                    ['event_id', '=', $event->id]])->delete();
-        return redirect('/');
     }
 
     public function kick(Request $request, $id){

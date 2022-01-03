@@ -1,6 +1,7 @@
 @extends('layouts.form')
 
 @section('title', 'Login')
+@section('form-title', 'Login')
 
 @section('form-content')
 <form method="POST" action="{{ route('login') }}">
@@ -32,6 +33,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Login</button>
+    <a class="mx-3" href="{{ route('register') }}">Register</a>
 </form>
 @endsection
 

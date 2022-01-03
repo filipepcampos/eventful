@@ -147,7 +147,6 @@ paths:
         '200':
           description: 'Show register UI'
 
-  /user:
     post:
       operationId: R105
       summary: 'R105: Create User Action'
@@ -199,13 +198,19 @@ paths:
 
   # --------------------------------- RECOVER PASSWORD ---------------------------------
 
-  /recover-password:
+  /user/{user_id}/recover-password:
     get:
       operationId: R106
       summary: 'R106: Show Recover Password Form'
       description: 'Provide password recover form. Access: PUB'
       tags:
         - 'M01: Authentication and User Profile'
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
       responses:
         '200':
           description: 'Show recover password form'
@@ -216,6 +221,12 @@ paths:
       description: 'Recover a password of the account associated to the given email. Access: PUB'
       tags:
         - 'M01: Authentication and User Profile'
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
       requestBody:
         required: true
         content:
@@ -350,6 +361,25 @@ paths:
       responses:
         '200':
           description: 'Show user update form'
+
+  # --------------------------------- OBTAIN USER IMAGE ---------------------------------
+
+  /user/{user_id}/profile_pic:
+    get:
+      operationId: R112
+      summary: 'R112: Return User Profile Picture'
+      description: 'Provide user profile picture. Access: USR'
+      tags:
+        - 'M01: Authentication and User Profile'
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'Returns user profile picture'
 
   # --------------------------------- EVENT CREATION ---------------------------------
 

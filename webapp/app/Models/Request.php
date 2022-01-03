@@ -14,7 +14,7 @@ class Request extends Model
    * User who made the request
    */
   public function requester() {
-    return $this->belongsTo('App\Models\User');
+    return $this->belongsTo('App\Models\User', 'user_id');
   }
 
   /**

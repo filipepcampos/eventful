@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -102,9 +103,9 @@ class UserController extends Controller
         if(!is_null($request->input('email'))){ 
             $user->email = $request->input('email');
         }
-        
+
         if(!is_null($request->input('password'))){ 
-            $user->password = $request->input('password');
+            $user->password = bcrypt($request->input('password'));
         }
         
         if(!is_null($request->input('birthdate'))){ 

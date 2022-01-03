@@ -15,8 +15,11 @@
         @cannot('viewContent', $event)
           @if($event->realization_date->isFuture())
             @if($event->is_accessible)
-              <a href="{{ url('/event/' . $event->id) }}" class="btn btn-success ml-auto">Join event</a>    <!-- TODO: Change url -->
-            @else()
+              <form method="POST" action="{{ route('joinEvent', ['event_id' => $event->id]) }}">
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-success ml-auto">Join event</button>
+              </form>
+            @elseif(is_null($event->requests()->where('user_id', Auth::user()->id)->where('event_id', $event->id)->first()))
               <a id="request{{ $event->id }}" onclick="sendRequest({{ $event->id }})" class="btn btn-danger ml-auto">Request to join</a>
             @endif
           @endif
