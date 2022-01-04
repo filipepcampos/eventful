@@ -234,7 +234,7 @@ paths:
     put:
       operationId: R109
       summary: 'R109: User Update Action'
-      description: 'Update a user. Access: USR'
+      description: 'Update a user. Access: OWN, ADM'
       tags:
         - 'M01: Authentication and User Profile'
       parameters:
@@ -281,7 +281,7 @@ paths:
     delete:
       operationId: R110
       summary: 'R110: Delete User Action'
-      description: 'Delete a user. Access: USR'
+      description: 'Delete a user. Access: OWN, ADM'
       tags:
         - 'M01: Authentication and User Profile'
       parameters:
@@ -312,7 +312,7 @@ paths:
     get:
       operationId: R111
       summary: 'R111: Show User Update Form'
-      description: 'Provide user update form. Access: USR'
+      description: 'Provide user update form. Access: OWN, ADM'
       tags:
         - 'M01: Authentication and User Profile'
       parameters:
