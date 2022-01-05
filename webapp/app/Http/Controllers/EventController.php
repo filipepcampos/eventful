@@ -92,6 +92,7 @@ class EventController extends Controller
      */
     public function create(EventCreateRequest $request)
     {
+        error_log('abc');
         if (!Auth::check()) return redirect('/login');
         $this->authorize('create', Event::class);
 

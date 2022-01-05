@@ -34,7 +34,7 @@
 
 <div class="form-group mb-3">
     <label for="description" class="form-label">Description</label>
-    <textarea id="description" maxlength="8192" value="{{ old('description') }}" type="textarea" name="description" class="form-control @if($errors->has('description')) is-invalid @endif" required></textarea>
+    <textarea id="description" maxlength="8192" type="textarea" name="description" class="form-control @if($errors->has('description')) is-invalid @endif" required>{{ old('description') }}</textarea>
     @if ($errors->has('description'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('description') }}
@@ -76,14 +76,14 @@
 </div>
 
 <div class="form-group mb-3">
-    <label for="accessibility" class="form-check-label">Accessibility</label>
-    <select class="form-control @if($errors->has('accessibility')) is-invalid @endif" value="{{ old('accessibility') }}" id="accessibility" name="accessibility" required>
+    <label for="access" class="form-check-label">Access</label>
+    <select class="form-control @if($errors->has('access')) is-invalid @endif" value="{{ old('access') }}" id="access" name="access" required>
     <option value="public">Public</option>
     <option value="private">Private</option>
     </select>
-    @if ($errors->has('accessibility'))
+    @if ($errors->has('access'))
     <div class="invalid-feedback d-block">
-        {{ $errors->first('accessibility') }}
+        {{ $errors->first('access') }}
     </div>
     @endif
 </div>
