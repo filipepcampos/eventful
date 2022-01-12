@@ -1,3 +1,7 @@
 <h2 class="display-4">Posts</h2>
 
-@each('partials.post', $posts, 'post')
+<div id="postList">
+@foreach($posts as $post)
+    @include('partials.post', ['post' => $post, 'event' => $event])
+@endforeach
+</div>

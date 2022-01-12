@@ -1,4 +1,74 @@
-var quill = new Quill('#postCreationEditor', {
+function createPost(eventId) {
+    let url = '/api/event/' + eventId + '/post';
+    let contents = quill.getContents();
+    let json = JSON.stringify(contents);
+    r = new AJAXRequest(url, 'POST');
+    r.setParam('text', json);
+    r.send(function (xhr) {
+        if(xhr.status == 200){
+            createHTMLpost(json);
+        } else {
+            console.log("Nope"); // TODO: What to do on error?
+        }
+    });
+}
+
+function deletePost(postId) {
+    let url = '/api/post/' + postId;
+    r = new AJAXRequest(url, 'DELETE');
+    r.send(function (xhr) {
+        if(xhr.status == 200){
+            document.getElementById('postRow' + postId).remove();
+        } else {
+            console.log("Nope"); // TODO: What to do on error?
+        }
+    })
+}
+
+function editPost(postId) {
+    let post = document.getElementById('post' + postId);
+    let postDelta = post.getAttribute('delta');
+    quill.setContents(JSON.parse(postDelta), 'api');
+}
+
+function createHTMLpost(json){
+    let postList = document.getElementById("postList");
+
+    let row = document.createElement('div');
+    row.classList.add('row');
+
+    let post = document.createElement('p');
+    post.classList.add("border");
+    post.classList.add("postText");
+    post.setAttribute('delta', json);
+    row.appendChild(post);
+
+    let date = document.createElement('p');
+    date.innerHTML = 'Now'; // TODO: Exhibit date
+    row.appendChild(date);
+
+    postList.insertBefore(row, postList.firstChild);
+    loadPost(post);
+}
+
+let quills = new Map();
+
+function loadPost(post){
+    let postDelta = post.getAttribute('delta');
+    let q = new Quill(post, {
+        readOnly: true,
+        theme: 'bubble'
+      });
+    q.setContents(JSON.parse(postDelta), 'api');
+}
+
+function loadPosts(){
+    for(let post of document.getElementsByClassName("postText")){
+        loadPost(post);
+    }
+}
+
+var quill = new Quill('#postEditorQuill', {
     modules: {
       toolbar: [
         [{ header: [1, 2, false] }],
@@ -6,42 +76,8 @@ var quill = new Quill('#postCreationEditor', {
         ['blockquote', 'code-block'],
       ]
     },
-    placeholder: 'Compose an epic...',
+    placeholder: 'Compose your post...',
     theme: 'snow'  // or 'bubble'
   });
 
-function createPost(eventId) {
-    let url = '/api/event/' + eventId + '/post';
-    let json = JSON.stringify(quill.getContents());
-    r = new AJAXRequest(url, 'POST');
-    r.setParam('text', json);
-    r.send(function (xhr) {
-        if(xhr.status == 200){
-            console.log("Sent");
-        } else {
-            console.log("Nope");
-        }
-    });
-}
-
-
-function invite(eventId) {
-    let url = '/api/event/' + eventId + '/invite';
-    let input_box = document.getElementById('invitedUsername');
-    let feedback = document.getElementById('inviteFeedback');
-    if(input_box == null){
-        return;
-    }
-    let username = input_box.value;
-    if(username != null){
-        r = new AJAXRequest(url, 'POST');
-        r.setParam('username', username);
-        r.send(function (xhr) {
-            if(xhr.status == 200){
-                validInviteFeedback(input_box,feedback);
-            } else {
-                invalidInviteFeedback(input_box,feedback);
-            }
-        });
-    }
-}
+loadPosts();

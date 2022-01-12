@@ -13,7 +13,8 @@
 
 
 @can('viewContent', $event)
-<script type="text/javascript" src="{{ asset('/js/attendeeManagement.js') }}" ></script>
+<script type="text/javascript" src="{{ asset('/js/attendeeManagement.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/js/commentManagement.js') }}"></script>
 @include('partials.attendeeListModal', ['event' => $event])
 @include('partials.inviteUserModal', ['event' => $event])
 @endcan
@@ -30,7 +31,7 @@
 <script type="text/javascript" src="{{ asset('/js/postManagement.js') }}" defer></script>
 
 @include('partials.requestsListModal', ['requests' => $event->requests()->get()])
-@include('partials.postCreationModal', ['event_id' => $event->id])
+@include('partials.postEditorModal', ['event_id' => $event->id])
 @endcan
 
 <div class="container">
@@ -107,8 +108,8 @@
             @include('partials.comments', ['comments' => $event->comments()->orderBy('creation_date', 'DESC')->get()])
         </div>
         <div class="col">
-            <a class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#postCreation">Create Post</a>
-            @include('partials.posts', ['posts' => $event->posts()->orderBy('creation_date', 'DESC')->get()])
+            <a class="btn btn-secondary mb-2" type="button" data-bs-toggle="modal" href="#postEditor">Create Post</a>
+            @include('partials.posts', ['posts' => $event->posts()->orderBy('creation_date', 'DESC')->get(), 'event' => $event])
         </div>
     </div>
     @endcan

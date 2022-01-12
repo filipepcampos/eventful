@@ -24,8 +24,8 @@ class CommentCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'content' => 'required|string|min:1|max:255',
-            'files' => 'max:10'
+            'content' => 'required|string|min:1|max:255'
+            // TODO: MAX 10 FILES
         ];
     }
 }

@@ -54,18 +54,30 @@ class EventController extends Controller
     {
         $search = $request->query('search');
         $searchString = str_replace(' ', ':*&', $search);
+        $events = Event::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString]);
+
         $tagsSelected = $request->query('tag');
-        $date_from = $request->query('date_from');
-        $date_to = $request->query('date_to');
-        if (empty($tagsSelected)) {
-            $events = Event::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString])->get();
-        } else {
-            $events = Event::whereHas('tags', function ($q) use ($tagsSelected) {
-                $q->whereIn('id', $tagsSelected);
-            })->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString])->get();
+        if (!empty($tagsSelected)) {
+            $events = $events->whereHas('tags', function ($q) use ($tagsSelected) { $q->whereIn('id', $tagsSelected); });
         }
-        $tags = Tag::all();
-        return view('pages.search')->with('search', $search)->with('tagsSelected', $tagsSelected)->with('tags', $tags)->with('events', $events);
+
+        $after_date = $request->query('after');
+        if (!is_null($after_date)) {
+            $events = $events->where('realization_date', '>=', $after_date);
+        }
+
+        $before_date = $request->query('before');
+        if (!is_null($before_date)) {
+            $events = $events->where('realization_date', '<=', $before_date);
+        }
+
+        return view('pages.search')->
+               with('events', $events->get())->
+               with('search', $search)->
+               with('tagsSelected', $tagsSelected)->
+               with('tags', Tag::all())->
+               with('after_date', $after_date)->
+               with('before_date', $before_date);
     }
 
     public function showCreateForm()
@@ -94,7 +106,6 @@ class EventController extends Controller
      */
     public function create(EventCreateRequest $request)
     {
-        error_log('abc');
         if (!Auth::check()) return redirect('/login');
         $this->authorize('create', Event::class);
 
@@ -122,14 +133,15 @@ class EventController extends Controller
         $event->price = $request->input('price');
         $event->save();
 
-        $tagsSelected = $request->has('tag') ? $request->input('tag') : [];
+        /*$tagsSelected = $request->has('tag') ? $request->input('tag') : [];
         foreach ($tagsSelected as $tag) {
             $insertions[] = [
                 'tag_id' => $tag,
                 'event_id' => $event->id
             ];
         }
-        DB::table('event_tag')->insert($insertions);
+
+        DB::table('event_tag')->insert($insertions);*/
 
         return redirect('event/' . $event->id);
     }

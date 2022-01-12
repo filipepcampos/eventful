@@ -1511,6 +1511,8 @@ INSERT INTO comment(id,author_id,event_id,content,creation_date) VALUES
   (28,121,51,'metus. Vivamus euismod urna. Nullam lobortis quam','2020-10-08 04:23:15'),
   (29,7,55,'natoque penatibus et magnis dis parturient','2019-12-20 09:19:23');
 
+select setval('comment_id_seq', (select max(id) from comment));
+
 -- ========================= rating =========================
 
 INSERT INTO rating(comment_id,user_id,vote) VALUES

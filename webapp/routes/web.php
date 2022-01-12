@@ -40,7 +40,10 @@ Route::delete('event/{event_id}/attend', 'EventController@leave')->name('leaveEv
 // Event API
 Route::delete('api/event/{event_id}/kick', 'EventController@kick');
 Route::post('api/event/{event_id}/invite', 'EventController@invite');
-Route::post('api/event/{event_id}/post', 'PostController@create');
+Route::post('api/event/{event_id}/post', 'PostController@store');
+
+// Post API
+Route::delete('api/post/{post_id}', 'PostController@delete');
 
 // Admin
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
@@ -67,4 +70,4 @@ Route::put('api/request/{request_id}/accept', 'RequestController@accept');
 Route::delete('api/request/{request_id}/reject', 'RequestController@reject');
 
 // Comments
-Route::post('api/event/{event_id}/comment', 'CommentController@store')->name('createComment');
+Route::post('api/event/{event_id}/comment', 'CommentController@store');

@@ -26,16 +26,11 @@
                             @endforeach
                         </fieldset>
 
-                        <label for="date_from" class="form-label font-weight-bold">From</label>
-                        <input id="date_from" type="datetime-local" name="date_from" class="form-control">
+                        <label for="after_date" class="form-label font-weight-bold">After</label>
+                        <input id="after_date" type="datetime-local" name="after" class="form-control" value="{{ $after_date }}">
 
-                        <label for="date_to" class="form-label">To</label>
-                        <input id="date_to" type="datetime-local" value="{{ old('date_to') }}" name="date_to" class="form-control @if($errors->has('date_to')) is-invalid @endif">
-                        @if ($errors->has('date_to'))
-                        <div class="invalid-feedback d-block">
-                            {{ $errors->first('date_to') }}
-                        </div>
-                        @endif
+                        <label for="before_date" class="form-label">Before</label>
+                        <input id="before_date" type="datetime-local" name="before" class="form-control" value="{{ $before_date }}">
                     </div>
                     <button type="submit" class="btn btn-dark">Submit</button>
                 </form>

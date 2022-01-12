@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Event;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -17,29 +19,24 @@ class PostController extends Controller
         //
     }
 
-    public function create(Request $request, $event_id)
-    {
-        error_log('create');
-        if (!Auth::check()) return redirect('/login');
-        $event = Event::find($event_id);
-        $this->authorize('isHost', $event);
-        error_log('Trying to post');
-        dd('pls crash before adding');
-        
-        $post = new Post();
-        $post->text = $request->input('text');
-        $post->save();
-    }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $event_id)
     {
-        //
+        error_log('create');
+        if (!Auth::check()) return redirect('/login');
+        $event = Event::find($event_id);
+        $this->authorize('host', $event);
+
+        $post = new Post();
+        // TODO: Disallow invalid posts
+        $post->text = $request->input('text');
+        $post->event_id = $event->id;
+        $post->save();
     }
 
     /**
@@ -49,17 +46,6 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Post $post)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Post $post)
     {
         //
     }
@@ -82,8 +68,11 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function delete($post_id)
     {
-        //
+        $post = Post::find($post_id);
+        $this->authorize('host', $post->event()->first()); // TODO: PostPolicy should be required?
+        $post = Post::destroy($post_id); // TODO: This will not work when we add polls
+        return response(null, 200);;
     }
 }

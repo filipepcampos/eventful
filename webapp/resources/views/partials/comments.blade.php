@@ -1,13 +1,13 @@
 <h2 class="display-4">Comments</h2>
-<form class="form-group mb-3" method="POST" action="{{ route('createComment') }}" enctype="multipart/form-data">
+<form id="comment-form" class="form-group mb-3">
     <h1>Add comment:</h1>
-    <textarea id="content" maxlength="8192" type="textarea" name="content" class="form-control @if($errors->has('content')) is-invalid @endif" required></textarea>
+    <textarea maxlength="200" type="textarea" name="content" class="form-control @if($errors->has('content')) is-invalid @endif" required></textarea>
     @if ($errors->has('content'))
         <div class="invalid-feedback d-block">
             {{ $errors->first('content') }}
         </div>
     @endif
-    <input type="file" name="files" multiple>
-    <button type="submit" class="btn btn-secondary">Publish</button>
+    <input type="file" name="files[]" multiple>
 </form>
+<a type="button" class="btn btn-secondary" onclick="addComment('{{ $event->id }}');">Publish</a>
 @each('partials.comment', $comments, 'comment')

@@ -17,7 +17,7 @@ class Post extends Model
   /**
    * The event this post belongs to
    */
-  public function events() {
-    return $this->hasMany('App\Models\Event');
+  public function event() {
+    return $this->belongsTo('App\Models\Event');
   }
 }

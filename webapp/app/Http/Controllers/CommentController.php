@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use App\Models\Comment;
+use App\Models\Event;
+use App\Http\Requests\CommentCreateRequest;
 
 class CommentController extends Controller
 {
@@ -36,30 +41,33 @@ class CommentController extends Controller
     public function store(CommentCreateRequest $request, $eventId)
     {
         if (!Auth::check()) return redirect('/login');
-        $this->authorize('create', Comment::class);
+        $event = Event::find($eventId);
+        $this->authorize('create', $event);
 
         $comment = new Comment();
         $event = Event::find($eventId);
 
         $comment->author_id = Auth::user()->id;
         $comment->event_id = $event->id;
-        if ($request->has('files')) {
-            // para cada ficheiro
-                // adicionar entrada na tabela File na base de dados
-        }
         $comment->content = $request->input('content');
 
-        
-        $files = $request->has('files') ? $request->input('files') : [];
-        foreach ($files as $file) {
-            $insertions[] = [
-                //'path' => TODO  
-                'comment_id' => $comment->id
-            ];
-        }
-        DB::table('file')->insert($insertions);
+        if ($request->has('files')) {
+            $files = !empty($request->file('files')) ? $request->file('files') : [];
 
-        return redirect('event/' . $event->id);
+            $insertions = array();
+            foreach ($files as $file) {
+                $path = $file->store('comments');
+                $insertions[] = [
+                    'path' => $path,
+                    'comment_id' => $comment->id
+                ];
+            }
+            DB::table('file')->insert($insertions);
+        }
+
+        $comment->save();
+
+        return redirect('event/' . $eventId); // TODO: NOT REDIRECT
     }
 
     /**
