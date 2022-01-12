@@ -16,7 +16,7 @@ class EventPolicy
         return $event->host()->first()->id === $user->id;
     }
 
-    private function isAttendee(User $user, Event $event)
+    public function isAttendee(User $user, Event $event)
     {
         return $user->attending()->get()->contains($event);
     }
@@ -26,7 +26,7 @@ class EventPolicy
         return $this->isHost($user,$event) || $this->isAttendee($user,$event);
     }
 
-    private function isAdmin(User $user) {
+    public function isAdmin(User $user) {
         return $user->is_admin;
     }
 

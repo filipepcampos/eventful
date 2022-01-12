@@ -1045,13 +1045,10 @@ paths:
             schema:
               type: object
               properties:
-                title:
-                  type: string
-                description:
+                text:
                   type: string
               required:
-                - title
-                - description    
+                - text   
       responses:
         '200':
           description: 'Success'

@@ -55,7 +55,8 @@ class EventController extends Controller
         $search = $request->query('search');
         $searchString = str_replace(' ', ':*&', $search);
         $tagsSelected = $request->query('tag');
-        $tags = Tag::all();
+        $date_from = $request->query('date_from');
+        $date_to = $request->query('date_to');
         if (empty($tagsSelected)) {
             $events = Event::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString])->get();
         } else {
@@ -63,6 +64,7 @@ class EventController extends Controller
                 $q->whereIn('id', $tagsSelected);
             })->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString])->get();
         }
+        $tags = Tag::all();
         return view('pages.search')->with('search', $search)->with('tagsSelected', $tagsSelected)->with('tags', $tags)->with('events', $events);
     }
 

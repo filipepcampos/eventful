@@ -17,14 +17,18 @@ class PostController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create(Request $request, $event_id)
     {
-        //
+        error_log('create');
+        if (!Auth::check()) return redirect('/login');
+        $event = Event::find($event_id);
+        $this->authorize('isHost', $event);
+        error_log('Trying to post');
+        dd('pls crash before adding');
+        
+        $post = new Post();
+        $post->text = $request->input('text');
+        $post->save();
     }
 
     /**

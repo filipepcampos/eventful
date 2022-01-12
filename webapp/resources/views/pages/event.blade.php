@@ -9,8 +9,8 @@
 @endsection
 
 @section('content')
-
 <script type="text/javascript" src="{{ asset('/js/requestsManagement.js') }}" ></script>
+
 
 @can('viewContent', $event)
 <script type="text/javascript" src="{{ asset('/js/attendeeManagement.js') }}" ></script>
@@ -19,7 +19,18 @@
 @endcan
 
 @can('host', $event)
+<!-- Main Quill library -->
+<script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+<!-- Theme included stylesheets -->
+<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+
+<script type="text/javascript" src="{{ asset('/js/postManagement.js') }}" defer></script>
+
 @include('partials.requestsListModal', ['requests' => $event->requests()->get()])
+@include('partials.postCreationModal', ['event_id' => $event->id])
 @endcan
 
 <div class="container">
@@ -96,6 +107,7 @@
             @include('partials.comments', ['comments' => $event->comments()->orderBy('creation_date', 'DESC')->get()])
         </div>
         <div class="col">
+            <a class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#postCreation">Create Post</a>
             @include('partials.posts', ['posts' => $event->posts()->orderBy('creation_date', 'DESC')->get()])
         </div>
     </div>

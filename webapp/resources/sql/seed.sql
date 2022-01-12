@@ -86,8 +86,7 @@ CREATE TABLE tag (
 
 CREATE TABLE post (
     id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
-    description TEXT NOT NULL,
+    text TEXT NOT NULL,
     creation_date TIMESTAMP NOT NULL DEFAULT NOW() CONSTRAINT post_creation_date_check CHECK (creation_date <= NOW()),
     event_id INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -121,7 +120,8 @@ CREATE TABLE rating (
 );
 
 CREATE TABLE file (
-    comment_id INTEGER PRIMARY KEY REFERENCES comment ON UPDATE CASCADE ON DELETE CASCADE,
+    file_id SERIAL PRIMARY KEY, 
+    comment_id INTEGER rEFERENCES comment ON UPDATE CASCADE ON DELETE CASCADE,
     path TEXT NOT NULL CONSTRAINT file_path_uk UNIQUE
 );
 
@@ -1290,6 +1290,7 @@ INSERT INTO tag(id,name) VALUES
 
 -- ========================= post =========================
 
+/*
 INSERT INTO post(id,title,description,creation_date,event_id) VALUES
   (0,'elit.','gravida sagittis. Duis gravida. Praesent eu nulla at sem','2021-10-20 20:06:02',126),
   (1,'eu','lorem, eget mollis lectus pede et risus. Quisque','2020-12-19 10:41:51',92),
@@ -1441,18 +1442,19 @@ INSERT INTO post(id,title,description,creation_date,event_id) VALUES
   (147,'vulputate','non leo. Vivamus nibh dolor, nonummy','2020-11-26 05:00:06',14),
   (148,'urna.','fringilla euismod enim. Etiam gravida molestie arcu. Sed','2020-01-21 00:44:37',14),
   (149,'sociosqu','Cras sed leo. Cras vehicula aliquet libero. Integer','2020-05-02 16:00:08',9);
-  
--- ========================= poll =========================
+*/
 
+-- ========================= poll =========================
+/*
 INSERT INTO poll(post_id) VALUES
   (0),
   (1),
   (10),
   (128),
-  (54);
+  (54);*/
 
 -- ========================= option =========================
-
+/*
 INSERT INTO option(id,poll_id,description) VALUES
   (0,0,'Mauris non dui nec urna suscipit'),
   (1,0,'dolor vitae dolor. Donec fringilla. Donec feugiat'),
@@ -1474,7 +1476,7 @@ INSERT INTO option(id,poll_id,description) VALUES
   (17,54,'ultrices sit amet, risus. Donec nibh enim, gravida'),
   (18,54,'eget, venenatis a, magna. Lorem ipsum'),
   (19,54,'eu dolor egestas rhoncus. Proin nisl');
-
+*/
 -- ========================= comment =========================
 
 INSERT INTO comment(id,author_id,event_id,content,creation_date) VALUES
@@ -1648,13 +1650,14 @@ INSERT INTO event_cancelled_notification_user(notification_id,user_id) VALUES
   (3, 50);
   
 -- ========================= vote =========================
-
+/*
 INSERT INTO vote(user_id,option_id) VALUES
   (112, 0),
   (143, 7),
   (107, 9),
   (2,0),
   (3,2);
+*/
 
 -- ========================= event_tag =========================
 

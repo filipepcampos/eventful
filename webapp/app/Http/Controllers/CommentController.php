@@ -33,9 +33,33 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CommentCreateRequest $request, $eventId)
     {
-        //
+        if (!Auth::check()) return redirect('/login');
+        $this->authorize('create', Comment::class);
+
+        $comment = new Comment();
+        $event = Event::find($eventId);
+
+        $comment->author_id = Auth::user()->id;
+        $comment->event_id = $event->id;
+        if ($request->has('files')) {
+            // para cada ficheiro
+                // adicionar entrada na tabela File na base de dados
+        }
+        $comment->content = $request->input('content');
+
+        
+        $files = $request->has('files') ? $request->input('files') : [];
+        foreach ($files as $file) {
+            $insertions[] = [
+                //'path' => TODO  
+                'comment_id' => $comment->id
+            ];
+        }
+        DB::table('file')->insert($insertions);
+
+        return redirect('event/' . $event->id);
     }
 
     /**
