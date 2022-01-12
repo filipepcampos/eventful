@@ -1,8 +1,7 @@
 class AJAXRequest {
-    constructor(url, type, encoding='application/x-www-form-urlencoded'){
+    constructor(url, type){
         this.url = url;
         this.type = type;
-        this.encoding = encoding;
 
         let csrf_token = document.head.querySelector("[name~=csrf-token][content]").content;
         this.params = "_token="+csrf_token;
@@ -24,7 +23,7 @@ class AJAXRequest {
             };
         }
         if(this.params != null){
-            xhr.setRequestHeader('Content-type', this.encoding);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.send(this.params);
         } else {
             xhr.send();
