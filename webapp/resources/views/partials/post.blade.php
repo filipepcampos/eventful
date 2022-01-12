@@ -3,7 +3,7 @@
     <p>{{$post->creation_date}}</p>
     <div>
         @can('host', $event)
-        <a class="btn btn-outline-primary" type="button" data-bs-toggle="modal" href="#postEditor" onclick="editPost('{{ $post->id }}')">Edit</a>
+        <a class="btn btn-outline-primary" type="button" data-bs-toggle="modal" href="#postEditor" onclick="openPostEditorForEdit('{{ $post->id }}')">Edit</a>
         <a class="btn btn-outline-danger" onclick="deletePost('{{ $post->id }}')">Delete</a>
         @endcan
     </div>

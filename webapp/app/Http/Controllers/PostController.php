@@ -27,7 +27,6 @@ class PostController extends Controller
      */
     public function store(Request $request, $event_id)
     {
-        error_log('create');
         if (!Auth::check()) return redirect('/login');
         $event = Event::find($event_id);
         $this->authorize('host', $event);
@@ -57,9 +56,14 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $post_id)
     {
-        //
+        if (!Auth::check()) return redirect('/login');
+        $post = Post::find($post_id);
+        $this->authorize('host', $post->event()->first()); // TODO: Post policy?
+        // TODO: Check for invalid content?
+        $post->text = $request->input('text');
+        $post->save();
     }
 
     /**

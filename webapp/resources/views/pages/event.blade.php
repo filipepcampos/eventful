@@ -108,7 +108,6 @@
             @include('partials.comments', ['comments' => $event->comments()->orderBy('creation_date', 'DESC')->get()])
         </div>
         <div class="col">
-            <a class="btn btn-secondary mb-2" type="button" data-bs-toggle="modal" href="#postEditor">Create Post</a>
             @include('partials.posts', ['posts' => $event->posts()->orderBy('creation_date', 'DESC')->get(), 'event' => $event])
         </div>
     </div>
