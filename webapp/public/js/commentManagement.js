@@ -23,10 +23,11 @@ function addComment(eventId) {
             }
         };
     }
-    xhr.setRequestHeader('Content-type', 'multipart/form-data');
     xhr.setRequestHeader('X-CSRF-TOKEN', document.head.querySelector("[name~=csrf-token][content]").content);
     let formData = new FormData();
     formData.append('content', content);
-    if (files.length > 0) formData.append('files', files);
+    for(let file of files) {
+        formData.append('files[]', file);
+    }
     xhr.send(formData);
 }
