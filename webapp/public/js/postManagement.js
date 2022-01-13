@@ -7,7 +7,7 @@ function createPost(eventId) {
     r.setParam('text', json);
     r.send(function (xhr) {
         if(xhr.status == 200){
-            createHTMLpost(json);
+            createHTMLPost(json, xhr.response);
         } else {
             console.log("Nope"); // TODO: What to do on error?
         }
@@ -44,22 +44,53 @@ function editPost(postId) {
     });
 }
 
+function createHTMLPostButtons(id){
+    let div = document.createElement('div');
+
+    let editButton = document.createElement('a');
+    editButton.classList.add('btn', 'btn-outline-primary');
+    editButton.setAttribute('data-bs-toggle', 'modal');
+    editButton.setAttribute('href', '#postEditor');
+    editButton.setAttribute('type', 'button');
+    editButton.onclick = () => openPostEditorForEdit(id);
+    editButton.innerHTML = 'Edit';
+
+    let deleteButton = document.createElement('a');
+    deleteButton.classList.add('btn', 'btn-outline-danger');
+    deleteButton.setAttribute('type', 'button');
+    deleteButton.onclick = () => deletePost(id);
+    deleteButton.innerHTML = 'Delete';
+
+    let whitespace = document.createElement('span');
+    whitespace.innerHTML = '&nbsp';
+
+    div.appendChild(editButton);
+    div.appendChild(whitespace);
+    div.appendChild(deleteButton);
+
+    return div;
+}
+
 // Create an HTML element for new post
-function createHTMLpost(json){
+function createHTMLPost(json, id){
     let postList = document.getElementById("postList");
 
     let row = document.createElement('div');
-    row.classList.add('row');
+    row.classList.add('row', 'my-5', 'border');
+    row.id = 'postRow' + id;
 
     let post = document.createElement('p');
-    post.classList.add("border");
-    post.classList.add("postText");
+    post.classList.add('postText');
+    post.id = 'post' + id;
     post.setAttribute('delta', json);
     row.appendChild(post);
 
     let date = document.createElement('p');
     date.innerHTML = 'Now'; // TODO: Exhibit date
     row.appendChild(date);
+
+    let buttonDiv = createHTMLPostButtons(id);
+    row.appendChild(buttonDiv);
 
     postList.insertBefore(row, postList.firstChild);
     loadPost(post);

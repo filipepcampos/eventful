@@ -5,7 +5,7 @@
         <div class="modal-header">
             <h5 class="modal-title" id="postEditorLabel">Post</h5>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="overflow-y:hidden">
             <div id="postEditorQuill">
             </div>
         </div>
