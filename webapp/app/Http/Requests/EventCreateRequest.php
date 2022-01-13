@@ -30,8 +30,7 @@ class EventCreateRequest extends FormRequest
             'location' => 'required|string|min:1|max:255',
             'realization_date' => 'required|date|after:today',
             'visibility' => 'required|string',
-            'accessibility' => 'required|string',
-            //'tag[]' => 'array',
+            'access' => 'required|string',
             'capacity' => 'integer',
             'price' => 'required|numeric|between:0,999999.99'
         ];
