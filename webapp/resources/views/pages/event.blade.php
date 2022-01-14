@@ -15,11 +15,7 @@
 @can('viewContent', $event)
 <script type="text/javascript" src="{{ asset('/js/attendeeManagement.js') }}"></script>
 <script type="text/javascript" src="{{ asset('/js/commentManagement.js') }}"></script>
-@include('partials.attendeeListModal', ['event' => $event])
-@include('partials.inviteUserModal', ['event' => $event])
-@endcan
 
-@can('host', $event)
 <!-- Main Quill library -->
 <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -29,9 +25,13 @@
 <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
 
 <script type="text/javascript" src="{{ asset('/js/postManagement.js') }}" defer></script>
-
-@include('partials.requestsListModal', ['requests' => $event->requests()->get()])
+@include('partials.attendeeListModal', ['event' => $event])
+@include('partials.inviteUserModal', ['event' => $event])
 @include('partials.postEditorModal', ['event_id' => $event->id])
+@endcan
+
+@can('host', $event)
+@include('partials.requestsListModal', ['requests' => $event->requests()->get()])
 @endcan
 
 <div class="container">

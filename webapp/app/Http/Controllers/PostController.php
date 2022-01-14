@@ -19,6 +19,18 @@ class PostController extends Controller
         //
     }
 
+    // TODO: Better documentation
+    private function getTextLengthFromDelta($text){
+        $delta = json_decode($text);
+        $text_length = 0;
+        foreach($delta->{'ops'} as $op){ // Add up all the strlens in the text (delta format)
+            if(property_exists($op, 'insert')){
+                $text_length += strlen($op->{'insert'});
+            }
+        }
+        return $text_length;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -32,11 +44,13 @@ class PostController extends Controller
         $this->authorize('host', $event);
 
         $request->validate([
-                'text' => 'required|max:16384',
-                ]);
-        if($request->input('text') )
+            'text' => 'required',
+            ]);
+        if($this->getTextLengthFromDelta($request->input('text')) > 8196){
+            return response(null, 302); // TODO: Document this or is it unecessary?
+        }
+
         $post = new Post();
-        // TODO: Disallow invalid posts
         $post->text = $request->input('text');
         $post->event_id = $event->id;
         $post->save();
@@ -68,6 +82,9 @@ class PostController extends Controller
         $request->validate([
             'text' => 'required|max:16384',
             ]);
+        if($this->getTextLengthFromDelta($request->input('text')) > 8196){
+            return response(null, 302); // TODO: Document this or is it unecessary?
+        }
 
         $post = Post::find($post_id);
         $this->authorize('host', $post->event()->first()); // TODO: Post policy?
