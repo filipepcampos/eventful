@@ -890,7 +890,7 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (149,'quuuuamar','cursus.vestibulum@hotmail.edu','CIB19EIU8WU','Alvin Mccarthy','03/11/1953');
 
 select setval('users_id_seq', (select max(id) from users));
-INSERT INTO users(username,is_admin,email,password,name,birthdate) VALUES ('admin','True','admin@eventful.com','$2y$10$ZV9u8LC4QKYAQnIz2KKCSuEC.AH1LkkQdGFY8RlloR3eIoqICF1j2','Admin','01/01/1960');
+INSERT INTO users(username,is_admin,email,password,name,birthdate) VALUES ('admin','True','admin@eventful.com','$2y$10$TEww9EtxnNwNbst5EUMlbupRzJraYSCzQX848msWUu9aAKvm/hUO.','Admin','01/01/1960');
 UPDATE users SET profile_pic='profile_pictures/default.png';
 
 -- ========================= unblock_appeal =========================
