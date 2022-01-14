@@ -51,8 +51,10 @@ class CommentController extends Controller
         $comment->event_id = $event->id;
         $comment->content = $request->input('content');
 
-        if ($request->has('files')) {
-            $files = !empty($request->file('files')) ? $request->file('files') : [];
+        $comment->save();  // Comment must be saved before file upload, because the files need to know the comment id
+
+        if ($request->hasfile('files')) {
+            $files = $request->file('files');
 
             $insertions = array();
             foreach ($files as $file) {
@@ -64,8 +66,6 @@ class CommentController extends Controller
             }
             DB::table('file')->insert($insertions);
         }
-
-        $comment->save();
 
         return redirect('event/' . $eventId); // TODO: NOT REDIRECT
     }
