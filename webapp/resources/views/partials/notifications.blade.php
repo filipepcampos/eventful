@@ -3,7 +3,7 @@
     <div class="toast mb-1" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" id="noNotificationsToast" hidden>
         <div class="toast-header">
             <strong class="me-auto">No notifications</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" onclick="hideNotifications()"></button>
         </div>
         <div class="toast-body">
             You've caught up with the news :)

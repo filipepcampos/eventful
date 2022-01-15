@@ -42,7 +42,6 @@ function markAsRead(userId, notificationId){
 }
 
 function noNotifications(){
-    notificationsHidden = true;
     document.getElementById('noNotificationsToast').hidden = false;
 }
 
