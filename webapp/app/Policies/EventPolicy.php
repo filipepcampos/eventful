@@ -142,4 +142,19 @@ class EventPolicy
     {
         //
     }
+
+    public function createPost(User $user, Event $event)
+    {
+        return Auth::check() && $this->isHost($user, $event);
+    }
+
+    public function editPost(User $user, Event $event)
+    {
+        return Auth::check() && $this->isHost($user, $event);
+    }
+
+    public function deletePost(User $user, Event $event)
+    {
+        return Auth::check() && ($this->isHost($user, $event) || $this->isAdmin($user));
+    }
 }

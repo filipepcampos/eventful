@@ -1,5 +1,6 @@
 // Send AJAX request to create post
-function createPost(eventId) {
+function createPost(eventId, canEdit, canDelete) {
+    console.log(canEdit, canDelete);
     let url = '/api/event/' + eventId + '/post';
     let contents = quill.getContents();
     let json = JSON.stringify(contents);
@@ -7,7 +8,7 @@ function createPost(eventId) {
     r.setParam('text', json);
     r.send(function (xhr) {
         if(xhr.status == 200){
-            createHTMLPost(json, xhr.response);
+            createHTMLPost(json, xhr.response, canEdit, canDelete);
         } else {
             console.log("Nope"); // TODO: What to do on error?
         }
@@ -44,35 +45,40 @@ function editPost(postId) {
     });
 }
 
-function createHTMLPostButtons(id){
+function createHTMLPostButtons(id, canEdit, canDelete){
+    console.log("creating html post buttons with canEdit / canDelete ", canEdit, canDelete);
     let div = document.createElement('div');
 
-    let editButton = document.createElement('a');
-    editButton.classList.add('btn', 'btn-outline-primary');
-    editButton.setAttribute('data-bs-toggle', 'modal');
-    editButton.setAttribute('href', '#postEditor');
-    editButton.setAttribute('type', 'button');
-    editButton.onclick = () => openPostEditorForEdit(id);
-    editButton.innerHTML = 'Edit';
-
-    let deleteButton = document.createElement('a');
-    deleteButton.classList.add('btn', 'btn-outline-danger');
-    deleteButton.setAttribute('type', 'button');
-    deleteButton.onclick = () => deletePost(id);
-    deleteButton.innerHTML = 'Delete';
+    if(canEdit){
+        let editButton = document.createElement('a');
+        editButton.classList.add('btn', 'btn-outline-primary');
+        editButton.setAttribute('data-bs-toggle', 'modal');
+        editButton.setAttribute('href', '#postEditor');
+        editButton.setAttribute('type', 'button');
+        editButton.onclick = () => openPostEditorForEdit(id);
+        editButton.innerHTML = 'Edit';
+        div.appendChild(editButton);
+    }
 
     let whitespace = document.createElement('span');
     whitespace.innerHTML = '&nbsp';
-
-    div.appendChild(editButton);
     div.appendChild(whitespace);
-    div.appendChild(deleteButton);
+
+    if(canDelete){
+        let deleteButton = document.createElement('a');
+        deleteButton.classList.add('btn', 'btn-outline-danger');
+        deleteButton.setAttribute('type', 'button');
+        deleteButton.onclick = () => deletePost(id);
+        deleteButton.innerHTML = 'Delete';
+        div.appendChild(deleteButton);
+    }
 
     return div;
 }
 
 // Create an HTML element for new post
-function createHTMLPost(json, id){
+function createHTMLPost(json, id, canEdit, canDelete){
+    console.log("creating html post with canEdit / canDelete ", canEdit, canDelete);
     let postList = document.getElementById("postList");
 
     let row = document.createElement('div');
@@ -89,26 +95,26 @@ function createHTMLPost(json, id){
     date.innerHTML = 'Now'; // TODO: Exhibit date
     row.appendChild(date);
 
-    let buttonDiv = createHTMLPostButtons(id);
+    let buttonDiv = createHTMLPostButtons(id, canEdit, canDelete);
     row.appendChild(buttonDiv);
 
     postList.insertBefore(row, postList.firstChild);
     loadPost(post);
 }
 
-// Prepare editor for Create operation
+// Prepare editor for Create operopenPostEation
 function openPostEditorForCreate(eventId){
-    let button = document.getElementById('postEditorSubmitButton');
-    button.onclick = () => { createPost(eventId); };
-    button.innerHTML = 'Create';
+    document.getElementById('postEditorCreateButton').hidden = false;
+    document.getElementById('postEditorEditButton').hidden = true;
     clearPostEditor();
 }
 
 // Prepare editor for Update operation
 function openPostEditorForEdit(postId){
-    let button = document.getElementById('postEditorSubmitButton');
-    button.onclick = () => { editPost(postId); };
-    button.innerHTML = 'Update';
+    document.getElementById('postEditorCreateButton').hidden = true;
+    let editButton = document.getElementById('postEditorEditButton');
+    editButton.hidden = false;
+    editButton.onclick = () => { editPost(postId) };
     let post = document.getElementById('post' + postId);
     let postDelta = post.getAttribute('delta');
     quill.setContents(JSON.parse(postDelta), 'api');
