@@ -11,12 +11,12 @@ class EventPolicy
 {
     use HandlesAuthorization;
 
-    private function isHost(User $user, Event $event)
+    public static function isHost(User $user, Event $event)
     {
         return $event->host()->first()->id === $user->id;
     }
 
-    public function isAttendee(User $user, Event $event)
+    public static function isAttendee(User $user, Event $event)
     {
         return $user->attending()->get()->contains($event);
     }
@@ -26,7 +26,7 @@ class EventPolicy
         return $this->isHost($user,$event) || $this->isAttendee($user,$event);
     }
 
-    public function isAdmin(User $user) {
+    public static function isAdmin(User $user) {
         return $user->is_admin;
     }
 

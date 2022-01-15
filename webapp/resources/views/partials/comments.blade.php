@@ -9,5 +9,7 @@
     @endif
     <input type="file" name="files[]" multiple>
 </form>
-<a type="button" class="btn btn-secondary" onclick="addComment('{{ $event->id }}');">Publish</a>
+@can('create', $event)
+    <a type="button" class="btn btn-secondary" onclick="addComment('{{ $event->id }}');">Publish</a>
+@endcan
 @each('partials.comment', $comments, 'comment')

@@ -30,3 +30,30 @@ class AJAXRequest {
         }
     }
 }
+
+class FormDataRequest {
+    constructor(url) {
+        this.url = url;
+        this.formData = new FormData();
+    }
+
+    setParam(name, value) {
+        this.formData.append(name, value);
+    }
+
+    send(func) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', BASE_URL + this.url, true);
+        let csrf_token = document.head.querySelector("[name~=csrf-token][content]").content;
+        xhr.setRequestHeader('X-CSRF-TOKEN', csrf_token);
+
+        if(func){
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == XMLHttpRequest.DONE){
+                    func(xhr);
+                }
+            };
+        }
+        xhr.send(this.formData);
+    }
+}

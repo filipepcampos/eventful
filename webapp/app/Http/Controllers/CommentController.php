@@ -67,7 +67,7 @@ class CommentController extends Controller
             DB::table('file')->insert($insertions);
         }
 
-        return redirect('event/' . $eventId); // TODO: NOT REDIRECT
+        //return redirect('event/' . $eventId); // TODO: NOT REDIRECT
     }
 
     /**
