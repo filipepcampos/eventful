@@ -88,7 +88,6 @@
     @endif
 </div>
 
-<!--
 <div class="form-group mb-3">
     <div class="dropdown">
     <a class="btn btn-secondary dropdown-toggle" data-bs-auto-close="outside" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -108,7 +107,6 @@
     </ul>
     </div>
 </div>
--->
 
 <div class="form-group mb-3">
     <label for="capacity" class="form-label">Capacity</label>

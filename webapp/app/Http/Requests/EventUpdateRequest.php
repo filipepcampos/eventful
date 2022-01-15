@@ -30,7 +30,7 @@ class EventUpdateRequest extends FormRequest
             'location' => 'nullable|string|min:1|max:255',
             'realization_date' => 'nullable|date|after:today',
             'visibility' => 'nullable|string',
-            'accessibility' => 'nullable|string',
+            'access' => 'nullable|string',
             'capacity' => 'nullable|integer',
             'price' => 'nullable|numeric|between:0,999999.99'
         ];
