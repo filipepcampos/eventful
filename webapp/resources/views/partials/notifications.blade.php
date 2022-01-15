@@ -6,7 +6,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-            You've catch up with the news :)
+            You've caught up on the news :)
         </div>
     </div>
     @foreach(Auth::user()->unreadNotifications as $notification)
