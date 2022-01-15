@@ -44,6 +44,7 @@ Route::post('api/event/{event_id}/post', 'PostController@store');
 
 // Post API
 Route::delete('api/post/{post_id}', 'PostController@delete');
+Route::put('api/post/{post_id}', 'PostController@update');
 
 // Admin
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){

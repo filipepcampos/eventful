@@ -19,6 +19,18 @@ class PostController extends Controller
         //
     }
 
+    // TODO: Better documentation
+    private function getTextLengthFromDelta($text){
+        $delta = json_decode($text);
+        $text_length = 0;
+        foreach($delta->{'ops'} as $op){ // Add up all the strlens in the text (delta format)
+            if(property_exists($op, 'insert')){
+                $text_length += strlen($op->{'insert'});
+            }
+        }
+        return $text_length;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -27,16 +39,22 @@ class PostController extends Controller
      */
     public function store(Request $request, $event_id)
     {
-        error_log('create');
         if (!Auth::check()) return redirect('/login');
         $event = Event::find($event_id);
-        $this->authorize('host', $event);
+        $this->authorize('createPost', $event);
+
+        $request->validate([
+            'text' => 'required',
+            ]);
+        if($this->getTextLengthFromDelta($request->input('text')) > 8196){
+            return response(null, 302); // TODO: Document this or is it unecessary?
+        }
 
         $post = new Post();
-        // TODO: Disallow invalid posts
         $post->text = $request->input('text');
         $post->event_id = $event->id;
         $post->save();
+        return response($post->id, 200); // TODO: If this isn't an horribly idea, it should be documented on a7
     }
 
     /**
@@ -57,9 +75,22 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $post_id)
     {
-        //
+        if (!Auth::check()) return redirect('/login');
+
+        $request->validate([
+            'text' => 'required|max:16384',
+            ]);
+        if($this->getTextLengthFromDelta($request->input('text')) > 8196){
+            return response(null, 302); // TODO: Document this or is it unecessary?
+        }
+
+        $post = Post::find($post_id);
+        $this->authorize('editPost', $post->event()->first()); // TODO: Post policy?
+        // TODO: Check for invalid content?
+        $post->text = $request->input('text');
+        $post->save();
     }
 
     /**
@@ -71,7 +102,7 @@ class PostController extends Controller
     public function delete($post_id)
     {
         $post = Post::find($post_id);
-        $this->authorize('host', $post->event()->first()); // TODO: PostPolicy should be required?
+        $this->authorize('deletePost', $post->event()->first()); // TODO: PostPolicy should be required?
         $post = Post::destroy($post_id); // TODO: This will not work when we add polls
         return response(null, 200);;
     }
