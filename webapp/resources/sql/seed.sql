@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS request;
 DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS unblock_appeal;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS notifications;
 
 -----------------------------------------
 -- Types
@@ -58,7 +59,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE unblock_appeal (
-    user_id SERIAL PRIMARY KEY REFERENCES users ON UPDATE CASCADE,
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users ON UPDATE CASCADE,
     message TEXT NOT NULL
 );
 
@@ -206,6 +208,17 @@ CREATE TABLE event_tag (
     PRIMARY KEY (tag_id, event_id)
 );
 
+-- Notifications table created by laravel
+CREATE TABLE notifications (
+    "id" uuid NOT NULL, 
+    "type" varchar(255) NOT NULL, 
+    "notifiable_type" varchar(255) NOT NULL, 
+    "notifiable_id" bigint NOT NULL, 
+    "data" text NOT NULL, 
+    "read_at" timestamp(0) without time zone null, 
+    "created_at" timestamp(0) without time zone null, 
+    "updated_at" timestamp(0) without time zone null
+);
 
 DROP INDEX IF EXISTS user_event_attendee;
 DROP INDEX IF EXISTS event_comment;
@@ -887,7 +900,7 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
   (146,'Justin','nisi.sem.semper@outlook.couk','HMQ19KOV8KW','Octavia Reynolds','11/16/2013'),
   (147,'Nina','dignissim.lacus.aliquam@hotmail.net','JLU31NBX7MT','Judith Holder','07/18/1953'),
   (148,'Clio','egestas.blandit.nam@yahoo.org','RJI68QAI6NW','Katell Mejia','06/09/1958'),
-  (149,'quuuuamar','cursus.vestibulum@hotmail.edu','CIB19EIU8WU','Alvin Mccarthy','03/11/1953');
+  (149,'manny','manny@gmail.com','$2y$10$dqEP9Wq4kAzewTNid8o9Z.bhS2uWwNeNL9JuXfLFiP0yg0gF918OK','Manny','08/29/2001');
 
 select setval('users_id_seq', (select max(id) from users));
 INSERT INTO users(username,is_admin,email,password,name,birthdate) VALUES ('admin','True','admin@eventful.com','$2y$10$TEww9EtxnNwNbst5EUMlbupRzJraYSCzQX848msWUu9aAKvm/hUO.','Admin','01/01/1960');
@@ -901,6 +914,8 @@ INSERT INTO unblock_appeal(user_id,message) VALUES
   (67,'Nulla interdum. Curabitur dictum. Phasellus in felis. Nulla tempor'),
   (14,'Quisque porttitor eros nec tellus. Nunc lectus pede, ultrices'),
   (86,'amet diam eu dolor egestas');
+
+select setval('unblock_appeal_id_seq', (select max(id) from unblock_appeal));
 
 -- ========================= event =========================
 

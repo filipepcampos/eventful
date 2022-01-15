@@ -1,6 +1,6 @@
 function kick(eventId,userId) {
     let url = '/api/event/' + eventId + '/kick';
-    r = new AJAXRequest(url, 'DELETE');
+    r = new URLEncodedRequest(url, 'DELETE');
     r.setParam('user_id',userId);
     r.send(function (xhr) {
         if(xhr.status == 200){
@@ -18,7 +18,7 @@ function invite(eventId) {
     }
     let username = input_box.value;
     if(username != null){
-        r = new AJAXRequest(url, 'POST');
+        r = new URLEncodedRequest(url, 'POST');
         r.setParam('username', username);
         r.send(function (xhr) {
             if(xhr.status == 200){

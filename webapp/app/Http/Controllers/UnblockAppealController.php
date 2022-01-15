@@ -4,82 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\UnblockAppeal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UnblockAppealController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function create(Request $request)
     {
-        //
-    }
+        $this->authorize('create', App\Models\UnblockAppeal::class);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        $unblockAppeal = new UnblockAppeal;
+        $unblockAppeal->user_id = Auth::user()->id;
+        $unblockAppeal->message = $request->input('content');
+        $unblockAppeal->save();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\UnblockAppeal  $unblockAppeal
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UnblockAppeal $unblockAppeal)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\UnblockAppeal  $unblockAppeal
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UnblockAppeal $unblockAppeal)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\UnblockAppeal  $unblockAppeal
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, UnblockAppeal $unblockAppeal)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\UnblockAppeal  $unblockAppeal
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(UnblockAppeal $unblockAppeal)
-    {
-        //
+        return response(null, 200);
     }
 }

@@ -40,6 +40,11 @@
     <div class="col">
         <div class="row justify-content-center">
             @each('partials.eventCard', $events, 'event')
+            @forelse($events as $event)
+                @include('partials.eventCard', ['event' => $event])
+            @empty
+                <h3 class="w-50">No event matches your criteria, try tweaking the search parameters</h3>
+            @endforelse
         </div>
     </div>
 </div>

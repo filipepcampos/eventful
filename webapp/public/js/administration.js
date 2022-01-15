@@ -4,7 +4,7 @@ function deleteUser(userId){
 function blockUser(userId){
     let url = '/api/user/' + userId + '/block';
     console.log(url);
-    r = new AJAXRequest(url, 'PUT');
+    r = new URLEncodedRequest(url, 'PUT');
     let motive = 'sample motive';
     r.setParam('block_motive', motive);
     r.send(function (xhr) {
@@ -23,7 +23,7 @@ function blockUser(userId){
 
 function unblockUser(userId){
     let url = '/api/user/' + userId + '/unblock';
-    r = new AJAXRequest(url, 'PUT');
+    r = new URLEncodedRequest(url, 'PUT');
     r.send(function (xhr) {
         if(xhr.status == 200){
             let card = document.getElementById('userCard' + userId)

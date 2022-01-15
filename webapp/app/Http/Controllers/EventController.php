@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Tag;
+use App\Models\Invite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\EventCreateRequest;
 use App\Http\Requests\EventUpdateRequest;
+use App\Notifications\InviteReceived;
 
 class EventController extends Controller
 {
@@ -30,10 +32,7 @@ class EventController extends Controller
         $event = Event::find($event_id);
         $this->authorize('join', $event);
         $user = Auth::user();
-        DB::table('attendee')->insert([
-            'user_id' => $user->id,
-            'event_id' => $event->id
-        ]);
+        $event->attendees()->attach($user->id);
         return redirect('event/' . $event->id);
     }
 
@@ -43,10 +42,7 @@ class EventController extends Controller
         $event = Event::find($event_id);
         $this->authorize('leave', $event);
         $user = Auth::user();
-        DB::table('attendee')->where([
-            ['user_id', '=', $user->id],
-            ['event_id', '=', $event->id]
-        ])->delete();
+        $event->attendees()->detach($user->id);
         return redirect('/');
     }
 
@@ -133,15 +129,8 @@ class EventController extends Controller
         $event->price = $request->input('price');
         $event->save();
 
-        /*$tagsSelected = $request->has('tag') ? $request->input('tag') : [];
-        foreach ($tagsSelected as $tag) {
-            $insertions[] = [
-                'tag_id' => $tag,
-                'event_id' => $event->id
-            ];
-        }
-
-        DB::table('event_tag')->insert($insertions);*/
+        $tagsSelected = $request->has('tag') ? $request->input('tag') : [];
+        $event->tags()->attach($tagsSelected);
 
         return redirect('event/' . $event->id);
     }
@@ -209,10 +198,7 @@ class EventController extends Controller
         $this->authorize('update', $event);
         $user_id = $request->input('user_id');
         if ($user_id != null) {
-            DB::table('attendee')->where([
-                ['user_id', '=', $user_id],
-                ['event_id', '=', $event->id]
-            ])->delete();
+            $event->attending()->detach($user_id);
         }
         return response(null, 200);
     }
@@ -221,16 +207,16 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         $this->authorize('viewContent', $event);
+
         $username = $request->input('username');
+        $invitee = User::where('username', $username)->first();
 
-        $inviter_id = Auth::id();
-        $invitee_id = User::where('username', $username)->first()->id;
+        $invite = new Invite();
+        $invite->invitee_id = $invitee->id;
+        $invite->inviter_id = Auth::id();
+        $invite->event_id = $event->id;
 
-        DB::table('invite')->insert([
-            'invitee_id' => $invitee_id,
-            'inviter_id' => $inviter_id,
-            'event_id' => $event->id
-        ]);
+        $invitee->notify(new InviteReceived($invite));
         return response(null, 200);
     }
 
@@ -280,22 +266,8 @@ class EventController extends Controller
             $event->price = $request->input('price');
         }
 
-        $currentTags = $event->tags()->pluck('id')->toArray();
         $tagsSelected = $request->has('tag') ? $request->input('tag') : [];
-        $tagsToInsert = array_diff($tagsSelected, $currentTags);
-        $tagsToRemove = array_diff($currentTags, $tagsSelected);
-        if (!empty($tagsToInsert)) {
-            foreach ($tagsToInsert as $tag) {
-                $toInsert[] = [
-                    'tag_id' => $tag,
-                    'event_id' => $event->id
-                ];
-            }
-            DB::table('event_tag')->insert($toInsert);
-        }
-        if (!empty($tagsToRemove)) {
-            DB::table('event_tag')->where('event_id', $event->id)->whereIn('tag_id', $tagsToRemove)->delete();
-        }
+        $event->tags()->sync($tagsSelected);
 
         $event->save();
         return redirect('event/' . $event->id);

@@ -4,7 +4,11 @@
 @endcan
 
 <div id="postList">
-@foreach($posts as $post)
-    @include('partials.post', ['post' => $post, 'event' => $event])
-@endforeach
+@section('posts')
+    @forelse($posts as $post)
+        @include('partials.post', ['post' => $post, 'event' => $event])
+    @empty
+        <h3> No post has been created. </h3>
+    @endforelse
+@show
 </div>

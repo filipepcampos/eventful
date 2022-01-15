@@ -1,6 +1,6 @@
 function sendRequest(eventId) {
     let url = '/api/event/' + eventId + '/request';
-    r = new AJAXRequest(url, 'POST');
+    r = new URLEncodedRequest(url, 'POST');
     r.send(function (xhr) {
         if(xhr.status == 200){
             document.getElementById('request' + eventId).remove();
@@ -10,7 +10,7 @@ function sendRequest(eventId) {
 
 function accept(requestId) {
     let url = '/api/request/' + requestId + '/accept';
-    r = new AJAXRequest(url, 'PUT');
+    r = new URLEncodedRequest(url, 'PUT');
     r.send(function (xhr) {
         if(xhr.status == 200){
             document.getElementById('request' + requestId).remove();
@@ -20,7 +20,7 @@ function accept(requestId) {
 
 function reject(requestId) {
     let url = '/api/request/' + requestId + '/reject';
-    r = new AJAXRequest(url, 'DELETE');
+    r = new URLEncodedRequest(url, 'DELETE');
     r.send(function (xhr) {
         if(xhr.status == 200){
             document.getElementById('request' + requestId).remove();

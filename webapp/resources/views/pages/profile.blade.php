@@ -8,8 +8,6 @@
 @endsection
 
 @section('content')
-<script type="text/javascript" src="{{ asset('/js/invitesManagement.js') }}" ></script>
-@include('partials.invitesListModal', ['user' => $user])
 <div class="container my-5">
     <div class="d-flex flex-row justify-content-start">
         <img class="border border-2 border-secondary rounded w-25" src="{{ route('userImage', ['user_id' => $user->id]) }}" alt="Profile Picture">
@@ -42,10 +40,19 @@
                 <p>{{ $user->description }}</p>
             </div>
             @endif
+            
             @can('update', $user)
+            <script type="text/javascript" src="{{ asset('/js/invitesManagement.js') }}" ></script>
+            @include('partials.invitesListModal', ['user' => $user])
             <a class="btn btn-secondary my-2" type="button" data-bs-toggle="modal" href="#invites">View Invites</a>
             <a class="btn btn-secondary my-2" href='{{ route("updateUserForm", ["user_id" => $user->id]) }}'>Edit Profile</a>
             @endcan
+
+            @if (!is_null(Auth::user()->block_motive))
+            <script type="text/javascript" src="{{ asset('/js/unblockAppealManagement.js') }}" ></script>
+            @include('partials.sendUnblockAppealModal')
+            <a class="btn btn-secondary my-2" type="button" data-bs-toggle="modal" href="#sendUnblockAppeal">Send Unblock Appeal</a>
+            @endif
         </div>
     </div>
    

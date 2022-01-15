@@ -29,7 +29,15 @@ class UserUpdateRequest extends FormRequest
             'profile_pic' => 'nullable|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=100,min_height=100,ratio=1',
             'description' => 'nullable|string|min:1|max:8192',
             'email' => 'nullable|email|min:1|max:255|unique:users',
-            'password' => 'nullable|string|min:6|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+            ],
             'birthdate' => 'nullable|date|before:today'
         ];
     }

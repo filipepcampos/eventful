@@ -2,17 +2,13 @@
 
 namespace App\Policies;
 
+use App\Models\UnblockAppeal;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class UnblockAppealPolicy
 {
     use HandlesAuthorization;
-
-    private function isAdmin(User $user) {
-        return $user->is_admin;
-    }
 
     /**
      * Determine whether the user can view any models.
@@ -29,12 +25,12 @@ class UserPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\UnblockAppeal  $unblockAppeal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, User $model)
+    public function view(User $user, UnblockAppeal $unblockAppeal)
     {
-        return $user->id === $model->id || $this->isAdmin($user);
+        //
     }
 
     /**
@@ -45,41 +41,42 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        //
+        error_log('here');
+        return !is_null($user->block_motive) && is_null(UnblockAppeal::where('user_id', $user->id)->first());
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\UnblockAppeal  $unblockAppeal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, User $model)
-    {  
-        return ($user->id === $model->id && is_null($user->block_motive)) || $this->isAdmin($user);
+    public function update(User $user, UnblockAppeal $unblockAppeal)
+    {
+        //
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\UnblockAppeal  $unblockAppeal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user, UnblockAppeal $unblockAppeal)
     {
-        return $user->id === $model->id || $this->isAdmin($user);
+        //
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\UnblockAppeal  $unblockAppeal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, User $model)
+    public function restore(User $user, UnblockAppeal $unblockAppeal)
     {
         //
     }
@@ -88,10 +85,10 @@ class UserPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\UnblockAppeal  $unblockAppeal
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, User $model)
+    public function forceDelete(User $user, UnblockAppeal $unblockAppeal)
     {
         //
     }

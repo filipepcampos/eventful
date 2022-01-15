@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Event;
 use App\Models\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -29,10 +31,7 @@ class RequestController extends Controller
         $this->authorize('update', $request);
         $request->accepted = TRUE;
         $request->save();
-        DB::table('attendee')->insert([
-            'user_id' => $request->user_id,
-            'event_id' => $request->event_id
-        ]);
+        $request->event()->attach($request->requester);
         return response(null, 200);
     }
 

@@ -60,8 +60,8 @@
                     <a class="btn btn-danger btn-disabled mb-2 w-100" href="">Delete (Disabled)</a>
                     @endcan
 
-                    @can('host', $event)
-                    <a class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#requests">Requests</a>
+                    @can('isHost', $event)
+                        <a class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#requests">Requests</a>
                     @endcan
 
                     <!-- Regular user buttons -->

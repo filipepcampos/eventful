@@ -70,5 +70,10 @@ Route::post('api/event/{event_id}/request', 'RequestController@send');
 Route::put('api/request/{request_id}/accept', 'RequestController@accept');
 Route::delete('api/request/{request_id}/reject', 'RequestController@reject');
 
-// Comments
+// Comment API
 Route::post('api/event/{event_id}/comment', 'CommentController@store');
+Route::delete('api/comment/{comment_id}', 'CommentController@destroy');
+Route::post('api/comment/{comment_id}/rating', 'CommentController@addRating');
+
+// Unblock Appeal API
+Route::post('api/unblockAppeal', 'UnblockAppealController@create');

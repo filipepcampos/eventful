@@ -39,15 +39,11 @@ class EventPolicy
      */
     public function viewContent(User $user, Event $event)
     {
-        return $this->participatingInEvent($user, $event) || $this->isAdmin($user);
+        return ($this->participatingInEvent($user, $event) && is_null($user->block_motive)) || $this->isAdmin($user);
     }
 
     public function host(User $user, Event $event){
-        return $this->isHost($user, $event);
-    }
-
-    public function attend(User $user, Event $event){
-        return $this->isAttendee($user, $event);
+        return is_null($user->block_motive);
     }
 
     public function viewInformation(?User $user, Event $event){
@@ -72,7 +68,7 @@ class EventPolicy
      */
     public function create(User $user)
     {
-        return Auth::check() && !$this->isAdmin($user);
+        return Auth::check() && !$this->isAdmin($user) && is_null($user->block_motive);
     }
 
     /**
@@ -92,7 +88,8 @@ class EventPolicy
         return $event->is_accessible &&
             $event->realization_date->isFuture() &&
             !($this->participatingInEvent($user, $event)) &&
-            !($this->isAdmin($user));
+            !($this->isAdmin($user)) &&
+            is_null($user->block_motive);
     }
 
     public function request(User $user, Event $event) 
@@ -100,11 +97,12 @@ class EventPolicy
         return !$event->is_accessible &&
             $event->realization_date->isFuture() &&
             !($this->participatingInEvent($user, $event)) &&
-            !($this->isAdmin($user));
+            !($this->isAdmin($user)) &&
+            is_null($user->block_motive);
     }
 
     public function leave(User $user, Event $event){
-        return $this->isAttendee($user, $event);
+        return $this->isAttendee($user, $event) && is_null($user->block_motive);
     }
 
     /**
@@ -156,5 +154,10 @@ class EventPolicy
     public function deletePost(User $user, Event $event)
     {
         return Auth::check() && ($this->isHost($user, $event) || $this->isAdmin($user));
+    }
+
+    public function createComment(User $user, Event $event)
+    {
+        return Auth::check() && !$this->isAdmin($user) && $this->isAttendee($user, $event);
     }
 }

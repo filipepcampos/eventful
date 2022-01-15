@@ -4,11 +4,11 @@ function createPost(eventId, canEdit, canDelete) {
     let url = '/api/event/' + eventId + '/post';
     let contents = quill.getContents();
     let json = JSON.stringify(contents);
-    r = new AJAXRequest(url, 'POST');
+    r = new URLEncodedRequest(url, 'POST');
     r.setParam('text', json);
     r.send(function (xhr) {
         if(xhr.status == 200){
-            createHTMLPost(json, xhr.response, canEdit, canDelete);
+            refreshPosts(xhr.response);
         } else {
             console.log("Nope"); // TODO: What to do on error?
         }
@@ -18,11 +18,18 @@ function createPost(eventId, canEdit, canDelete) {
 // Send AJAX request to delete post
 function deletePost(postId) {
     let url = '/api/post/' + postId;
-    r = new AJAXRequest(url, 'DELETE');
+    r = new URLEncodedRequest(url, 'DELETE');
     r.send(function (xhr) {
-        if(xhr.status == 200){
+        if(xhr.status == 200) {
             document.getElementById('postRow' + postId).remove();
-        } else {
+            let postList = document.getElementById('postList');
+            if(postList.childElementCount == 0){
+                let msg = document.createElement('h3');
+                msg.innerHTML = ' No post has been created. ';
+                postList.appendChild(msg);
+            }
+        }
+        else {                        
             console.log("Nope"); // TODO: What to do on error?
         }
     });
@@ -34,72 +41,23 @@ function editPost(postId) {
     let newHTMLContent = quill.root.innerHTML;
     let contents = quill.getContents();
     let json = JSON.stringify(contents);
-    r = new AJAXRequest(url, 'PUT');
+    r = new URLEncodedRequest(url, 'PUT');
     r.setParam('text', json);
     r.send(function (xhr) {
         if(xhr.status == 200){
-            document.getElementById('post' + postId).innerHTML = newHTMLContent;
+            let post = document.getElementById('post' + postId);
+            post.innerHTML = newHTMLContent;
+            post.setAttribute('delta', contents);
         } else {
             console.log("Nope"); // TODO: What to do on error?
         }
     });
 }
 
-function createHTMLPostButtons(id, canEdit, canDelete){
-    console.log("creating html post buttons with canEdit / canDelete ", canEdit, canDelete);
-    let div = document.createElement('div');
-
-    if(canEdit){
-        let editButton = document.createElement('a');
-        editButton.classList.add('btn', 'btn-outline-primary');
-        editButton.setAttribute('data-bs-toggle', 'modal');
-        editButton.setAttribute('href', '#postEditor');
-        editButton.setAttribute('type', 'button');
-        editButton.onclick = () => openPostEditorForEdit(id);
-        editButton.innerHTML = 'Edit';
-        div.appendChild(editButton);
-    }
-
-    let whitespace = document.createElement('span');
-    whitespace.innerHTML = '&nbsp';
-    div.appendChild(whitespace);
-
-    if(canDelete){
-        let deleteButton = document.createElement('a');
-        deleteButton.classList.add('btn', 'btn-outline-danger');
-        deleteButton.setAttribute('type', 'button');
-        deleteButton.onclick = () => deletePost(id);
-        deleteButton.innerHTML = 'Delete';
-        div.appendChild(deleteButton);
-    }
-
-    return div;
-}
-
-// Create an HTML element for new post
-function createHTMLPost(json, id, canEdit, canDelete){
-    console.log("creating html post with canEdit / canDelete ", canEdit, canDelete);
-    let postList = document.getElementById("postList");
-
-    let row = document.createElement('div');
-    row.classList.add('row', 'my-5', 'border');
-    row.id = 'postRow' + id;
-
-    let post = document.createElement('p');
-    post.classList.add('postText');
-    post.id = 'post' + id;
-    post.setAttribute('delta', json);
-    row.appendChild(post);
-
-    let date = document.createElement('p');
-    date.innerHTML = 'Now'; // TODO: Exhibit date
-    row.appendChild(date);
-
-    let buttonDiv = createHTMLPostButtons(id, canEdit, canDelete);
-    row.appendChild(buttonDiv);
-
-    postList.insertBefore(row, postList.firstChild);
-    loadPost(post);
+function refreshPosts(content){
+    let postList = document.getElementById('postList');
+    postList.innerHTML = content;
+    loadPosts();
 }
 
 // Prepare editor for Create operopenPostEation
@@ -122,6 +80,7 @@ function openPostEditorForEdit(postId){
 
 // Load a post content to HTML
 function loadPost(post){
+    console.log("Loading a post");
     let postDelta = post.getAttribute('delta');
     quill.setContents(JSON.parse(postDelta), 'api');
     post.innerHTML = quill.root.innerHTML;

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 use App\Models\Comment;
 use App\Models\Event;
 use App\Http\Requests\CommentCreateRequest;
@@ -67,6 +68,11 @@ class CommentController extends Controller
             DB::table('file')->insert($insertions);
         }
 
+        $this->authorize('viewContent', $event);
+        $view = View::make('pages.event', ['comments' => $event->comments()->get(), 'event' => $event]);
+        $sections = $view->renderSections();
+        return $sections['comments']; // TODO: Update on A7
+
         //return redirect('event/' . $eventId); // TODO: NOT REDIRECT
     }
 
@@ -110,8 +116,18 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy($commentId)
     {
-        //
+        $comment = Comment::find($commentId);
+        $this->authorize('deleteComment', $comment);
+        // TODO: DELETE FILES ASSOCIATED IN STORAGE
+        $comment = Comment::destroy($commentId);
+        return response(null, 200);
+    }
+
+    public function addRating(Request $request, $commentId)
+    {
+        $comment = Comment::find($commendId);
+        $this->authorize('addRatingComment', $comment);
     }
 }

@@ -40,7 +40,12 @@
                 <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
             </li>
             <li class="nav-item mb-0">
-                <a class="nav-link text-white" href="{{ url('/user/' . Auth::id()) }}">{{ Auth::user()->name }}</a>
+                <a class="nav-link text-white" href="{{ url('/user/' . Auth::id()) }}">
+                    {{ Auth::user()->name }}
+                    @if (!is_null(Auth::user()->block_motive))
+                    (Blocked)
+                    @endif
+                </a>
             </li>
             @endif
         </ul>
@@ -53,6 +58,14 @@
         </ol>
     </nav>
     <section id="content">
+    @if(Auth::check())
+        @foreach(Auth::user()->notifications as $notification)
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>There's a notification here</strong> You should check in on some of those fields below.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endforeach
+    @endif
     @yield('content')
     </section>
 </main>

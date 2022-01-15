@@ -17,12 +17,11 @@ class CommentPolicy
         return $user->id == $comment->author_id;
     }
 
-    public function create(User $user, Event $event)
-    {
-        return Auth::check() && !EventPolicy::isAdmin($user) && EventPolicy::isAttendee($user, $event);
+    public function deleteComment(User $user, Comment $comment) {
+        return EventPolicy::isHost($user, Event::find($comment->event_id)) || $this->isOwner($user, $comment);
     }
 
-    public function delete(User $user, Comment $comment) {
-        return EventPolicy::isHost($user, Event::find($comment->event_id)) || $this->isOwner($user, $comment);
+    public function addRatingComment(User $user, Comment $comment) {
+        return !($this->isOwner($user, $comment));
     }
 }

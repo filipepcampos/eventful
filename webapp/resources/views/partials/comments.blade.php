@@ -7,9 +7,17 @@
             {{ $errors->first('content') }}
         </div>
     @endif
-    <input type="file" name="files[]" multiple>
+    <input class="form-control" type="file" name="files[]" multiple>
 </form>
-@can('create', $event)
-    <a type="button" class="btn btn-secondary" onclick="addComment('{{ $event->id }}');">Publish</a>
+@can('createComment', $event)
+    <a type="button" class="btn btn-secondary mb-5" onclick="addComment('{{ $event->id }}');">Publish</a>
 @endcan
-@each('partials.comment', $comments, 'comment')
+<div id="commentsList">
+@section('comments')
+    @forelse($comments as $comment)
+        @include('partials.comment', ['comment' => $comment, 'event' => $event])
+    @empty
+        <h3> No comment has been created. </h3>
+    @endforelse
+@show
+</div>
