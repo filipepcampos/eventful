@@ -35,7 +35,7 @@
 
     <div class="form-group mb-3">
     <label class="form-label" for="profile_pic">Profile Picture</label>
-    <input type="file" name="profile_pic" class="form-control-file @if($errors->has('profile_pic')) is-invalid @endif" id="profile_pic" accept="image/*">
+    <input type="file" name="profile_pic" class="form-control @if($errors->has('profile_pic')) is-invalid @endif" id="profile_pic" accept="image/*">
     @if ($errors->has('profile_pic'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('profile_pic') }}

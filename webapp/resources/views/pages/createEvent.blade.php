@@ -14,7 +14,7 @@
 {{ csrf_field() }}
 <div class="form-group mb-3">
     <label for="title" class="form-label">Title</label>
-    <input id="title" type="text" name="title" value="{{ old('title') }}" class="form-control @if($errors->has('title')) is-invalid @endif" required>
+    <input id="title" type="text" name="title" value="{{ old('title') }}" class="form-control @if($errors->has('title')) is-invalid @endif"required>
     @if ($errors->has('title'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('title') }}
@@ -24,7 +24,7 @@
 
 <div class="form-group mb-3">
     <label class="form-label" for="event_image">Event Image</label>
-    <input type="file" name="event_image" value="{{ old('event_image') }}" class="form-control-file @if($errors->has('file')) is-invalid @endif" id="event_image" accept="image/*">
+    <input type="file" name="event_image" value="{{ old('event_image') }}" class="form-control @if($errors->has('file')) is-invalid @endif" id="event_image" accept="image/*">
     @if ($errors->has('event_image'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('event_image') }}

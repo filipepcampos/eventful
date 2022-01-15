@@ -13,7 +13,7 @@
     {{ csrf_field() }}
     
     <div class="form-group mb-3">
-        <label for="email">Email</label>
+        <label for="email" class="form-label">Email</label>
         <input type="email" class="form-control @if($errors->has('email')) is-invalid @endif" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email" value="{{ old('email') }}" required autofocus>
         @if ($errors->has('email'))
         <div class="invalid-feedback d-block">
@@ -23,7 +23,7 @@
     </div>
 
     <div class="form-group mb-3">
-        <label for="password">Password</label>
+        <label for="password" class="form-label">Password</label>
         <input type="password" class="form-control  @if($errors->has('password')) is-invalid @endif" name="password" id="password" placeholder="Enter password" value="{{ old('password') }}" required>
         @if ($errors->has('password'))
         <span class="invalid-feedback" role="alert">

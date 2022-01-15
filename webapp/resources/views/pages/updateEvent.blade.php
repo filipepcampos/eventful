@@ -28,7 +28,7 @@
 
     <div class="form-group mb-3">
     <label class="form-label" for="event_image">Event Image</label>
-    <input type="file" name="event_image" class="form-control-file @if($errors->has('file')) is-invalid @endif" id="event_image" accept="image/*">
+    <input type="file" name="event_image" class="form-control @if($errors->has('file')) is-invalid @endif" id="event_image" accept="image/*">
     @if ($errors->has('event_image'))
         <div class="invalid-feedback d-block">
             {{ $errors->first('event_image') }}

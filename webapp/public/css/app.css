@@ -63,3 +63,8 @@ input.form-control {
 .form-check-label {
   padding-right: 4em;
 }
+
+input:focus {
+  border-color: var(--blue) !important;
+  border-width: 1px; 
+}
