@@ -69,3 +69,8 @@ input:focus {
   border-color: transparent !important;
   border-width: 1px; 
 }
+
+.bi-bell-fill:hover {
+  color:white !important;
+  cursor: pointer;
+}

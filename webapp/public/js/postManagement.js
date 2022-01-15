@@ -1,6 +1,5 @@
 // Send AJAX request to create post
 function createPost(eventId, canEdit, canDelete) {
-    console.log(canEdit, canDelete);
     let url = '/api/event/' + eventId + '/post';
     let contents = quill.getContents();
     let json = JSON.stringify(contents);

@@ -60,6 +60,8 @@ Route::get('user/{user_id}', 'UserController@show')->name('user');
 Route::put('user/{user_id}', 'UserController@update')->name('updateUser');
 Route::get('user/{user_id}/update', 'UserController@showUpdateForm')->name('updateUserForm'); 
 Route::get('user/{user_id}/profile_pic', 'UserController@getImage')->name('userImage');
+//      Notifications
+Route::post('api/user/{user_id}/markNotificationAsRead', 'UserController@markNotificationAsRead')->name('markNotificationAsRead'); // TODO A7?
 
 // Invites
 Route::put('api/invite/{invite_id}/accept', 'InviteController@accept');

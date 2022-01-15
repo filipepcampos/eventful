@@ -16,9 +16,9 @@ class InviteReceived extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($invite)
     {
-        //
+        $this->invite = $invite;
     }
 
     /**
@@ -54,10 +54,12 @@ class InviteReceived extends Notification
      */
     public function toArray($notifiable)
     {
+        $event = $this->invite->event()->first();
+        $inviter = $this->invite->inviter()->first();
         return [
-            'inviter' => $this->inviter()->username,
-            'event' => $this->event()->title,
-            'event_id' => $this->event()->id,
+            'title' => $inviter->username,
+            'event' => $event->title,
+            'event_id' => $event->id,
         ];
     }
 }
