@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Administrator;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
+use App\Notifications\Contact;
 
 class AdministratorController extends Controller
 {
@@ -44,5 +46,12 @@ class AdministratorController extends Controller
         $user->block_motive = null;
         $user->save();
         return response(null, 200);
+    }
+
+    public function contact(Request $request){
+        // TODO: Validate
+        $admins = User::where('is_admin', 'true')->get();
+        Notification::send($admins, new Contact($request->input('name'), $request->input('email'), $request->input('message')));
+        return redirect('/');
     }
 }

@@ -15,6 +15,7 @@
 Route::get('/', function () { return view('pages.home'); } )->name('homepage');
 Route::get('about', function(){return view('pages.about');});
 Route::get('contact', function(){return view('pages.contact');});
+Route::post('contact', 'AdministratorController@contact')->name('contact'); // TODO: Is this in the right place?
 
 // Authentication
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
