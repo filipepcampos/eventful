@@ -1,8 +1,15 @@
-<!-- Accessibility -->
+<!-- Access -->
 <div class="mb-2">
 <span class="card-text">
     <i class="bi bi-box-arrow-up" style="font-size: 1.5rem"></i>
     {{ $event->is_accessible ? 'Public' : 'Private' }}
+</span>
+</div>
+<!-- Visibility -->
+<div class="mb-2">
+<span class="card-text">
+    <i class="bi bi-eye" style="font-size: 1.5rem"></i>
+    {{ $event->is_visible ? 'Public' : 'Private' }}
 </span>
 </div>
 <!-- Date -->

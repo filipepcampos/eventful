@@ -65,8 +65,8 @@
 <div class="form-group mb-3">
     <label for="visibility" class="form-check-label">Visibility</label>
     <select class="form-control @if($errors->has('visibility')) is-invalid @endif"  value="{{ old('visibility') }}" id="visibility" name="visibility" required>
-    <option value="public">Public</option>
-    <option value="private">Private</option>
+    <option value="public" {{ old('visibility') ? "selected" : "" }}>Public</option>
+    <option value="private" {{ old('visibility') ? "" : "selected" }}>Private</option>
     </select>
     @if ($errors->has('visibility'))
     <div class="invalid-feedback d-block">
@@ -78,8 +78,8 @@
 <div class="form-group mb-3">
     <label for="access" class="form-check-label">Access</label>
     <select class="form-control @if($errors->has('access')) is-invalid @endif" value="{{ old('access') }}" id="access" name="access" required>
-    <option value="public">Public</option>
-    <option value="private">Private</option>
+    <option value="public" {{ old('access') ? "selected" : "" }}>Public</option>
+    <option value="private" {{ old('access') ? "" : "selected" }}>Private</option>
     </select>
     @if ($errors->has('access'))
     <div class="invalid-feedback d-block">
