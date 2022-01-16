@@ -93,6 +93,8 @@ class UserController extends Controller
         
         if(!is_null($request->file('profile_pic'))){ 
             $user->profile_pic = $request->file('profile_pic')->store('profile_pictures');
+            $image = Image::make(Storage::path($user->profile_pic))->fit(400,400); // TODO: Check if there's a better way to do this
+            $image->save();
         }
         
         if(!is_null($request->input('description'))){ 
