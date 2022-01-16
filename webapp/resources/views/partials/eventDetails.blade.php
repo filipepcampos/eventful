@@ -31,5 +31,8 @@
 <span class="card-text">
     <i class="bi bi-person" style="font-size: 1.5rem"></i>
     {{ $event->number_attendees . '/' . $event->capacity }}
+    @if($event->number_attendees >= $event->capacity)
+     (Sold-out)
+    @endif
 </span>
 </div>
