@@ -40,6 +40,11 @@
                         'includeEventButton' => false,
                     ])
                 @break
+                @case('App\Notifications\Contact')
+                    @include('partials.notifications.contactNotification',
+                        ['email' => $notification->data['email'],
+                        'message' => $notification->data['message']])
+                @break
             @endswitch
         </div>
     </div>
