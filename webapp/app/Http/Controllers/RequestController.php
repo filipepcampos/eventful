@@ -31,11 +31,14 @@ class RequestController extends Controller
     public function accept($request_id) {
         $request = Request::find($request_id);
         $this->authorize('update', $request);
-        $request->accepted = TRUE;
-        $request->save();
-        $request->event()->first()->attendees()->attach($request->requester);
-        $request->requester()->first()->notify(new RequestAccepted($request));
-        return response(null, 200);
+        if($request->event()->first()->isNotFull()){
+            $request->accepted = TRUE;
+            $request->save();
+            $request->event()->first()->attendees()->attach($request->requester);
+            $request->requester()->first()->notify(new RequestAccepted($request));
+            return response(null, 200);
+        }
+        return response(null, 200); // TODO: See correct error code in this situation
     }
 
     /**

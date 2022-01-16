@@ -30,10 +30,6 @@ class EventPolicy
         return $user->is_admin;
     }
 
-    public static function notFull(Event $event) {
-        return $event->number_attendees < $event->capacity;
-    }
-
     /**
      * Determine whether the user can view the event content (comments/polls).
      *
@@ -90,7 +86,7 @@ class EventPolicy
     public function join(User $user, Event $event) 
     {
         return $event->is_accessible &&
-            $this->notFull($event) &&
+            $event->isNotFull() &&
             $event->realization_date->isFuture() &&
             !($this->participatingInEvent($user, $event)) &&
             !($this->isAdmin($user)) &&
@@ -100,7 +96,7 @@ class EventPolicy
     public function request(User $user, Event $event) 
     {
         return !$event->is_accessible &&
-            $this->notFull($event) &&
+            $event->isNotFull() &&
             $event->realization_date->isFuture() &&
             !($this->participatingInEvent($user, $event)) &&
             !($this->isAdmin($user)) &&

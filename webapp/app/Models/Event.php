@@ -15,6 +15,10 @@ class Event extends Model
     'realization_date'
   ];
 
+  public function isNotFull(){
+    return $this->number_attendees < $this->capacity;
+  }
+
   /**
    * Host of this event
    */

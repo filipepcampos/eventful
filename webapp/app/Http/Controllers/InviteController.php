@@ -17,6 +17,7 @@ class InviteController extends Controller
         $invite->save();
         $event = $invite->event()->first();
         if ($event->is_accessible) {
+            $this->authorize('join', $event);
             app('App\Http\Controllers\EventController')->join($invite->event_id);
         } else {
             app('App\Http\Controllers\RequestController')->send($invite->event_id);
