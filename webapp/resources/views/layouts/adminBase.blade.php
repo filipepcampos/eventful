@@ -18,6 +18,9 @@
             <a class="nav-link" href="{{ url('/admin/users')}}">Users</a>
             </li>
             <li class="nav-item mb-0">
+            <a class="nav-link" href="{{ url('/admin/unblockAppeals') }}">Unblock Appeals</a>
+            </li>
+            <li class="nav-item mb-0">
             <a class="nav-link" href="{{ url('/admin/reports') }}">Reports</a>
             </li>
         </ul>

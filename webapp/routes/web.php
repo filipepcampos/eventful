@@ -52,6 +52,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function(){
     Route::get('/', 'AdministratorController@home')->name('admin');
     Route::get('users', 'AdministratorController@users')->name('adminUserList');
     Route::get('reports', function () { return view('pages.reports'); });
+    Route::get('unblockAppeals', 'AdministratorController@unblockAppeals');
 });
 Route::put('api/user/{user_id}/block', 'AdministratorController@blockUser')->middleware('admin');
 Route::put('api/user/{user_id}/unblock', 'AdministratorController@unblockUser')->middleware('admin');

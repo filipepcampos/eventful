@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Administrator;
 use App\Models\User;
+use App\Models\UnblockAppeal;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
@@ -54,5 +55,9 @@ class AdministratorController extends Controller
         $admins = User::where('is_admin', 'true')->get();
         Notification::send($admins, new Contact($request->input('name'), $request->input('email'), $request->input('message')));
         return redirect('/');
+    }
+
+    public function unblockAppeals(Request $request) {
+        return view('pages.adminUnblockAppealList', ['unblockAppeals' => UnblockAppeal::all()]);
     }
 }

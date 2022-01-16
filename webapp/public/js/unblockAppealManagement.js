@@ -20,3 +20,13 @@ function sendUnblockAppeal() {
         }
     });
 }
+
+function unblockUser(userId) {
+    let url = '/api/user/' + userId + '/unblock';
+    r = new URLEncodedRequest(url, 'PUT');
+    r.send(function (xhr) {
+        if(xhr.status == 200){
+            document.getElementById('unblockAppealUser' + userId).remove();
+        }
+    });
+}
