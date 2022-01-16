@@ -81,13 +81,13 @@
 
 <div class="form-group mb-3">
     <label for="accessibility" class="form-check-label">Accessibility</label>
-    <select class="form-control @if($errors->has('accessibility')) is-invalid @endif" placeholder="{{ old('accessibility') }}" id="accessibility" name="accessibility">
+    <select class="form-control @if($errors->has('access')) is-invalid @endif" placeholder="{{ old('access') }}" id="access" name="access">
     <option value="public">Public</option>
     <option value="private">Private</option>
     </select>
-    @if ($errors->has('accessibility'))
+    @if ($errors->has('access'))
     <div class="invalid-feedback d-block">
-        {{ $errors->first('accessibility') }}
+        {{ $errors->first('access') }}
     </div>
     @endif
 </div>

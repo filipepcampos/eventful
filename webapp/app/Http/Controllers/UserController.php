@@ -121,6 +121,14 @@ class UserController extends Controller
         return Storage::response($user->profile_pic);
     }
 
+    public function markNotificationAsRead($id, Request $request){
+        $user = User::find($id);
+        if(Auth::check() && Auth::id() == $id){
+            $user->unreadNotifications()->find($request->input('notification_id'))->markAsRead();
+        }
+        return response(null, 200); // TODO: Idk what to return on error tbh...
+    }
+
     /**
      * Remove the specified resource from storage.
      *

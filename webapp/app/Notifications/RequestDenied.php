@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class InviteReceived extends Notification
+class RequestDenied extends Notification
 {
     use Queueable;
 
@@ -16,9 +16,9 @@ class InviteReceived extends Notification
      *
      * @return void
      */
-    public function __construct($invite)
+    public function __construct($request)
     {
-        $this->invite = $invite;
+        $this->request = $request;
     }
 
     /**
@@ -32,7 +32,7 @@ class InviteReceived extends Notification
         return ['database'];
     }
 
-    /** TODO: Remove
+    /**
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
@@ -54,12 +54,9 @@ class InviteReceived extends Notification
      */
     public function toArray($notifiable)
     {
-        $event = $this->invite->event()->first();
-        $inviter = $this->invite->inviter()->first();
+
         return [
-            'title' => $inviter->username,
-            'event' => $event->title,
-            'event_id' => $event->id,
+            'title' => $this->request->event()->first()->title,
         ];
     }
 }
