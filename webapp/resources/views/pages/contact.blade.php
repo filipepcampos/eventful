@@ -35,7 +35,7 @@
 
 <div class="form-group mb-3">
     <label for="message" class="form-label">Message</label>
-    <textarea id="message" maxlength="8192" type="textarea" name="message" class="form-control @if($errors->has('message')) is-invalid @endif" required>{{ old('message') }}</textarea>
+    <textarea id="message" maxlength="2048" type="textarea" name="message" class="form-control @if($errors->has('message')) is-invalid @endif" required>{{ old('message') }}</textarea>
     @if ($errors->has('message'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('message') }}
