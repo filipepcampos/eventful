@@ -18,13 +18,13 @@
             </div>
         </div>
         <div class="card-footer">
-            <a role="button" class="btn btn-outline-primary" href="{{ url('/user/' . $user->id) }}">Profile</a>
-            <a role="button" class="btn btn-outline-success" href="{{ route('updateUserForm', ['user_id' => $user->id]) }}">Edit</a>
+            <a type="button" class="btn btn-outline-primary" href="{{ url('/user/' . $user->id) }}">Profile</a>
+            <a type="button" class="btn btn-outline-success" href="{{ route('updateUserForm', ['user_id' => $user->id]) }}">Edit</a>
             <a class="btn btn-outline-danger">Delete</a>
             @if($user->block_motive == null)
-            <a role="button" class="btn btn-outline-secondary" id="blockButtonUser{{ $user->id }}" onclick="blockUser({{ $user->id }})">Block</a>
+            <a type="button" class="btn btn-outline-secondary" id="blockButtonUser{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#blockUser{{ $user->id }}Modal">Block</a>
             @else
-            <a role="button" class="btn btn-secondary" id="blockButtonUser{{ $user->id }}" onclick="unblockUser({{ $user->id }})">Unblock</a>
+            <a type="button" class="btn btn-secondary" id="blockButtonUser{{ $user->id }}" onclick="unblockUser({{ $user->id }})">Unblock</a>
             @endif
         </div>
     </div>

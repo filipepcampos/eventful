@@ -24,7 +24,8 @@
     </div>
     
     <div class="row justify-content-center">
-    @each('partials.adminUserCard', $users, 'user')
+        @each('partials.blockUserModal', $users, 'user')
+        @each('partials.adminUserCard', $users, 'user')
     </div>
     <div class="row justify-content-center">
         {{ $users->render() }}
