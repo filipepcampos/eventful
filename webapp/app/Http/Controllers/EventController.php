@@ -119,7 +119,7 @@ class EventController extends Controller
         $event->realization_date = $request->input('realization_date');
 
         $event->is_visible = $request->input('visibility') === 'public';
-        $event->is_accessible = $request->input('accessibility') === 'public';
+        $event->is_accessible = $request->input('access') === 'public';
 
         if ($request->has('capacity')) {
             $event->capacity = $request->input('capacity');
@@ -262,8 +262,8 @@ class EventController extends Controller
         if (!is_null($request->input('visibility'))) {
             $event->is_visible = $request->input('visibility') === 'public';
         }
-        if (!is_null($request->input('accessibility'))) {
-            $event->is_visible = $request->input('accessibility') === 'public';
+        if (!is_null($request->input('access'))) {
+            $event->is_accessible = $request->input('access') === 'public';
         }
         if (!is_null($request->input('price'))) {
             $event->price = $request->input('price');

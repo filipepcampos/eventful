@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Request;
+use App\Notifications\RequestAccepted;
+use App\Notifications\RequestDenied;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,7 +33,8 @@ class RequestController extends Controller
         $this->authorize('update', $request);
         $request->accepted = TRUE;
         $request->save();
-        $request->event()->attach($request->requester);
+        $request->event()->first()->attendees()->attach($request->requester);
+        $request->requester()->first()->notify(new RequestAccepted($request));
         return response(null, 200);
     }
 
@@ -41,6 +44,7 @@ class RequestController extends Controller
     public function reject($request_id) {
         $request = Request::find($request_id);
         $this->authorize('delete', $request);
+        $request->requester()->first()->notify(new RequestDenied($request));
         $request->delete();
         return response(null, 200);
     }

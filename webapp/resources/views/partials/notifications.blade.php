@@ -20,7 +20,25 @@
         <div class="toast-body">
             @switch($notification->type)
                 @case('App\Notifications\InviteReceived')
-                    @include('partials.notifications.inviteReceived', ['notification' => $notification])
+                    @include('partials.notifications.genericNotification', 
+                        ['text' => "You've been invited to join the event",
+                        'strong' => $notification->data['event'],
+                        'includeEventButton' => true,
+                        'event_id' => $notification->data['event_id'],
+                    ])
+                @break
+                @case('App\Notifications\RequestAccepted')
+                    @include('partials.notifications.genericNotification', 
+                        ['text' => "Your request to join the event has been accepted",
+                        'includeEventButton' => true,
+                        'event_id' => $notification->data['event_id'],
+                    ])
+                @break
+                @case('App\Notifications\RequestDenied')
+                    @include('partials.notifications.genericNotification', 
+                        ['text' => "Your request to join the event has been denied",
+                        'includeEventButton' => false,
+                    ])
                 @break
             @endswitch
         </div>
