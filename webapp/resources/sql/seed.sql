@@ -905,6 +905,7 @@ INSERT INTO users(id,username,email,password,name,birthdate) VALUES
 select setval('users_id_seq', (select max(id) from users));
 INSERT INTO users(username,is_admin,email,password,name,birthdate) VALUES ('admin','True','admin@eventful.com','$2y$10$TEww9EtxnNwNbst5EUMlbupRzJraYSCzQX848msWUu9aAKvm/hUO.','Admin','01/01/1960');
 UPDATE users SET profile_pic='profile_pictures/default.png';
+UPDATE users SET block_motive='No apparent reason' WHERE username='manny';
 
 -- ========================= unblock_appeal =========================
 

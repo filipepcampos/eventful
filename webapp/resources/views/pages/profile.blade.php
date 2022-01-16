@@ -49,9 +49,17 @@
             @endcan
 
             @if (!is_null(Auth::user()->block_motive))
-            <script type="text/javascript" src="{{ asset('/js/unblockAppealManagement.js') }}" ></script>
-            @include('partials.sendUnblockAppealModal')
-            <a class="btn btn-secondary my-2" type="button" data-bs-toggle="modal" href="#sendUnblockAppeal">Send Unblock Appeal</a>
+                <script type="text/javascript" src="{{ asset('/js/unblockAppealManagement.js') }}" ></script>
+                <div class="my-4">
+                    <h3>Block Motive</h3>
+                    <p>{{ $user->block_motive }}</p>
+                </div>
+                @include('partials.sendUnblockAppealModal')
+                @if (is_null(App\Models\UnblockAppeal::where('user_id', Auth::user()->id)->first()))    <!-- TODO: Find better way to do this, maybe in controller -->
+                    <a id="unblockAppealModalButton" class="btn btn-secondary my-2" type="button" data-bs-toggle="modal" href="#sendUnblockAppealModal">Send Unblock Appeal</a>
+                @else
+                    <a id="unblockAppealModalButton" class="btn btn-success my-2" type="button">Unblock Appeal Sent</a>
+                @endif
             @endif
         </div>
     </div>

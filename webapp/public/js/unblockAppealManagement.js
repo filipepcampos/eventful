@@ -11,7 +11,12 @@ function sendUnblockAppeal() {
     request.setParam('content', content);
     request.send(function (xhr) {
         if(xhr.status == 200){
-            // TODO: Eliminar modal, alterar botão
+            let button = document.getElementById('unblockAppealModalButton');
+            button.removeAttribute('data-bs-toggle');
+            button.removeAttribute('href');
+            button.setAttribute('class', 'btn btn-success my-2');
+            button.innerHTML = 'Unblock Appeal Sent';
+            document.getElementById('sendUnblockAppealModal').remove();
         }
     });
 }
