@@ -30,7 +30,6 @@ function deleteComment(commentId) {
     let request = new URLEncodedRequest(url, 'DELETE');
     request.send(function (xhr) {
         if(xhr.status == 200) {
-            console.log('commentRow' + commentId);
             document.getElementById('commentRow' + commentId).remove();
             let commentsList = document.getElementById('commentsList');
             if(commentsList.childElementCount == 0) {

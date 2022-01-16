@@ -12,4 +12,7 @@
         <span><i id ="downvotes" class="bi bi-arrow-down" style="font-size: 1.5rem"></i>{{ $comment->number_downvotes }}</span>
     </div>
     <p>{{$comment->content}}</p>
+    @foreach($comment->files()->get() as $file)
+        <a href="{{ asset('storage/'.$file->path) }}">{{ $file->original_name }}</a>
+    @endforeach
 </div>

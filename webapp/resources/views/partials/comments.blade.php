@@ -8,6 +8,7 @@
         </div>
     @endif
     <input class="form-control" type="file" name="files[]" multiple>
+    <h6>Max 10 files, 500KB each. Allowed extensions: jpeg,png,jpg,gif,svg,pdf,txt</h6>
 </form>
 @can('createComment', $event)
     <a type="button" class="btn btn-secondary mb-5" onclick="addComment('{{ $event->id }}');">Publish</a>

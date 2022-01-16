@@ -62,7 +62,8 @@ class CommentController extends Controller
                 $path = $file->store('comments');
                 $insertions[] = [
                     'path' => $path,
-                    'comment_id' => $comment->id
+                    'comment_id' => $comment->id,
+                    'original_name' => $file->getClientOriginalName()
                 ];
             }
             DB::table('file')->insert($insertions);
@@ -120,14 +121,19 @@ class CommentController extends Controller
     {
         $comment = Comment::find($commentId);
         $this->authorize('deleteComment', $comment);
-        // TODO: DELETE FILES ASSOCIATED IN STORAGE
+        $files = $comment->files()->get();
+        $paths = array();
+        foreach($files as $file) {
+            $paths[] = $file->path;
+        }
+        Storage::delete($paths);
         $comment = Comment::destroy($commentId);
         return response(null, 200);
     }
 
     public function addRating(Request $request, $commentId)
     {
-        $comment = Comment::find($commendId);
+        $comment = Comment::find($commentId);
         $this->authorize('addRatingComment', $comment);
     }
 }

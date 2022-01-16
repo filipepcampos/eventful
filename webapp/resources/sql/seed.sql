@@ -123,7 +123,8 @@ CREATE TABLE rating (
 
 CREATE TABLE file (
     file_id SERIAL PRIMARY KEY, 
-    comment_id INTEGER rEFERENCES comment ON UPDATE CASCADE ON DELETE CASCADE,
+    comment_id INTEGER REFERENCES comment ON UPDATE CASCADE ON DELETE CASCADE,
+    original_name TEXT NOT NULL,
     path TEXT NOT NULL CONSTRAINT file_path_uk UNIQUE
 );
 
@@ -1542,17 +1543,17 @@ INSERT INTO rating(comment_id,user_id,vote) VALUES
 
 -- ========================= file =========================
 
-INSERT INTO file(comment_id,path) VALUES
-  (28,'./images/idk.png'),
-  (4,'./images/oof.png'),
-  (19,'./images/idkv2.png'),
-  (26,'./images/main.jpeg'),
-  (21,'./images/test.png'),
-  (29,'./images/not_main.jpeg'),
-  (10,'./images/oooof.png'),
-  (8,'./test/idk.gif'),
-  (25,'./test/test.png'),
-  (9,'./debug.jpeg');
+INSERT INTO file(comment_id, path, original_name) VALUES
+  (28,'./images/idk.png', 'idk.png'),
+  (4,'./images/oof.png', 'oof.png'),
+  (19,'./images/idkv2.png', 'idkv2.png'),
+  (26,'./images/main.jpeg', 'main.jpeg'),
+  (21,'./images/test.png', 'test.png'),
+  (29,'./images/not_main.jpeg', 'not_main.jpeg'),
+  (10,'./images/oooof.png', 'oooof.png'),
+  (8,'./test/idk.gif', 'idk.gif'),
+  (25,'./test/test.png', 'test.png'),
+  (9,'./debug.jpeg', 'debug.jpeg');
 
 -- ========================= report =========================
 
