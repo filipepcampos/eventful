@@ -50,4 +50,8 @@ class User extends Authenticatable
     public function invites() {
         return $this->hasMany('App\Models\Invite', 'invitee_id');
     }
+
+    public function unblockAppeal() {
+        return $this->hasOne('App\Models\UnblockAppeal');
+    }
 }

@@ -43,6 +43,7 @@ class AdministratorController extends Controller
         $user = User::find($id);
         $user->block_motive = null;
         $user->save();
+        $user->unblockAppeal()->delete();
         return response(null, 200);
     }
 }
