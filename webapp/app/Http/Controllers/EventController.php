@@ -188,6 +188,9 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::find($id);
+        if($event == null){
+            abort(404);
+        }
         $this->authorize('viewInformation', $event);
         return view('pages.event', ['event' => $event]);
     }
