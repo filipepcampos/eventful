@@ -76,6 +76,7 @@
     <div class="form-group mb-3">
     <label for="password" class="form-label">Password</label>
     <input id="password" type="password" name="password" class="form-control @if($errors->has('password')) is-invalid @endif">
+    <span class="form-text">Password must be at least 8 characters long and contain lowercase, uppercase, numerical and special characters.</span>
     @if ($errors->has('password'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('password') }}
