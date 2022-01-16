@@ -1,5 +1,5 @@
 @if(Auth::check())
-    <div style="position: absolute;top: 10%; right: 0; z-index:1;">
+    <div style="position: absolute; right: 0; z-index:1;">
     <div class="toast mb-1" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" id="noNotificationsToast" hidden>
         <div class="toast-header">
             <strong class="me-auto">No notifications</strong>

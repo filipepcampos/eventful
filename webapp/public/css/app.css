@@ -70,7 +70,7 @@ input:focus {
   border-width: 1px; 
 }
 
-.bi-bell-fill:hover {
-  color:white !important;
-  cursor: pointer;
+.notificationButton {
+  height: 100%;
+  line-height: 0px;
 }

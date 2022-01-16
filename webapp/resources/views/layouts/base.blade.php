@@ -36,10 +36,11 @@
                 <a class="nav-link" href="{{ url('/register') }}">Register</a>
             </li>
             @else
-            <li class="nav-item mb-0">
-                <a class="nav-link">
-                    <i class="bi text-muted bi-bell-fill" onclick="toggleNotifications()"></i>
-                </a>
+            <li class="nav-item mb-0 me-1">
+                <button type="button" class="btn btn-sm btn-outline-secondary notificationButton px-2 py-0" onclick="toggleNotifications()">
+                    <i class="bi text-white bi-bell"></i>
+                </button>
+                
             </li>
             <li class="nav-item mb-0">
                 <a class="nav-link" href="{{ url('/logout') }}">Logout</a>
@@ -57,12 +58,12 @@
         </div>
     </div>
     </nav>
+    @include('partials.notifications')
     <nav aria-label="breadcrumb">
         <ol class="mx-5 my-5 breadcrumb">
             @yield('breadcrumbs')
         </ol>
     </nav>
-    @include('partials.notifications')
     <section id="content">
     @yield('content')
     </section>
