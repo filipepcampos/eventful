@@ -11,6 +11,8 @@
 |
 */
 
+use Laravel\Socialite\Facades\Socialite;
+
 // Static Pages
 Route::get('/', function () { return view('pages.home'); } )->name('homepage');
 Route::get('about', function(){return view('pages.about');});
@@ -23,6 +25,8 @@ Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
+Route::get('redirect', 'Auth\LoginController@redirectToProvider');
+Route::get('callback', 'Auth\LoginController@handleProviderCallback');
 
 // Events
 Route::get('createEvent', 'EventController@showCreateForm')->name('createEventForm');

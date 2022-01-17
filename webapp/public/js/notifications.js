@@ -43,6 +43,7 @@ function markAsRead(userId, notificationId){
 
 function noNotifications(){
     document.getElementById('noNotificationsToast').hidden = false;
+    document.getElementById('notificationBadge').hidden = true;
 }
 
 let toastElList = [].slice.call(document.querySelectorAll('.toast'));

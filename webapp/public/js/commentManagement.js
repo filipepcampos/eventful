@@ -43,13 +43,25 @@ function deleteComment(commentId) {
     });
 }
 
+function updateRatingElement(elem, upvote) {
+    // TODO: UPDATE NUMBER AND UPDATE OPPOSITE ICON
+    let base = upvote ? 'bi-hand-thumbs-up' : 'bi-hand-thumbs-down';
+    if (elem.classList.contains(base)) {
+        elem.classList.remove(base);
+        elem.classList.add(base + '-fill');
+    } else {
+        elem.classList.remove(base + '-fill');
+        elem.classList.add(base);
+    }
+}
+
 function addRatingComment(commentId, upvote) {
     let url = '/api/comment/' + commentId + '/rating';
     let request = new URLEncodedRequest(url, 'POST');
     request.setParam('rating', upvote);
     request.send(function (xhr) {
         if(xhr.status == 200) {
-            // document.getElementById('upvotes').add();
+            updateRatingElement(document.getElementById((upvote ? 'upvote' : 'downvote') + commentId), upvote);
         } else {
             console.log("Nope"); // TODO: What to do on error?
         }

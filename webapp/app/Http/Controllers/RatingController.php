@@ -91,10 +91,9 @@ class RatingController extends Controller
      * @param  \App\Models\Rating  $rating
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Rating $rating)
+    private function destroy(Rating $rating)
     {
         $rating->delete();
-        return response(null, 200);
     }
 
     public function addRating(Request $request, $commentId)
