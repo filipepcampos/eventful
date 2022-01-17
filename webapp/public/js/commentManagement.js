@@ -43,15 +43,21 @@ function deleteComment(commentId) {
     });
 }
 
-function updateRatingElement(elem, upvote) {
-    // TODO: UPDATE NUMBER AND UPDATE OPPOSITE ICON
+function isRatingSelected(elem) {
+    return elem.classList.contains('bi-hand-thumbs-up-fill') || elem.classList.contains('bi-hand-thumbs-down-fill');
+}
+
+function updateRatingElement(icon, number, upvote) {
+    // TODO: UPDATE NUMBER OF VOTES
     let base = upvote ? 'bi-hand-thumbs-up' : 'bi-hand-thumbs-down';
-    if (elem.classList.contains(base)) {
-        elem.classList.remove(base);
-        elem.classList.add(base + '-fill');
+    if (icon.classList.contains(base)) {
+        icon.classList.remove(base);
+        icon.classList.add(base + '-fill');
+        number.innerText = parseInt(number.innerText) + 1;
     } else {
-        elem.classList.remove(base + '-fill');
-        elem.classList.add(base);
+        icon.classList.remove(base + '-fill');
+        icon.classList.add(base);
+        number.innerText = parseInt(number.innerText) - 1;
     }
 }
 
@@ -61,7 +67,15 @@ function addRatingComment(commentId, upvote) {
     request.setParam('rating', upvote);
     request.send(function (xhr) {
         if(xhr.status == 200) {
-            updateRatingElement(document.getElementById((upvote ? 'upvote' : 'downvote') + commentId), upvote);
+            let upIcon = document.getElementById('upvote' + commentId);
+            let downIcon = document.getElementById('downvote' + commentId);
+            let upNum = document.getElementById('upvotes' + commentId);
+            let downNum = document.getElementById('downvotes' + commentId);
+
+            let otherIcon = upvote ? downIcon : upIcon;
+            let otherNum = upvote ? downNum : upNum;
+            updateRatingElement(upvote ? upIcon : downIcon, upvote ? upNum : downNum, upvote);
+            if (isRatingSelected(otherIcon)) updateRatingElement(otherIcon, otherNum, !upvote);
         } else {
             console.log("Nope"); // TODO: What to do on error?
         }

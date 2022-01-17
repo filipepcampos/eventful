@@ -8,8 +8,14 @@
     </div>
     <p class="mb-0">{{$comment->creation_date}}</p>
     <div class="mb-2">
-        <span><i id ="upvote{{ $comment->id }}" class="bi bi-hand-thumbs-up{{ $comment->ratings()->where('user_id', '=', Auth::id())->where('vote', '=', 'Upvote')->first() ? '-fill' : '' }} me-2" style="font-size: 1.5rem" onclick="addRatingComment({{ $comment->id }}, true);"></i>{{ $comment->number_upvotes }}</span>
-        <span><i id ="downvote{{ $comment->id }}" class="bi bi-hand-thumbs-down{{ $comment->ratings()->where('user_id', '=', Auth::id())->where('vote', '=', 'Downvote')->first() ? '-fill' : '' }} me-2" style="font-size: 1.5rem" onclick="addRatingComment({{ $comment->id }}, false);"></i>{{ $comment->number_downvotes }}</span>
+        <span>
+            <i id="upvote{{ $comment->id }}" class="bi bi-hand-thumbs-up{{ $comment->ratings()->where('user_id', '=', Auth::id())->where('vote', '=', 'Upvote')->first() ? '-fill' : '' }} me-2" style="font-size: 1.5rem" onclick="addRatingComment({{ $comment->id }}, true);"></i>
+            <span id ="upvotes{{ $comment->id }}">{{ $comment->number_upvotes }}</span>
+        </span>
+        <span>
+            <i id ="downvote{{ $comment->id }}" class="bi bi-hand-thumbs-down{{ $comment->ratings()->where('user_id', '=', Auth::id())->where('vote', '=', 'Downvote')->first() ? '-fill' : '' }} me-2" style="font-size: 1.5rem" onclick="addRatingComment({{ $comment->id }}, false);"></i>
+            <span id="downvotes{{ $comment->id }}">{{ $comment->number_downvotes }}</span>
+        </span>
     </div>
     <p>{{$comment->content}}</p>
     @foreach($comment->files()->get() as $file)
