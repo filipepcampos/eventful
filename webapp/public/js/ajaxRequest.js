@@ -13,6 +13,7 @@ class AJAXRequest {
         xhr.open(this.method, BASE_URL + this.url, true);
         let csrf_token = document.head.querySelector("[name~=csrf-token][content]").content;
         xhr.setRequestHeader('X-CSRF-TOKEN', csrf_token);
+        xhr.setRequestHeader('Accept', 'application/json');
 
         if(callback){
             xhr.onreadystatechange = function() {

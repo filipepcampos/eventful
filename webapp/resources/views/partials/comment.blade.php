@@ -8,8 +8,8 @@
     </div>
     <p class="mb-0">{{$comment->creation_date}}</p>
     <div id="commentFeedback{{ $comment->id }}" class="mb-2">
-        <span><i id ="upvotes" class="bi bi-arrow-up" style="font-size: 1.5rem"></i>{{ $comment->number_upvotes }}</span>
-        <span><i id ="downvotes" class="bi bi-arrow-down" style="font-size: 1.5rem"></i>{{ $comment->number_downvotes }}</span>
+        <span><i id ="upvotes" class="bi bi-arrow-up" style="font-size: 1.5rem" onclick="addRatingComment({{ $comment->id }}, true);"></i>{{ $comment->number_upvotes }}</span>
+        <span><i id ="downvotes" class="bi bi-arrow-down" style="font-size: 1.5rem" onclick="addRatingComment({{ $comment->id }}, false);"></i>{{ $comment->number_downvotes }}</span>
     </div>
     <p>{{$comment->content}}</p>
     @foreach($comment->files()->get() as $file)

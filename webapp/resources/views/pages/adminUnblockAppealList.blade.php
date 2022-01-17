@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-<script type="text/javascript" src="{{ asset('/js/unblockAppealManagement.js') }}" ></script>
+<script type="text/javascript" src="{{ asset('/js/administration.js') }}" ></script>
 <div class="container mt-5">
     <div class="jumbotron text-center mb-5">
         <h1 class="display-2">Unblock Appeals Management</h1>

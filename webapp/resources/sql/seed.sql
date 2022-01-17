@@ -28,6 +28,7 @@ DROP TABLE IF EXISTS event;
 DROP TABLE IF EXISTS unblock_appeal;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS notifications;
+DROP TABLE IF EXISTS password_resets;
 
 -----------------------------------------
 -- Types
@@ -60,7 +61,7 @@ CREATE TABLE users (
 
 CREATE TABLE unblock_appeal (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users ON UPDATE CASCADE,
+    user_id INTEGER REFERENCES users ON UPDATE CASCADE UNIQUE,
     message TEXT NOT NULL
 );
 
@@ -115,10 +116,11 @@ CREATE TABLE comment (
 );
 
 CREATE TABLE rating (
+    id SERIAL PRIMARY KEY,
     comment_id INTEGER REFERENCES comment ON UPDATE CASCADE,
     user_id INTEGER REFERENCES users ON UPDATE CASCADE,
     vote comment_rating NOT NULL,
-    PRIMARY KEY (comment_id, user_id)
+    UNIQUE (comment_id, user_id)
 );
 
 CREATE TABLE file (
@@ -219,6 +221,12 @@ CREATE TABLE notifications (
     "read_at" timestamp(0) without time zone null, 
     "created_at" timestamp(0) without time zone null, 
     "updated_at" timestamp(0) without time zone null
+);
+
+CREATE TABLE password_resets (
+    "email" varchar(255) not null,
+    "token" varchar(255) not null,
+    "created_at" timestamp(0) without time zone null
 );
 
 DROP INDEX IF EXISTS user_event_attendee;
@@ -683,7 +691,7 @@ DROP FUNCTION IF EXISTS increment_number_upvotes;
 CREATE FUNCTION increment_number_upvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET number_upvotes = number_upvotes + 1 WHERE NEW.comment_id = comment.id;
+    UPDATE comment SET number_upvotes = number_upvotes + 1 WHERE NEW.comment_id = comment.id AND NEW.vote = 'Upvote';
     RETURN NEW;
 END
 $BODY$
@@ -701,7 +709,7 @@ DROP FUNCTION IF EXISTS increment_number_downvotes;
 CREATE FUNCTION increment_number_downvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET number_downvotes = number_downvotes + 1 WHERE NEW.comment_id = comment.id;
+    UPDATE comment SET number_downvotes = number_downvotes + 1 WHERE NEW.comment_id = comment.id AND NEW.vote = 'Downvote';
     RETURN NEW;
 END
 $BODY$
@@ -719,7 +727,7 @@ DROP FUNCTION IF EXISTS decrement_number_upvotes;
 CREATE FUNCTION decrement_number_upvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET number_upvotes = number_upvotes - 1 WHERE OLD.comment_id = comment.id;
+    UPDATE comment SET number_upvotes = number_upvotes - 1 WHERE OLD.comment_id = comment.id AND OLD.vote = 'Upvote';
     RETURN OLD;
 END
 $BODY$
@@ -737,7 +745,7 @@ DROP FUNCTION IF EXISTS decrement_number_downvotes;
 CREATE FUNCTION decrement_number_downvotes() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    UPDATE comment SET number_downvotes = number_downvotes - 1 WHERE OLD.comment_id = comment.id;
+    UPDATE comment SET number_downvotes = number_downvotes - 1 WHERE OLD.comment_id = comment.id AND OLD.vote = 'Downvote';
     RETURN OLD;
 END
 $BODY$
@@ -1532,14 +1540,16 @@ select setval('comment_id_seq', (select max(id) from comment));
 
 -- ========================= rating =========================
 
-INSERT INTO rating(comment_id,user_id,vote) VALUES
-  (10,49,'Upvote'),
-  (1,41,'Downvote'),
-  (1,82,'Upvote'),
-  (1,76,'Upvote'),
-  (26,5, 'Upvote'),
-  (26,148, 'Downvote'),
-  (26,55, 'Downvote');
+INSERT INTO rating(id,comment_id,user_id,vote) VALUES
+  (1,10,49,'Upvote'),
+  (2,1,41,'Downvote'),
+  (3,1,82,'Upvote'),
+  (4,1,76,'Upvote'),
+  (5,26,5, 'Upvote'),
+  (6,26,148, 'Downvote'),
+  (7,26,55, 'Downvote');
+
+select setval('rating_id_seq', (select max(id) from rating));
 
 -- ========================= file =========================
 

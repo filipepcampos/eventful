@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Administrator;
 use App\Models\User;
 use App\Models\UnblockAppeal;
+use App\Http\Requests\BlockMessageCreateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
@@ -30,16 +31,13 @@ class AdministratorController extends Controller
         return view('pages.adminUserList', ['users' => $users]);
     }
 
-    public function blockUser(Request $request, $id)
+    public function blockUser(BlockMessageCreateRequest $request, $id)
     {
         $user = User::find($id);
         $motive = $request->input('block_motive');
-        if ($motive != null) {
-            $user->block_motive = $motive;
-            $user->save();
-            return response(null, 200);
-        }
-        return response(null, 403);
+        $user->block_motive = $motive;
+        $user->save();
+        return response(null, 200);
     }
 
     public function unblockUser(Request $request, $id){

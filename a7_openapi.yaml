@@ -913,62 +913,13 @@ paths:
           description: 'Success'
         '403':
           description: 'Access denied'
-    
-    put:
-      operationId: 'R311'
-      summary: 'R311: Changing Rating of a Comment API'
-      description: 'Changing rating of a comment on an event. Access: REA'
-      tags:
-        - 'M03: User Interactions'
-      parameters:
-      - in: path
-        name: comment_id
-        description: ID of the comment
-        schema:
-          type: integer
-        required: true
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                rating:
-                  type: boolean
-              required:
-                - rating
-      responses:
-        '200':
-          description: 'Success'
-        '403':
-          description: 'Access denied'
-
-    delete:
-      operationId: 'R312'
-      summary: 'R312: Deleting Rating of a Comment API'
-      description: 'Deleting rating of a comment on an event. Access: REA'
-      tags:
-        - 'M03: User Interactions'
-      parameters:
-      - in: path
-        name: comment_id
-        description: ID of the comment
-        schema:
-          type: integer
-        required: true
-      responses:
-        '200':
-          description: 'Success'
-        '403':
-          description: 'Access denied'
 
   # --------------------------------- JOINING/LEAVING EVENT ---------------------------------
 
   /event/{event_id}/attend:
     post:
-      operationId: 'R313'
-      summary: 'R313: Joining Event'
+      operationId: 'R311'
+      summary: 'R312: Joining Event'
       description: 'Joining event. Access: USR'
       tags:
         - 'M03: User Interactions'
@@ -995,8 +946,8 @@ paths:
                   value: '/'
     
     delete:
-      operationId: 'R314'
-      summary: 'R314: Leaving Event'
+      operationId: 'R312'
+      summary: 'R313: Leaving Event'
       description: 'Leaving event. Access: ATT'
       tags:
         - 'M03: User Interactions'
@@ -1026,8 +977,8 @@ paths:
 
   /api/event/{event_id}/post:
     post:
-      operationId: 'R315'
-      summary: 'R315: Create Post API'
+      operationId: 'R313'
+      summary: 'R314: Create Post API'
       description: 'Create a post on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1057,8 +1008,8 @@ paths:
 
   /api/post/{post_id}:
     put:
-      operationId: 'R316'
-      summary: 'R316: Update Post API'
+      operationId: 'R314'
+      summary: 'R315: Update Post API'
       description: 'Update a post on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1087,8 +1038,8 @@ paths:
           description: 'Access denied'
 
     delete:
-      operationId: 'R317'
-      summary: 'R317: Delete Post API'
+      operationId: 'R315'
+      summary: 'R316: Delete Post API'
       description: 'Delete a post on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1109,8 +1060,8 @@ paths:
 
   /api/event/{event_id}/poll:
     post:
-      operationId: 'R318'
-      summary: 'R318: Create Poll API'
+      operationId: 'R316'
+      summary: 'R317: Create Poll API'
       description: 'Create a poll on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1148,8 +1099,8 @@ paths:
 
   /api/poll/{poll_id}:
     delete:
-      operationId: 'R319'
-      summary: 'R319: Delete Poll API'
+      operationId: 'R317'
+      summary: 'R318: Delete Poll API'
       description: 'Delete a poll on an event. Access: HOST'
       tags:
         - 'M03: User Interactions'
@@ -1170,8 +1121,8 @@ paths:
 
   /api/option/{option_id}/vote:
     post:
-      operationId: 'R320'
-      summary: 'R320: Create Vote on an Option of a Poll API'
+      operationId: 'R318'
+      summary: 'R319: Create Vote on an Option of a Poll API'
       description: 'Create vote on an option of a poll. Access: ATT'
       tags:
         - 'M03: User Interactions'
@@ -1189,8 +1140,8 @@ paths:
           description: 'Access denied'
 
     delete:
-      operationId: 'R321'
-      summary: 'R321: Delete Vote on an Option of a Poll API'
+      operationId: 'R319'
+      summary: 'R320: Delete Vote on an Option of a Poll API'
       description: 'Delete vote on an option of a poll. Access: ATT'
       tags:
         - 'M03: User Interactions'
@@ -1211,8 +1162,8 @@ paths:
 
   /api/event/{event_id}/kick:
     delete:
-      operationId: 'R322'
-      summary: 'R322: Kick Attendee From an Event API'
+      operationId: 'R320'
+      summary: 'R321: Kick Attendee From an Event API'
       description: 'Kick attendee from an event. Access: HOST'
       tags:
         - 'M03: User Interactions'

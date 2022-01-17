@@ -1,6 +1,6 @@
 @extends('layouts.form')
 
-@section('title', 'Login')
+@section('title', 'Eventful -Login')
 @section('form-title', 'Login')
 
 @section('breadcrumbs')
@@ -38,7 +38,8 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Login</button>
-    <a class="mx-3" href="{{ route('register') }}">Register</a>
+    <a class="ms-3" href="{{ route('register') }}">Register</a>
+    <a class="ms-3" href="{{ route('passwordRequest') }}">Forgot password?</a>
 </form>
 @endsection
 

@@ -1,6 +1,6 @@
 @extends('layouts.form')
 
-@section('title', 'Register')
+@section('title', 'Eventful - Register')
 @section('form-title', 'Register')
 
 @section('breadcrumbs')

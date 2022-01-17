@@ -77,7 +77,13 @@ Route::delete('api/request/{request_id}/reject', 'RequestController@reject');
 // Comment API
 Route::post('api/event/{event_id}/comment', 'CommentController@store');
 Route::delete('api/comment/{comment_id}', 'CommentController@destroy');
-Route::post('api/comment/{comment_id}/rating', 'CommentController@addRating');
+Route::post('api/comment/{comment_id}/rating', 'RatingController@addRating');
 
 // Unblock Appeal API
 Route::post('api/unblockAppeal', 'UnblockAppealController@create');
+
+// Forgotten Password TODO: A7
+Route::get('forgot-password', 'Auth\ForgotPasswordController@showRequestForm')->name('passwordRequest');
+Route::post('forgot-password', 'Auth\ForgotPasswordController@sendReset')->name('passwordSendEmail');
+Route::get('reset-password/{token}', 'Auth\ForgotPasswordController@showResetForm')->name('password.reset');
+Route::post('reset-password', 'Auth\ForgotPasswordController@updatePassword')->name('passwordUpdate');

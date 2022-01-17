@@ -21,7 +21,7 @@ class CommentPolicy
         return EventPolicy::isHost($user, Event::find($comment->event_id)) || $this->isOwner($user, $comment);
     }
 
-    public function addRatingComment(User $user, Comment $comment) {
-        return !($this->isOwner($user, $comment));
+    public function ratingComment(User $user, Comment $comment) {
+        return EventPolicy::isAttendee($user, Event::find($comment->event_id)) && !($this->isOwner($user, $comment));
     }
 }

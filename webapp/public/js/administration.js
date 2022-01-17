@@ -22,7 +22,7 @@ function blockUser(userId){
     });
 }
 
-function unblockUser(userId){
+function unblockUser1(userId){
     let url = '/api/user/' + userId + '/unblock';
     r = new URLEncodedRequest(url, 'PUT');
     r.send(function (xhr) {
@@ -37,6 +37,16 @@ function unblockUser(userId){
             button.removeAttribute('onclick');
             button.setAttribute('data-bs-toggle', 'modal');
             button.setAttribute('data-bs-target', '#blockUser' + userId + 'Modal');
+        }
+    });
+}
+
+function unblockUser2(userId) {
+    let url = '/api/user/' + userId + '/unblock';
+    r = new URLEncodedRequest(url, 'PUT');
+    r.send(function (xhr) {
+        if(xhr.status == 200){
+            document.getElementById('unblockAppealUser' + userId).remove();
         }
     });
 }

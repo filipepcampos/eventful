@@ -43,9 +43,10 @@ function deleteComment(commentId) {
     });
 }
 
-function addRatingComment(commentId) {
+function addRatingComment(commentId, upvote) {
     let url = '/api/comment/' + commentId + '/rating';
     let request = new URLEncodedRequest(url, 'POST');
+    request.setParam('rating', upvote);
     request.send(function (xhr) {
         if(xhr.status == 200) {
             // document.getElementById('upvotes').add();

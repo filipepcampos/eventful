@@ -73,8 +73,6 @@ class CommentController extends Controller
         $view = View::make('pages.event', ['comments' => $event->comments()->get(), 'event' => $event]);
         $sections = $view->renderSections();
         return $sections['comments']; // TODO: Update on A7
-
-        //return redirect('event/' . $eventId); // TODO: NOT REDIRECT
     }
 
     /**
@@ -129,11 +127,5 @@ class CommentController extends Controller
         Storage::delete($paths);
         $comment = Comment::destroy($commentId);
         return response(null, 200);
-    }
-
-    public function addRating(Request $request, $commentId)
-    {
-        $comment = Comment::find($commentId);
-        $this->authorize('addRatingComment', $comment);
     }
 }
