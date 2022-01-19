@@ -38,7 +38,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Login</button>
-    <a class="ms-3" href="{{ route('redirectOAuth') }}">Login with Google</a>
+    <a class="btn btn-outline-secondary ms-3 py-3" href="{{ route('googleRedirectOAuth') }}"><i class="bi bi-google me-2"></i>Login with Google</a>
     <a class="ms-3" href="{{ route('register') }}">Register</a>
     <a class="ms-3" href="{{ route('passwordRequest') }}">Forgot password?</a>
 </form>

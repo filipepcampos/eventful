@@ -25,10 +25,10 @@ Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
-Route::get('registerOAuth', 'Auth\RegisterController@showOAuthRegistrationForm');
-Route::post('registerOAuth', 'Auth\RegisterController@registerOAuth')->name('registerOAuth');
-Route::get('redirect', 'Auth\LoginController@redirectToProvider')->name('redirectOAuth');
-Route::get('callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('google/registerOAuth', 'Auth\GoogleOAuthController@showRegistrationForm');
+Route::post('google/registerOAuth', 'Auth\GoogleOAuthController@register')->name('googleRegisterOAuth');
+Route::get('api/google/redirect', 'Auth\GoogleOAuthController@redirectToProvider')->name('googleRedirectOAuth');
+Route::get('api/google/callback', 'Auth\GoogleOAuthController@handleProviderCallback');
 
 // Events
 Route::get('createEvent', 'EventController@showCreateForm')->name('createEventForm');

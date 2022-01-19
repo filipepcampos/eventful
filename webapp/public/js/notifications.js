@@ -52,8 +52,8 @@ let toastList = toastElList.map(function (toastEl) {
 let notificationsHidden = true;
 let notificationCount = toastElList.length;
 
-if(notificationCount == 1){
-    noNotifications();
-} else {
+if(notificationCount > 1){
     document.getElementById('notificationBadge').hidden = false;
+} else if(notificationCount == 1) {
+    noNotifications();
 }

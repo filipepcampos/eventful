@@ -71,7 +71,7 @@
     <button type="submit" class="btn btn-primary">
         Register
     </button>
-    <a class="ms-3" href="{{ route('redirectOAuth') }}">Register with Google</a>
+    <a class="btn btn-outline-secondary ms-3 py-3" href="{{ route('googleRedirectOAuth') }}"><i class="bi bi-google me-2"></i>Register with Google</a>
     <a class="ms-3" href="{{ route('login') }}">Login</a>
 </form>
 @endsection

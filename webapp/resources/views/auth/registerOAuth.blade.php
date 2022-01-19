@@ -9,7 +9,7 @@
 @endsection
 
 @section('form-content')
-<form method="POST" action="{{ route('registerOAuth') }}">
+<form method="POST" action="{{ route('googleRegisterOAuth') }}">
     {{ csrf_field() }}
 
     <div class="form-group mb-3">
