@@ -79,7 +79,7 @@
                         </button>
                     </form>
                     @elsecan('request', $event)
-                        @if(is_null($event->requests()->where('user_id', Auth::user()->id)->where('event_id', $event->id)->first()))
+                        @if(is_null($event->requests()->where('user_id', Auth::id())->where('event_id', $event->id)->first()))
                             <a id="request{{ $event->id }}" onclick="sendRequest('{{ $event->id }}')" class="btn btn-danger ml-auto">Request to Join</a>
                         @else
                             <span class="text-primary">Request Sent</span>

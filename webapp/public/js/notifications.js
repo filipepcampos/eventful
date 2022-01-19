@@ -35,8 +35,6 @@ function markAsRead(userId, notificationId){
             if(notificationCount == 1){
                 noNotifications();
             }
-        } else {
-            console.log("Nope"); // TODO: What to do on error?
         }
     });
 }

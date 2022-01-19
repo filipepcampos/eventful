@@ -8,8 +8,6 @@ function createPost(eventId, canEdit, canDelete) {
     r.send(function (xhr) {
         if(xhr.status == 200){
             refreshPosts(xhr.response);
-        } else {
-            console.log("Nope"); // TODO: What to do on error?
         }
     });
 }
@@ -28,9 +26,6 @@ function deletePost(postId) {
                 postList.appendChild(msg);
             }
         }
-        else {                        
-            console.log("Nope"); // TODO: What to do on error?
-        }
     });
 }
 
@@ -47,8 +42,6 @@ function editPost(postId) {
             let post = document.getElementById('post' + postId);
             post.innerHTML = newHTMLContent;
             post.setAttribute('delta', contents);
-        } else {
-            console.log("Nope"); // TODO: What to do on error?
         }
     });
 }

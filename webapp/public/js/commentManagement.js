@@ -20,8 +20,6 @@ function addComment(eventId) {
         if(xhr.status == 200){
             reloadComments(xhr.response);
             document.getElementById("comment-form").reset();
-        } else {
-            console.log("Nope"); // TODO: What to do on error? nothing
         }
     }); 
 }

@@ -10,16 +10,6 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     // TODO: Better documentation
     private function getTextLengthFromDelta($text){
         $delta = json_decode($text);
@@ -92,8 +82,7 @@ class PostController extends Controller
         }
 
         $post = Post::find($post_id);
-        $this->authorize('editPost', $post->event()->first()); // TODO: Post policy?
-        // TODO: Check for invalid content?
+        $this->authorize('editPost', $post->event()->first());
         $post->text = $request->input('text');
         $post->save();
     }
@@ -107,8 +96,8 @@ class PostController extends Controller
     public function delete($post_id)
     {
         $post = Post::find($post_id);
-        $this->authorize('deletePost', $post->event()->first()); // TODO: PostPolicy should be required?
-        $post = Post::destroy($post_id); // TODO: This will not work when we add polls
+        $this->authorize('deletePost', $post->event()->first());
+        $post = Post::destroy($post_id);
         return response(null, 200);
     }
 }

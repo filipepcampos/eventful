@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-<script type="text/javascript" src="{{ asset('/js/requestsManagement.js') }}" ></script>
+<script src="{{ asset('/js/requestsManagement.js') }}" ></script>
 <div class="container">
     <div class="row justify-content-center my-5">
         <div class="col">

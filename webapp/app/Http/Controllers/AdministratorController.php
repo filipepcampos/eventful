@@ -6,6 +6,7 @@ use App\Models\Administrator;
 use App\Models\User;
 use App\Models\UnblockAppeal;
 use App\Http\Requests\BlockMessageCreateRequest;
+use App\Http\Requests\ContactUsRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
@@ -48,8 +49,7 @@ class AdministratorController extends Controller
         return response(null, 200);
     }
 
-    public function contact(Request $request){
-        // TODO: Validate
+    public function contact(ContactUsRequest $request){
         $admins = User::where('is_admin', 'true')->get();
         Notification::send($admins, new Contact($request->input('name'), $request->input('email'), $request->input('message')));
         return redirect('/');
