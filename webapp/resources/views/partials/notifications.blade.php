@@ -40,6 +40,12 @@
                         'includeEventButton' => false,
                     ])
                 @break
+                @case('App\Notifications\EventCancelled')
+                    @include('partials.notifications.genericNotification', 
+                        ['text' => "This event has been cancelled",
+                        'includeEventButton' => false,
+                    ])
+                @break
                 @case('App\Notifications\Contact')
                     @include('partials.notifications.contactNotification',
                         ['email' => $notification->data['email'],

@@ -7,7 +7,7 @@
     </div>
     <div class="modal-body">
         <div class="wrapper container">
-        @foreach($event->attendees()->get() as $user)
+        @forelse($event->attendees()->get() as $user)
             <div class="flex-row justify-content-between d-flex" id="attendee{{ $user->id }}">
                 <div class="p-2">
                     <img class="img-fluid rounded-circle mx-2" style="height:4em;" src="{{ route('userImage', ['user_id' => $user->id]) }}">
@@ -19,7 +19,9 @@
                 </div>
                 @endcan
             </div>
-        @endforeach
+        @empty
+            <h4>The attendee's list is still empty.</h4>
+        @endforelse
         </div>
     </div>
     <div class="modal-footer">

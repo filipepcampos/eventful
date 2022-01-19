@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -30,6 +31,7 @@ class UserUpdateRequest extends FormRequest
             'description' => 'nullable|string|min:1|max:8192',
             'email' => 'nullable|email|min:1|max:255|unique:users',
             'password' => [
+                'sometimes',
                 'required',
                 'string',
                 'confirmed',

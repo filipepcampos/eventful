@@ -23,8 +23,12 @@ function invite(eventId) {
         r.send(function (xhr) {
             if(xhr.status == 200){
                 validInviteFeedback(input_box,feedback);
+            } else if (xhr.status == 406){
+                invalidInviteFeedback(input_box,feedback,'Invitation was already sent.');
+            } else if (xhr.status == 409) {
+                invalidInviteFeedback(input_box,feedback,'The invitee already belongs to the event.');
             } else {
-                invalidInviteFeedback(input_box,feedback);
+                invalidInviteFeedback(input_box,feedback,'Invitation not sent.');
             }
         });
     }
@@ -38,12 +42,12 @@ function validInviteFeedback(input_box, feedback){
     feedback.innerHTML = 'Invitation sent.';
 }
 
-function invalidInviteFeedback(input_box, feedback){
+function invalidInviteFeedback(input_box, feedback, message){
     input_box.classList.remove('is-valid');
     input_box.classList.add('is-invalid');
     feedback.classList.remove('valid-feedback');
     feedback.classList.add('invalid-feedback');
-    feedback.innerHTML = 'Invitation not sent.';
+    feedback.innerHTML = message;
 }
 
 function clearInviteFeedback(){

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use App\Models\Comment;
 use App\Models\Event;
+use App\Models\File;
 use App\Http\Requests\CommentCreateRequest;
 
 class CommentController extends Controller
@@ -59,14 +60,12 @@ class CommentController extends Controller
 
             $insertions = array();
             foreach ($files as $file) {
-                $path = $file->store('comments');
-                $insertions[] = [
-                    'path' => $path,
-                    'comment_id' => $comment->id,
-                    'original_name' => $file->getClientOriginalName()
-                ];
+                $fileModel = new File();
+                $fileModel->path = $file->store('comments');
+                $fileModel->comment_id = $comment->id;
+                $fileModel->original_name = $file->getClientOriginalName();
+                $fileModel->save();
             }
-            DB::table('file')->insert($insertions);
         }
 
         $this->authorize('viewContent', $event);

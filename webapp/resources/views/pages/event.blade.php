@@ -57,7 +57,13 @@
                     @endcan
 
                     @can('delete', $event)
-                    <a class="btn btn-danger btn-disabled mb-2 w-100" href="">Delete (Disabled)</a>
+                    <form class="mb-2 w-100" method='post' action='{{ route("deleteEvent", ["event_id" => $event->id]) }}'>
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-danger my-2">
+                            Delete event
+                        </button>
+                    </form>
                     @endcan
 
                     @can('isHost', $event)

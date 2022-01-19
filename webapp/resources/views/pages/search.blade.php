@@ -9,8 +9,8 @@
 @endsection
 
 @section('content')
-<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilters" aria-controls="offcanvasFilters">
-  Filters
+<button class="btn btn-primary ms-5" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilters" aria-controls="offcanvasFilters">
+  Filters <span><i class="bi bi-filter"></i></span>
 </button>
 
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasFilters" aria-labelledby="offcanvasFiltersLabel">
@@ -41,16 +41,20 @@
   </div>
 </div>
 
-<h1 class="text-center my-5">Searching for: {{ $search }}</h1>
-<div class="row">
-    <div class="col">
-        <div class="row justify-content-center">
-            @each('partials.eventCard', $events, 'event')
-            @forelse($events as $event)
-                @include('partials.eventCard', ['event' => $event])
-            @empty
-                <h3 class="w-50 text-justify">No event matches your criteria, try tweaking the search parameters</h3>
-            @endforelse
+<div class="container">
+    <h1 class="text-center my-5">Searching for: {{ $search }}</h1>
+    <div class="row">
+        <div class="col">
+            <div class="row justify-content-center">
+                @forelse($events as $event)
+                    @include('partials.eventCard', ['event' => $event])
+                @empty
+                    <h3 class="w-50 text-justify">No event matches your criteria, try tweaking the search parameters</h3>
+                @endforelse
+            </div>
+            <div class="row justify-content-center">
+            {{ $events->withQueryString()->links() }}
+            </div>
         </div>
     </div>
 </div>

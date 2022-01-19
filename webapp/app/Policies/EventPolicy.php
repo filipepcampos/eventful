@@ -160,6 +160,6 @@ class EventPolicy
 
     public function createComment(User $user, Event $event)
     {
-        return Auth::check() && !$this->isAdmin($user) && $this->isAttendee($user, $event);
+        return Auth::check() && !$this->isAdmin($user) && $this->participatingInEvent($user, $event);
     }
 }

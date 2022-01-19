@@ -47,6 +47,15 @@
             <a class="btn btn-secondary my-2" type="button" data-bs-toggle="modal" href="#invites">View Invites</a>
             <a class="btn btn-secondary my-2" href='{{ route("updateUserForm", ["user_id" => $user->id]) }}'>Edit Profile</a>
             @endcan
+            @can('delete', $user)
+            <form method='post' action='{{ route("deleteUser", ["user_id" => $user->id]) }}'>
+                {{ method_field('DELETE') }}
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-danger my-2">
+                    Delete account
+                </button>
+            </form>
+            @endcan
 
             @if (!is_null(Auth::user()->block_motive))
                 <script type="text/javascript" src="{{ asset('/js/unblockAppealManagement.js') }}" ></script>

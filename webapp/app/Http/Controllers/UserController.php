@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Event;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
@@ -65,6 +66,7 @@ class UserController extends Controller
     {
         if (!Auth::check()) return redirect('/login');
         $user = User::find($id);
+        $this->authorize('update', $user);
         return view('pages.updateProfile', ['user'=>$user]);
     }
 
@@ -137,8 +139,13 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function delete($id)
     {
-        //
+        $user = User::find($id);
+        $this->authorize('delete', $user);
+        DB::transaction(function () use ($id) {
+            DB::statement('SELECT delete_user(?)', [$id]);
+        }, 3);
+        return redirect('/');
     }
 }

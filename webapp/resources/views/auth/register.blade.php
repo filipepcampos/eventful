@@ -14,7 +14,7 @@
 
     <div class="form-group mb-3">
         <label for="username" class="form-label">Username</label>
-        <input id="username" class="form-control @if($errors->has('username')) is-invalid @endif" type="text" name="username" value="{{ old('username') }}" placeholder="Enter username" required>
+        <input id="username" class="form-control @if($errors->has('username')) is-invalid @endif" type="text" name="username" value="{{ old('username') }}" placeholder="Enter username" required autofocus>
         @if ($errors->has('username'))
         <div class="invalid-feedback d-block">
         {{ $errors->first('username') }}
@@ -24,7 +24,7 @@
 
     <div class="form-group mb-3">
         <label for="name" class="form-label">Name</label>
-        <input id="name" class="form-control @if($errors->has('name')) is-invalid @endif" type="text" name="name" value="{{ old('name') }}" placeholder="Enter name" required autofocus>
+        <input id="name" class="form-control @if($errors->has('name')) is-invalid @endif" type="text" name="name" value="{{ old('name') }}" placeholder="Enter name" required>
         @if ($errors->has('name'))
         <div class="invalid-feedback d-block">
         {{ $errors->first('name') }}
@@ -71,6 +71,7 @@
     <button type="submit" class="btn btn-primary">
         Register
     </button>
-    <a class="mx-3" href="{{ route('login') }}">Login</a>
+    <a class="ms-3" href="{{ route('redirectOAuth') }}">Register with Google</a>
+    <a class="ms-3" href="{{ route('login') }}">Login</a>
 </form>
 @endsection

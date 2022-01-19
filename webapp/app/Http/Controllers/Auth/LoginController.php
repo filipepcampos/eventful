@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 
@@ -68,25 +69,20 @@ class LoginController extends Controller
 
         if ($user) {
             $user->update([
-                'github_token' => $googleUser->token,
-                'github_refresh_token' => $googleUser->refreshToken,
+                'google_token' => $googleUser->token,
+                'google_refresh_token' => $googleUser->refreshToken,
             ]);
             Auth::login($user);
             return redirect('/events');
         } else {
-            /*
-            username TEXT NOT NULL CONSTRAINT user_username_uk UNIQUE,
-            password TEXT NOT NULL,
-            birthdate DATE NOT NULL,
-            */
-
-            return view('auth.registerOAuth')->
-                   with('name', $googleUser->name)->
-                   with('email', $googleUser->email)->
-                   with('password', $googleUser->email)->
-                   with('google_id', $googleUser->id)->
-                   with('google_token', $googleUser->token)->
-                   with('google_refresh_token', $googleUser->refreshToken);
+            session([
+                'name' => $googleUser->name,
+                'email' => $googleUser->email,
+                'google_id' => $googleUser->id,
+                'google_token' => $googleUser->token,
+                'google_refresh_token' => $googleUser->refreshToken
+            ]);
+            return redirect('/registerOAuth');
         }
     }
 }

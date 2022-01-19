@@ -19,10 +19,11 @@ function addComment(eventId) {
     request.send(function (xhr) {
         if(xhr.status == 200){
             reloadComments(xhr.response);
+            document.getElementById("comment-form").reset();
         } else {
             console.log("Nope"); // TODO: What to do on error? nothing
         }
-    });
+    }); 
 }
 
 function deleteComment(commentId) {
@@ -37,8 +38,6 @@ function deleteComment(commentId) {
                 msg.innerHTML = ' No comment has been created. ';
                 commentsList.appendChild(msg);
             }
-        } else {
-            console.log("Nope"); // TODO: What to do on error?
         }
     });
 }
@@ -48,7 +47,6 @@ function isRatingSelected(elem) {
 }
 
 function updateRatingElement(icon, number, upvote) {
-    // TODO: UPDATE NUMBER OF VOTES
     let base = upvote ? 'bi-hand-thumbs-up' : 'bi-hand-thumbs-down';
     if (icon.classList.contains(base)) {
         icon.classList.remove(base);
@@ -76,8 +74,6 @@ function addRatingComment(commentId, upvote) {
             let otherNum = upvote ? downNum : upNum;
             updateRatingElement(upvote ? upIcon : downIcon, upvote ? upNum : downNum, upvote);
             if (isRatingSelected(otherIcon)) updateRatingElement(otherIcon, otherNum, !upvote);
-        } else {
-            console.log("Nope"); // TODO: What to do on error?
         }
     });
 }

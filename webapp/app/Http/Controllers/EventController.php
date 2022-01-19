@@ -10,23 +10,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use App\Http\Requests\EventCreateRequest;
 use App\Http\Requests\EventUpdateRequest;
 use App\Notifications\InviteReceived;
+use App\Notifications\EventCancelled;
+use App\Policies\EventPolicy;
 use Intervention\Image\Facades\Image;
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     public function join($event_id)
     {
         if (!Auth::check()) return redirect('/login');
@@ -43,6 +36,10 @@ class EventController extends Controller
         $event = Event::find($event_id);
         $this->authorize('leave', $event);
         $user = Auth::user();
+        foreach($event->comments()->where('author_id', $user->id)->get() as $comment){ // Make comments anonymous
+            $comment->author_id = 0;
+            $comment->save();
+        }
         $event->attendees()->detach($user->id);
         return redirect('/');
     }
@@ -50,8 +47,11 @@ class EventController extends Controller
     public function search(Request $request)
     {
         $search = $request->query('search');
-        $searchString = str_replace(' ', ':*&', $search);
-        $events = Event::whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString]);
+        $events = $this->getViewableEvents();
+        if(!empty($search)){
+            $searchString = str_replace(' ', ':*&', $search);
+            $events = $events->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString]);
+        }
 
         $tagsSelected = $request->query('tag');
         if (!empty($tagsSelected)) {
@@ -69,7 +69,7 @@ class EventController extends Controller
         }
 
         return view('pages.search')->
-               with('events', $events->get())->
+               with('events', $events->paginate(16))->
                with('search', $search)->
                with('tagsSelected', $tagsSelected)->
                with('tags', Tag::all())->
@@ -138,6 +138,23 @@ class EventController extends Controller
         return redirect('event/' . $event->id);
     }
 
+    private function getViewableEvents(){
+        $has_auth = Auth::check();
+        if($has_auth){
+            if(Auth::user()->is_admin){
+                $events = Event::query();
+            } else {
+                $user = Auth::user();
+                $events = Event::whereHas('attendees', function ($q) use ($user) {
+                    $q->where('id', $user->id)->orWhere('is_visible', '=', 'true')->orWhere('host_id', '=', $user->id);
+                });
+            }
+        } else {
+            $events = Event::where('is_visible', '=', 'true'); // Visible events
+        }
+        return $events;
+    }
+
     /**
      * Shows all cards.
      *
@@ -145,23 +162,8 @@ class EventController extends Controller
      */
     public function list()
     {
-        $has_auth = Auth::check();
-        if ($has_auth && Auth::user()->is_admin) {
-            $events = Event::paginate(16);
-            return view('pages.events', ['events' => $events]);
-        } else {
-            $events = Event::where('is_visible', '=', 'true'); // Visible events
-            if (Auth::check()) {
-                $user = Auth::user();
-                $hosting = Event::where('host_id', $user->id);
-                $attending = Event::whereHas('attendees', function ($q) use ($user) {
-                    $q->where('id', $user->id);
-                });
-                $events = $events->union($attending)->union($hosting);
-            }
-            $events = $events->paginate(16);
-            return view('pages.events', ['events' => $events]);
-        }
+        $events = $this->getViewableEvents()->paginate(16);
+        return view('pages.events', ['events' => $events]);
     }
 
     public function getImage($id)
@@ -169,17 +171,6 @@ class EventController extends Controller
         $event = Event::find($id);
         $this->authorize('viewInformation', $event);
         return Storage::response($event->event_image);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -217,10 +208,17 @@ class EventController extends Controller
         $username = $request->input('username');
         $invitee = User::where('username', $username)->first();
 
+        if (EventPolicy::isAttendee($invitee, $event))
+            return response('The invitee already belongs to the event', 409);
+
+        if (Invite::where('invitee_id', $invitee->id)->where('inviter_id', Auth::id())->where('event_id', $id)->first() != NULL)
+            return response('The invitation was already sent', 406);
+
         $invite = new Invite();
         $invite->invitee_id = $invitee->id;
         $invite->inviter_id = Auth::id();
         $invite->event_id = $event->id;
+        $invite->save();
 
         $invitee->notify(new InviteReceived($invite));
         return response(null, 200);
@@ -287,8 +285,17 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function delete(Event $event)
+    public function delete($id)
     {
-        //
+        $event = Event::find($id);
+        $this->authorize('delete', $event);
+        DB::transaction(function () use ($event) {
+            $event->attendees()->detach();
+            $event->delete();
+        }, 3);
+        $attendees = $event->attendees()->get();
+        
+        Notification::send($attendees, new EventCancelled($event->title));
+        return redirect('/');
     }
 }

@@ -73,21 +73,23 @@
     @endif
     </div>
 
-    <div class="form-group mb-3">
-    <label for="password" class="form-label">Password</label>
-    <input id="password" type="password" name="password" class="form-control @if($errors->has('password')) is-invalid @endif">
-    <span class="form-text">Password must be at least 8 characters long and contain lowercase, uppercase, numerical and special characters.</span>
-    @if ($errors->has('password'))
-    <div class="invalid-feedback d-block">
-        {{ $errors->first('password') }}
-    </div>
-    @endif
-    </div>
+    @if(!is_null($user->password))
+        <div class="form-group mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input id="password" type="password" name="password" class="form-control @if($errors->has('password')) is-invalid @endif">
+        <span class="form-text">Password must be at least 8 characters long and contain lowercase, uppercase, numerical and special characters.</span>
+        @if ($errors->has('password'))
+        <div class="invalid-feedback d-block">
+            {{ $errors->first('password') }}
+        </div>
+        @endif
+        </div>
 
-    <div class="form-group mb-3">
-    <label for="password-confirm">Confirm Password</label>
-    <input id="password-confirm" class="form-control" type="password" name="password_confirmation">
-    </div> 
+        <div class="form-group mb-3">
+        <label for="password-confirm">Confirm Password</label>
+        <input id="password-confirm" class="form-control" type="password" name="password_confirmation">
+        </div>
+    @endif
 
     <button type="submit" class="btn btn-primary">
         Submit

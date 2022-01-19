@@ -25,9 +25,9 @@ Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
-Route::get('registerOAuth', 'Auth\RegisterController@showOAuthRegistrationForm')->name('registerOAuth');
-Route::post('registerOAuth', 'Auth\RegisterController@registerOAuth');
-Route::get('redirect', 'Auth\LoginController@redirectToProvider');
+Route::get('registerOAuth', 'Auth\RegisterController@showOAuthRegistrationForm');
+Route::post('registerOAuth', 'Auth\RegisterController@registerOAuth')->name('registerOAuth');
+Route::get('redirect', 'Auth\LoginController@redirectToProvider')->name('redirectOAuth');
 Route::get('callback', 'Auth\LoginController@handleProviderCallback');
 
 // Events
@@ -36,7 +36,7 @@ Route::get('event', 'EventController@search');
 Route::post('event', 'EventController@create')->name('createEvent');
 Route::get('event/{event_id}', 'EventController@show')->name('event');
 Route::put('event/{event_id}', 'EventController@update')->name('updateEvent');
-Route::delete('event/{event_id}', 'EventController@delete');
+Route::delete('event/{event_id}', 'EventController@delete')->name('deleteEvent');
 Route::get('event/{event_id}/update', 'EventController@showUpdateForm')->name('updateEventForm');
 Route::get('events', 'EventController@list')->name('events');
 Route::get('event/{event_id}/image', 'EventController@getImage');
@@ -68,6 +68,7 @@ Route::get('user/{user_id}', 'UserController@show')->name('user');
 Route::put('user/{user_id}', 'UserController@update')->name('updateUser');
 Route::get('user/{user_id}/update', 'UserController@showUpdateForm')->name('updateUserForm'); 
 Route::get('user/{user_id}/profile_pic', 'UserController@getImage')->name('userImage');
+Route::delete('user/{user_id}', 'UserController@delete')->name('deleteUser');
 
 //      Notifications
 Route::post('api/user/{user_id}/markNotificationAsRead', 'UserController@markNotificationAsRead')->name('markNotificationAsRead'); // TODO A7?
