@@ -56,4 +56,6 @@ let notificationCount = toastElList.length;
 
 if(notificationCount == 1){
     noNotifications();
+} else {
+    document.getElementById('notificationBadge').hidden = false;
 }

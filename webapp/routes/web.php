@@ -25,6 +25,8 @@ Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
+Route::get('registerOAuth', 'Auth\RegisterController@showOAuthRegistrationForm')->name('registerOAuth');
+Route::post('registerOAuth', 'Auth\RegisterController@registerOAuth');
 Route::get('redirect', 'Auth\LoginController@redirectToProvider');
 Route::get('callback', 'Auth\LoginController@handleProviderCallback');
 
@@ -66,6 +68,7 @@ Route::get('user/{user_id}', 'UserController@show')->name('user');
 Route::put('user/{user_id}', 'UserController@update')->name('updateUser');
 Route::get('user/{user_id}/update', 'UserController@showUpdateForm')->name('updateUserForm'); 
 Route::get('user/{user_id}/profile_pic', 'UserController@getImage')->name('userImage');
+
 //      Notifications
 Route::post('api/user/{user_id}/markNotificationAsRead', 'UserController@markNotificationAsRead')->name('markNotificationAsRead'); // TODO A7?
 
@@ -82,6 +85,9 @@ Route::delete('api/request/{request_id}/reject', 'RequestController@reject');
 Route::post('api/event/{event_id}/comment', 'CommentController@store');
 Route::delete('api/comment/{comment_id}', 'CommentController@destroy');
 Route::post('api/comment/{comment_id}/rating', 'RatingController@addRating');
+
+// Files
+Route::get('api/download/{file_id}', 'FileController@getDownload')->name('getDownload');
 
 // Unblock Appeal API
 Route::post('api/unblockAppeal', 'UnblockAppealController@create');

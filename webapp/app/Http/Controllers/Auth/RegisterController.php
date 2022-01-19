@@ -82,4 +82,18 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function showOAuthRegistrationForm(){
+        return view('auth.registerOAuth');
+    }
+
+    public function registerOAuth(array $data){
+        return User::create([
+            'username' => $data['username'],
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'birthdate' => date('Y-m-d', strtotime($data['birthdate'])),
+            'password' => bcrypt($data['password']),
+        ]);
+    }
 }

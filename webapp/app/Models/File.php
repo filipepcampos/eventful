@@ -9,6 +9,7 @@ class File extends Model
   // Don't add create and update timestamps in database.
   public $timestamps  = false;
   protected $table = 'file';
+  protected $primaryKey = 'file_id';
 
   /**
    * Comment the file is attached to

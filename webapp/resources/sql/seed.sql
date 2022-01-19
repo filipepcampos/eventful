@@ -56,6 +56,9 @@ CREATE TABLE users (
     block_motive TEXT,
     remember_token TEXT,
     is_admin BOOLEAN NOT NULL DEFAULT false,
+    google_id TEXT,
+    google_token TEXT,
+    google_refresh_token TEXT,
     CONSTRAINT user_birthdate_check CHECK (birthdate <= account_creation_date)
 );
 
@@ -107,7 +110,7 @@ CREATE TABLE option (
 
 CREATE TABLE comment (
     id SERIAL PRIMARY KEY,
-    author_id INTEGER REFERENCES users ON UPDATE CASCADE,
+    author_id INTEGER REFERENCES users ON UPDATE CASCADE ON DELETE CASCADE,
     event_id INTEGER NOT NULL REFERENCES event ON UPDATE CASCADE ON DELETE CASCADE,
     content TEXT NOT NULL,
     number_upvotes INTEGER NOT NULL DEFAULT 0 CONSTRAINT comment_number_upvotes CHECK (number_upvotes >= 0),
@@ -117,8 +120,8 @@ CREATE TABLE comment (
 
 CREATE TABLE rating (
     id SERIAL PRIMARY KEY,
-    comment_id INTEGER REFERENCES comment ON UPDATE CASCADE,
-    user_id INTEGER REFERENCES users ON UPDATE CASCADE,
+    comment_id INTEGER REFERENCES comment ON UPDATE CASCADE ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON UPDATE CASCADE ON DELETE CASCADE,
     vote comment_rating NOT NULL,
     UNIQUE (comment_id, user_id)
 );

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 
@@ -61,28 +62,31 @@ class LoginController extends Controller
      */
     public function handleProviderCallback()
     {
-        try {
-            $user = Socialite::driver('google')->user();
-        } catch (\Exception $e) {
-            return redirect('/login');
-        }
+        $googleUser = Socialite::driver('google')->user();
 
-        $existingUser = User::where('email', $user->email)->first();
-        if ($existingUser) {
-            // log them in
-            auth()->login($existingUser, true);
+        $user = User::where('google_id', $googleUser->id)->first();
+
+        if ($user) {
+            $user->update([
+                'github_token' => $googleUser->token,
+                'github_refresh_token' => $googleUser->refreshToken,
+            ]);
+            Auth::login($user);
+            return redirect('/events');
         } else {
-            // create a new user
-            $newUser                  = new User;
-            $newUser->name            = $user->name;
-            $newUser->email           = $user->email;
-            //$newUser->google_id       = $user->id;
-            //$newUser->avatar          = $user->avatar;
-            //$newUser->avatar_original = $user->avatar_original;
-            $newUser->save();
-            auth()->login($newUser, true);
-        }
+            /*
+            username TEXT NOT NULL CONSTRAINT user_username_uk UNIQUE,
+            password TEXT NOT NULL,
+            birthdate DATE NOT NULL,
+            */
 
-        return redirect()->to('/events');
+            return view('auth.registerOAuth')->
+                   with('name', $googleUser->name)->
+                   with('email', $googleUser->email)->
+                   with('password', $googleUser->email)->
+                   with('google_id', $googleUser->id)->
+                   with('google_token', $googleUser->token)->
+                   with('google_refresh_token', $googleUser->refreshToken);
+        }
     }
 }

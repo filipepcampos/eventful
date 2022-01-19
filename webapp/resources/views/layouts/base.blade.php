@@ -39,7 +39,7 @@
             <li class="nav-item mb-0 me-1">
                 <button type="button" class="btn btn-sm btn-outline-secondary notificationButton px-2 py-0 position-relative" onclick="toggleNotifications()">
                     <i class="bi text-white bi-bell"></i>
-                    <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle">
+                    <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle" hidden>
                         <span class="visually-hidden">New alerts</span>
                     </span>
                 </button>
