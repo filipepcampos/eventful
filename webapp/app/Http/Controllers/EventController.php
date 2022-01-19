@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\EventCreateRequest;
 use App\Http\Requests\EventUpdateRequest;
 use App\Notifications\InviteReceived;
+use Intervention\Image\Facades\Image;
 
 class EventController extends Controller
 {
@@ -111,6 +112,8 @@ class EventController extends Controller
         $event->title = $request->input('title');
         if ($request->has('event_image')) {
             $event->event_image = $request->file('event_image')->store('images');
+            $image = Image::make(Storage::path($event->event_image))->fit(400,400);
+            $image->save();
         } else {
             $event->event_image = 'images/default.png';
         }
@@ -249,6 +252,8 @@ class EventController extends Controller
         }
         if (!is_null($request->file('event_image'))) {
             $event->event_image = $request->file('event_image')->store('images');
+            $image = Image::make(Storage::path($event->event_image))->fit(400,400);
+            $image->save();
         }
         if (!is_null($request->input('description'))) {
             $event->description = $request->input('description');
