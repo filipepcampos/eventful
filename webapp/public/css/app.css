@@ -74,3 +74,8 @@ input:focus {
   height: 100%;
   line-height: 0px;
 }
+
+.required-label:after {
+  content:" *";
+  color:rgb(218, 52, 52);
+}
