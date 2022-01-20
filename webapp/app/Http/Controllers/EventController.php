@@ -237,7 +237,7 @@ class EventController extends Controller
         $event = Event::find($id);
         $this->authorize('update', $event);
 
-        $validated = $request->validated();
+        $validated = $request->validated(); // TODO: Is this necessary?
 
         if (!is_null($request->input('capacity'))) {
             $capacity = (int)$request->input('capacity');

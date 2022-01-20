@@ -24,7 +24,7 @@
 
 <div class="form-group mb-3">
     <label class="form-label" for="event_image">Event Image</label>
-    <input type="file" name="event_image" value="{{ old('event_image') }}" class="form-control @if($errors->has('file')) is-invalid @endif" id="event_image" accept="image/*">
+    <input type="file" name="event_image" value="{{ old('event_image') }}" class="form-control @if($errors->has('event_image')) is-invalid @endif" id="event_image" accept="image/*">
     @if ($errors->has('event_image'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('event_image') }}
@@ -63,7 +63,8 @@
 </div>
 
 <div class="form-group mb-3">
-    <label for="visibility" class="form-check-label required-label">Visibility</label>
+    <label for="visibility" class="form-check-label required-label pe-2">Visibility</label>
+    <a href="#visibility" data-bs-toggle="tooltip" title="Anyone can view a public event's details (title, description and image). A private event can only be viewed by it's attendees."><i class="bi bi-question-octagon text-secondary ml-auto"></i></a>
     <select class="form-control @if($errors->has('visibility')) is-invalid @endif"  value="{{ old('visibility') }}" id="visibility" name="visibility" required>
     <option value="public" {{ old('visibility') ? "selected" : "" }}>Public</option>
     <option value="private" {{ old('visibility') ? "" : "selected" }}>Private</option>
@@ -76,7 +77,8 @@
 </div>
 
 <div class="form-group mb-3">
-    <label for="access" class="form-check-label required-label">Access</label>
+    <label for="access" class="form-check-label required-label pe-2">Access</label>
+    <a href="#access" data-bs-toggle="tooltip" title="Anyone can join a public access event, in a private event you can accept or deny requests to join."><i class="bi bi-question-octagon text-secondary ml-auto"></i></a>
     <select class="form-control @if($errors->has('access')) is-invalid @endif" value="{{ old('access') }}" id="access" name="access" required>
     <option value="public" {{ old('access') ? "selected" : "" }}>Public</option>
     <option value="private" {{ old('access') ? "" : "selected" }}>Private</option>

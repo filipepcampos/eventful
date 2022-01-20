@@ -25,7 +25,7 @@ class EventUpdateRequest extends FormRequest
     {
         return [
             'title' => 'nullable|string|min:1|max:255',
-            'event_image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=100,min_height=100,ratio=1',
+            'event_image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|dimensions:min_width=100,min_height=100',
             'description' => 'nullable|string|min:1|max:8192',
             'location' => 'nullable|string|min:1|max:255',
             'realization_date' => 'nullable|date|after:today',
