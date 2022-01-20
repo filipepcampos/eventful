@@ -9,26 +9,6 @@ use Illuminate\Http\Request;
 
 class RatingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     private function getRating($input) {
         return $input == 'true' ? 'Upvote' : 'Downvote';
     }
@@ -49,40 +29,6 @@ class RatingController extends Controller
         $rating->vote = $this->getRating($request->input('rating'));
 
         $rating->save();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Rating  $rating
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Rating $rating)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Rating  $rating
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Rating $rating)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Rating  $rating
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Rating $rating)
-    {
-        //
     }
 
     /**
