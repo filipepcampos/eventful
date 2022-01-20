@@ -115,7 +115,8 @@
 </div>
 
 <div class="form-group mb-3">
-    <label for="capacity" class="form-label">Capacity</label>
+    <label for="capacity" class="form-label">Capacity</label>        
+    <input id="capacity" type="text" name="capacity" placeholder="{{ $event->capacity }}" class="form-control @if($errors->has('capacity')) is-invalid @endif">
     @if ($errors->has('capacity'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('capacity') }}
