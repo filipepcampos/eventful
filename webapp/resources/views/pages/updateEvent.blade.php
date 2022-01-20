@@ -28,7 +28,7 @@
 
     <div class="form-group mb-3">
     <label class="form-label" for="event_image">Event Image</label>
-    <input type="file" name="event_image" class="form-control @if($errors->has('file')) is-invalid @endif" id="event_image" accept="image/*">
+    <input type="file" name="event_image" class="form-control @if($errors->has('event_image')) is-invalid @endif" id="event_image" accept="image/*">
     @if ($errors->has('event_image'))
         <div class="invalid-feedback d-block">
             {{ $errors->first('event_image') }}
@@ -67,7 +67,8 @@
     </div>
 
     <div class="form-group mb-3">
-    <label for="visibility" class="form-check-label">Visibility</label>
+    <label for="visibility" class="form-check-label pe-2">Visibility</label>
+    <a href="#visibility" data-bs-toggle="tooltip" title="Anyone can view a public event's details (title, description and image). A private event can only be viewed by it's attendees."><i class="bi bi-question-octagon text-secondary ml-auto"></i></a>
     <select class="form-control @if($errors->has('visibility')) is-invalid @endif"  id="visibility" name="visibility">
         <option value="public" {{ $event->is_visible ? "selected" : "" }}>Public</option>
         <option value="private" {{ $event->is_visible ? "" : "selected" }}>Private</option>
@@ -80,7 +81,8 @@
 </div>
 
 <div class="form-group mb-3">
-    <label for="accessibility" class="form-check-label">Accessibility</label>
+    <label for="access" class="form-check-label pe-2">Access</label>
+    <a href="#access" data-bs-toggle="tooltip" title="Anyone can join a public access event, in a private event you can accept or deny requests to join."><i class="bi bi-question-octagon text-secondary ml-auto"></i></a>
     <select class="form-control @if($errors->has('access')) is-invalid @endif" placeholder="{{ old('access') }}" id="access" name="access">
     <option value="public" {{ $event->is_accessible ? "selected" : "" }}>Public</option>
     <option value="private" {{ $event->is_accessible ? "" : "selected" }}>Private</option>
@@ -113,7 +115,7 @@
 </div>
 
 <div class="form-group mb-3">
-    <label for="capacity" class="form-label">Capacity</label>
+    <label for="capacity" class="form-label">Capacity</label>        
     <input id="capacity" type="text" name="capacity" placeholder="{{ $event->capacity }}" class="form-control @if($errors->has('capacity')) is-invalid @endif">
     @if ($errors->has('capacity'))
     <div class="invalid-feedback d-block">
