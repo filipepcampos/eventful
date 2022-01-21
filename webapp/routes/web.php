@@ -69,6 +69,7 @@ Route::put('user/{user_id}', 'UserController@update')->name('updateUser');
 Route::get('user/{user_id}/update', 'UserController@showUpdateForm')->name('updateUserForm'); 
 Route::get('user/{user_id}/profile_pic', 'UserController@getImage')->name('userImage');
 Route::delete('user/{user_id}', 'UserController@delete')->name('deleteUser');
+Route::delete('api/user/{user_id}', 'UserController@deleteAPI');
 
 //      Notifications
 Route::post('api/user/{user_id}/markNotificationAsRead', 'UserController@markNotificationAsRead')->name('markNotificationAsRead'); // TODO A7?

@@ -1,5 +1,5 @@
-<div class="col-auto mb-3 userCardCol">
-    <div id="userCard{{ $user->id }}" class="rounded-lg shadow card @if($user->block_motive!=null) border-secondary border-1 @endif" style="width: 26rem; box-sizing: border-box;">
+<div class="col-auto mb-3 userCardCol" id="userCard{{ $user->id }}">
+    <div class="rounded-lg shadow card @if($user->block_motive!=null) border-secondary border-1 @endif" style="width: 26rem; box-sizing: border-box;">
         <img class="card-img-top" src='{{ url("/user/$user->id" . "/profile_pic") }}' alt="Profile Picture">
         <div class="card-body">
             <h5 class="card-title">{{ $user->username }}</h5>
@@ -20,7 +20,7 @@
         <div class="card-footer">
             <a type="button" class="btn btn-outline-primary" href="{{ url('/user/' . $user->id) }}">Profile</a>
             <a type="button" class="btn btn-outline-success" href="{{ route('updateUserForm', ['user_id' => $user->id]) }}">Edit</a>
-            <a class="btn btn-outline-danger">Delete</a>
+            <a class="btn btn-outline-danger" onclick="deleteUser({{ $user->id }})">Delete</a>
             @if($user->block_motive == null)
             <a type="button" class="btn btn-outline-secondary" id="blockButtonUser{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#blockUser{{ $user->id }}Modal">Block</a>
             @else

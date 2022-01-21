@@ -117,4 +117,20 @@ class UserController extends Controller
         }, 3);
         return redirect('/');
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteAPI($id)
+    {
+        $user = User::find($id);
+        $this->authorize('delete', $user);
+        DB::transaction(function () use ($id) {
+            DB::statement('SELECT delete_user(?)', [$id]);
+        }, 3);
+        return response(null, 200);
+    }
 }

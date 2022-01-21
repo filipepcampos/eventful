@@ -1,4 +1,12 @@
 function deleteUser(userId){
+    let url = '/api/user/' + userId;
+    r = new URLEncodedRequest(url, 'DELETE');
+    r.send(function (xhr) {
+        if(xhr.status == 200){
+            let card = document.getElementById('userCard' + userId);
+            card.remove();
+        }
+    });
 }
 
 function blockUser(userId){
@@ -8,7 +16,7 @@ function blockUser(userId){
     r.setParam('block_motive', motive.content.value);
     r.send(function (xhr) {
         if(xhr.status == 200){
-            let card = document.getElementById('userCard' + userId)
+            let card = document.getElementById('userCard' + userId);
             card.classList.add('border-secondary');
             card.classList.add('border-1');
             let button = document.getElementById('blockButtonUser' + userId);
@@ -27,7 +35,7 @@ function unblockUser1(userId){
     r = new URLEncodedRequest(url, 'PUT');
     r.send(function (xhr) {
         if(xhr.status == 200){
-            let card = document.getElementById('userCard' + userId)
+            let card = document.getElementById('userCard' + userId);
             card.classList.remove('border-secondary');
             card.classList.remove('border-1');
             let button = document.getElementById('blockButtonUser' + userId);
