@@ -68,7 +68,7 @@ class EventPolicy
      */
     public function create(User $user)
     {
-        return Auth::check() && !$this->isAdmin($user) && is_null($user->block_motive);
+        return !$this->isAdmin($user) && is_null($user->block_motive);
     }
 
     /**

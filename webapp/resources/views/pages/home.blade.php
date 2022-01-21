@@ -17,7 +17,11 @@
                 @can('create', App\Models\Event::class)
                     <a id="homeCreateEventButton" href="{{ route('createEventForm') }}" class="btn btn-primary btn-lg px-4 gap-3">Create Event</a>
                 @else
-                    <a class="btn btn-danger btn-lg px-4 gap-3">Create Event</a>
+                    @if(!Auth::check())
+                        <a id="homeCreateEventButton" href="{{ route('createEventForm') }}" class="btn btn-primary btn-lg px-4 gap-3">Create Event</a>
+                    @else
+                        <a class="btn btn-danger btn-lg px-4 gap-3">Create Event</a>
+                    @endif
                 @endcan
                 <a id="homeBrowseEventButton" href="{{ route('events') }}" class="btn btn-outline-secondary btn-lg px-4">Browse Events</a>
             </div>
