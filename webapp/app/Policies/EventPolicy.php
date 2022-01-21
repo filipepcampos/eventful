@@ -43,7 +43,7 @@ class EventPolicy
     }
 
     public function host(User $user, Event $event){
-        return is_null($user->block_motive);
+        return $event->host()->first()->id === $user->id && is_null($user->block_motive);
     }
 
     public function viewInformation(?User $user, Event $event){
@@ -80,7 +80,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        return $this->isHost($user, $event) || $this->isAdmin($user);
+        return ($this->isHost($user, $event) && is_null($user->block_motive)) || $this->isAdmin($user);
     }
 
     public function join(User $user, Event $event) 
@@ -116,7 +116,7 @@ class EventPolicy
      */
     public function delete(User $user, Event $event)
     {
-        return $this->isHost($user, $event) || $this->isAdmin($user);
+        return ($this->isHost($user, $event) && is_null($user->block_motive)) || $this->isAdmin($user);
     }
 
     /**

@@ -30,10 +30,6 @@
 @include('partials.postEditorModal', ['event_id' => $event->id])
 @endcan
 
-@can('host', $event)
-@include('partials.requestsListModal', ['requests' => $event->requests()->get()])
-@endcan
-
 <div class="container">
     <div class="row my-5">
         <div class="col">
@@ -66,7 +62,8 @@
                     </form>
                     @endcan
 
-                    @can('isHost', $event)
+                    @can('host', $event)
+                        @include('partials.requestsListModal', ['requests' => $event->requests()->get()])
                         <a class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#requests">Requests</a>
                     @endcan
 
