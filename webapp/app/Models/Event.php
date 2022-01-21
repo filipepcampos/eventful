@@ -16,7 +16,7 @@ class Event extends Model
   ];
 
   public function isNotFull(){
-    return $this->number_attendees < $this->capacity;
+    return $this->capacity == NULL || $this->number_attendees < $this->capacity;
   }
 
   /**

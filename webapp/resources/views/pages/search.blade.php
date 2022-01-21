@@ -9,6 +9,8 @@
 @endsection
 
 @section('content')
+<script src="{{ asset('/js/requestsManagement.js') }}" ></script>
+
 <button class="btn btn-primary ms-5" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilters" aria-controls="offcanvasFilters">
   Filters <span><i class="bi bi-filter"></i></span>
 </button>
