@@ -10,7 +10,7 @@
 @section('content')
 <div class="container my-5">
     <div class="d-flex flex-row justify-content-start">
-        <img class="border border-2 border-secondary rounded w-25" src="{{ route('userImage', ['user_id' => $user->id]) }}" alt="Profile Picture">
+        <img class="border border-2 border-secondary rounded w-25" src="{{ route('userImage', ['user_id' => $user->id]) }}" alt="Profile Picture" style="min-width: 28rem;">
         <div class="p-5 mx-5 border-secondary rounded">
             <h1 class="display-3 text-center">{{ $user->username }}</h1>
             <div class="my-2">
