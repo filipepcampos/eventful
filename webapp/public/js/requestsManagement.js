@@ -4,6 +4,8 @@ function sendRequest(eventId) {
     r.send(function (xhr) {
         if(xhr.status == 200){
             document.getElementById('request' + eventId).remove();
+        } else if (xhr.status == 401){
+            window.location = '/login';
         }
     });
 }

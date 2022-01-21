@@ -83,24 +83,26 @@ class EventPolicy
         return ($this->isHost($user, $event) && is_null($user->block_motive)) || $this->isAdmin($user);
     }
 
-    public function join(User $user, Event $event) 
+    public function join(?User $user, Event $event) 
     {
-        return $event->is_accessible &&
-            $event->isNotFull() &&
-            $event->realization_date->isFuture() &&
-            !($this->participatingInEvent($user, $event)) &&
-            !($this->isAdmin($user)) &&
-            is_null($user->block_motive);
+        if (is_null($user)) return $event->is_accessible && $event->isNotFull() && $event->realization_date->isFuture();
+        else return $event->is_accessible &&
+                    $event->isNotFull() &&
+                    $event->realization_date->isFuture() &&
+                    !($this->participatingInEvent($user, $event)) &&
+                    !($this->isAdmin($user)) &&
+                    is_null($user->block_motive);
     }
 
-    public function request(User $user, Event $event) 
+    public function request(?User $user, Event $event) 
     {
-        return !$event->is_accessible &&
-            $event->isNotFull() &&
-            $event->realization_date->isFuture() &&
-            !($this->participatingInEvent($user, $event)) &&
-            !($this->isAdmin($user)) &&
-            is_null($user->block_motive);
+        if (is_null($user)) return !$event->is_accessible && $event->isNotFull() && $event->realization_date->isFuture();
+        else return !$event->is_accessible &&
+                    $event->isNotFull() &&
+                    $event->realization_date->isFuture() &&
+                    !($this->participatingInEvent($user, $event)) &&
+                    !($this->isAdmin($user)) &&
+                    is_null($user->block_motive);
     }
 
     public function leave(User $user, Event $event){

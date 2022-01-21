@@ -16,7 +16,7 @@ class RequestController extends Controller
      * Sends a request to enter the event
      */
     public function send($event_id) {
-        if (!Auth::check()) return redirect('/login');
+        if (!Auth::check()) return response(null, 401);
         $user = Auth::user();
         $request = new Request;
         $request->user_id = $user->id;
