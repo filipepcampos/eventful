@@ -56,15 +56,17 @@
                     <form class="mb-2 w-100" method='post' action='{{ route("deleteEvent", ["event_id" => $event->id]) }}'>
                         {{ method_field('DELETE') }}
                         {{ csrf_field() }}
-                        <button type="submit" class="btn btn-danger my-2">
+                        <button type="submit" class="btn btn-danger mb-2 w-100">
                             Delete event
                         </button>
                     </form>
                     @endcan
 
                     @can('host', $event)
+                        @if(!$event->is_accessible)
                         @include('partials.requestsListModal', ['requests' => $event->requests()->get()])
                         <a class="btn btn-secondary mb-2 w-100" type="button" data-bs-toggle="modal" href="#requests">Requests</a>
+                        @endif
                     @endcan
 
                     <!-- Regular user buttons -->

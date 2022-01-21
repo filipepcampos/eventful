@@ -79,9 +79,9 @@ CREATE TABLE event (
    realization_date TIMESTAMP NOT NULL,
    is_visible BOOLEAN NOT NULL,
    is_accessible BOOLEAN NOT NULL,
-   capacity INT NOT NULL CHECK (capacity > 0),
+   capacity INT CHECK (capacity = NULL OR capacity > 0),
    price DECIMAL(8, 2) NOT NULL CHECK (price >= 0),
-   number_attendees INT NOT NULL DEFAULT 0 CONSTRAINT event_number_attendees CHECK (number_attendees >= 0 AND number_attendees <= capacity),
+   number_attendees INT NOT NULL DEFAULT 0 CONSTRAINT event_number_attendees CHECK (number_attendees >= 0 AND (capacity = NULL OR number_attendees <= capacity)),
    CONSTRAINT check_realization_date CHECK (creation_date < realization_date)
 );
 

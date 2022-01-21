@@ -111,8 +111,9 @@
 </div>
 
 <div class="form-group mb-3">
-    <label for="capacity" class="form-label">Capacity</label>
-    <input id="capacity" type="text" name="capacity" value="{{ old('capacity') }}" class="form-control @if($errors->has('capacity')) is-invalid @endif">
+    <label for="capacity" class="form-label required-label">Capacity</label>
+    <a href="#capacity" data-bs-toggle="tooltip" title="If the event has unlimited capacity, represent it with a 0."><i class="bi bi-question-octagon text-secondary ml-auto"></i></a>
+    <input id="capacity" type="number" step="1" min="0" name="capacity" value="{{ old('capacity') }}" class="form-control @if($errors->has('capacity')) is-invalid @endif" required>
     @if ($errors->has('capacity'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('capacity') }}
@@ -122,7 +123,7 @@
 
 <div class="form-group mb-3">
     <label for="price" class="form-label required-label">Price</label>
-    <input id="price" type="number" step=".01" name="price" value="{{ old('price') }}" class="form-control @if($errors->has('price')) is-invalid @endif" required>
+    <input id="price" type="number" step=".01" min="0" name="price" value="{{ old('price') }}" class="form-control @if($errors->has('price')) is-invalid @endif" required>
     @if ($errors->has('price'))
     <div class="invalid-feedback d-block">
         {{ $errors->first('price') }}

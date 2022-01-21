@@ -31,7 +31,7 @@ class EventCreateRequest extends FormRequest
             'realization_date' => 'required|date|after:today',
             'visibility' => 'required|string',
             'access' => 'required|string',
-            'capacity' => 'integer|min:1',
+            'capacity' => 'required|integer|min:0',
             'price' => 'required|numeric|between:0,999999.99'
         ];
     }

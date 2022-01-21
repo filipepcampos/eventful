@@ -49,7 +49,7 @@ class EventController extends Controller
         $search = $request->query('search');
         $events = $this->getViewableEvents();
         if(!empty($search)){
-            $searchString = str_replace(' ', ':*&', $search);
+            $searchString = str_replace(' ', ':*&', $search) . ':*';
             $events = $events->whereRaw('tsvectors @@ to_tsquery(\'english\', ?)', [$searchString])->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$searchString]);
         }
 
@@ -124,10 +124,10 @@ class EventController extends Controller
         $event->is_visible = $request->input('visibility') === 'public';
         $event->is_accessible = $request->input('access') === 'public';
 
-        if ($request->has('capacity')) {
+        if ($request->input('capacity') > 0) {
             $event->capacity = $request->input('capacity');
         } else {
-            $event->capacity = +INF;
+            $event->capacity = NULL;
         }
         $event->price = $request->input('price');
         $event->save();
@@ -145,8 +145,18 @@ class EventController extends Controller
                 $events = Event::query();
             } else {
                 $user = Auth::user();
-                $events = Event::whereHas('attendees', function ($q) use ($user) {
-                    $q->where('id', $user->id)->orWhere('is_visible', '=', 'true')->orWhere('host_id', '=', $user->id);
+                /*
+                $events = Event::where('is_visible', '=', 'true')
+                        ->orWhere('host_id', '=', $user->id)
+                        ->orwhereHas('attendees', function ($q) use ($user){
+                            $q->where('id', $user->id);
+                        });*/
+                $events = Event::where(function($query) use ($user){
+                    $query->where('is_visible', '=', 'true')
+                    ->orWhere('host_id', '=', $user->id)
+                    ->orwhereHas('attendees', function ($q) use ($user){
+                        $q->where('id', $user->id);
+                    });
                 });
             }
         } else {
@@ -195,7 +205,7 @@ class EventController extends Controller
         $this->authorize('update', $event);
         $user_id = $request->input('user_id');
         if ($user_id != null) {
-            $event->attending()->detach($user_id);
+            $event->attendees()->detach($user_id);
         }
         return response(null, 200);
     }
@@ -242,7 +252,7 @@ class EventController extends Controller
         if (!is_null($request->input('capacity'))) {
             $capacity = (int)$request->input('capacity');
             if ($capacity < $event->number_attendees) return redirect()->back();
-            $event->capacity = $capacity;
+            $event->capacity = $capacity > 0 ? $capacity : NULL;
         }
 
         if (!is_null($request->input('title'))) {
