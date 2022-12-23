@@ -15,7 +15,7 @@ Eventful is a website that allows users to organize and participate in events, g
 
 ## Installation
 
-The final version of the source code is available at: https://git.fe.up.pt/lbaw/lbaw2122/lbaw2122/-/tree/main/webapp. In order to install and run our project, the next steps must be followed:
+In order to install and run our project, the next steps must be followed:
 
 1. Install Software dependencies:
 
@@ -58,10 +58,10 @@ The final product is available at http://lbaw2122.lbaw.fe.up.pt/, (only works wi
 
 ## Team
 
-* Adriano Soares, up201904873@fe.up.pt
-* Filipe Campos, up201905609@fe.up.pt
-* Francisco Cerqueira, up201905337@fe.up.pt
-* Vasco Alves, up201808031@fe.up.pt
+* [Adriano Soares](https://github.com/adr1an0s0ar3s/), up201904873@fe.up.pt
+* [Filipe Campos](https://github.com/filipepcampos), up201905609@fe.up.pt
+* [Francisco Cerqueira](https://github.com/xico2001pt), up201905337@fe.up.pt
+* [Vasco Alves](https://github.com/Vasco52), up201808031@fe.up.pt
 
 ***
 GROUP2122, 30/11/2021
